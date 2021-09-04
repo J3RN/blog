@@ -1,0 +1,12 @@
+baseURL = "http://j3rn.com/"
+languageCode = "en-us"
+title = "J3RN's Blog"
+theme = "mini"
+
+[social]
+github = "https://github.com/J3RN"
+
+[params]
+author = "Jonathan Arnett"
+description = "My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design."
+enableRSS = true
