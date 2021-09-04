@@ -1,0 +1,141 @@
+<!doctype html><html lang=en-us>
+<head>
+<title>Escaping from Ruby Blocks | J3RN's Blog</title>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<meta name=viewport content="width=device-width,minimum-scale=1">
+<meta name=description content="Guard Clauses 🔗Once upon a time, Rubocop taught me to love guard clauses. When I first started learning to program, I was deeply conflicted about guard clauses. On the one hand, guard clauses can prevent the need to have deeply nested ifs. On the other hand, it can be hard to remember the context deep into a method without being able to reference the enveloping ifs (similarly to RSpec contexts). In any case, Rubocop wants me to use guard clauses, so I do.">
+<meta name=generator content="Hugo 0.88.0">
+<meta name=ROBOTS content="NOINDEX, NOFOLLOW">
+<link rel=stylesheet href=/css/style.css>
+<link rel="shortcut icon" href=/images/favicon.ico type=image/x-icon>
+</head>
+<body>
+<nav class=navigation>
+<a href=/> <span class=arrow>←</span>Home</a>
+<a href=/posts>Archive</a>
+<a href=/tags>Tags</a>
+<a class=button href=http://j3rn.com/index.xml>Subscribe</a>
+</nav>
+<main class=main>
+<section id=single>
+<h1 class=title>Escaping from Ruby Blocks</h1>
+<div class=tip>
+<time datetime="2017-10-18 12:00:00 -0400 -0400">Oct 18, 2017</time>
+<span class=split>
+·
+</span>
+<span>
+789 words
+</span>
+<span class=split>
+·
+</span>
+<span>
+4 minute read
+</span>
+</div>
+<div class=content>
+<h2 id=guard-clauses>Guard Clauses <a href=#guard-clauses class=anchor>🔗</a></h2><p>Once upon a time, <a href=http://rubocop.readthedocs.io/en/latest/cops_style/#styleguardclause target=_blank rel=noopener>Rubocop taught me to love guard clauses</a>. When I first started learning to program, I was deeply conflicted about guard clauses. On the one hand, guard clauses can prevent the need to have deeply nested <code>if</code>s. On the other hand, it can be hard to remember the context deep into a method without being able to reference the enveloping <code>if</code>s (similarly to RSpec contexts). In any case, Rubocop wants me to use guard clauses, so I do.</p>
+<p>Here&rsquo;s an example of using a guard clause—if the author is <code>nil</code>, there&rsquo;s no point in continuing with this method.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>describe_author</span>(author)
+  <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span> <span style=color:#66d9ef>if</span> author<span style=color:#f92672>.</span>nil?
+  <span style=color:#e6db74>&#34;</span><span style=color:#e6db74>#{</span>author<span style=color:#f92672>.</span>name<span style=color:#e6db74>}</span><span style=color:#e6db74> (</span><span style=color:#e6db74>#{</span>author<span style=color:#f92672>.</span>birth_year<span style=color:#e6db74>}</span><span style=color:#e6db74>–</span><span style=color:#e6db74>#{</span>author<span style=color:#f92672>.</span>death_year<span style=color:#e6db74>}</span><span style=color:#e6db74>)&#34;</span>
+<span style=color:#66d9ef>end</span>
+</code></pre></div><h2 id=blocks>Blocks <a href=#blocks class=anchor>🔗</a></h2><p>The Ruby language has a useful construct to contain blocks of code, aptly called &ldquo;blocks.&rdquo; Actually, Ruby has three ways to contain blocks of code—blocks, procs, and lambdas—but this post will just cover blocks.</p>
+<h2 id=guard-clauses-in-blocks>Guard Clauses in Blocks <a href=#guard-clauses-in-blocks class=anchor>🔗</a></h2><p>First, in order to use a block, we&rsquo;ll need a function that expects one.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>foo</span>
+  <span style=color:#66d9ef>yield</span> <span style=color:#66d9ef>if</span> block_given?
+  puts <span style=color:#e6db74>&#34;End of foo&#34;</span>
+<span style=color:#66d9ef>end</span>
+</code></pre></div><p>This method will execute whatever block we give it first (<em>if we gave it one</em>), then print out a message. Let&rsquo;s give it a block.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { puts <span style=color:#e6db74>&#34;Inside block!&#34;</span> }
+<span style=color:#75715e>#=&gt; Inside block!</span>
+<span style=color:#75715e>#=&gt; End of foo</span>
+</code></pre></div><p>Now let&rsquo;s suppose that we want a guard clause in the block that we send.</p>
+<h3 id=return>return <a href=#return class=anchor>🔗</a></h3><p>My first inclination on how to do this was with the <code>return</code> keyword. Seeing <code>return</code> in a block, though, would probably raise some questions about whether it&rsquo;s the block that&rsquo;s being returned from or the method that <code>yield</code>s to it. Let&rsquo;s try it and find out.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#66d9ef>return</span> }
+<span style=color:#75715e>#=&gt; LocalJumpError: unexpected return</span>
+</code></pre></div><p>It doesn&rsquo;t return from the block or the calling method, it just crashes. Interesting!</p>
+<h3 id=break>break <a href=#break class=anchor>🔗</a></h3><p>The <code>break</code> keyword was the next suggestion to come to mind. You may have seen the <code>break</code> keyword used to break out of blocks early in cases like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>find_first_even</span>(array)
+  first_even <span style=color:#f92672>=</span> <span style=color:#66d9ef>nil</span>
+  array<span style=color:#f92672>.</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>item<span style=color:#f92672>|</span>
+    <span style=color:#66d9ef>if</span> item<span style=color:#f92672>.</span>even?
+      first_even <span style=color:#f92672>=</span> item
+      <span style=color:#66d9ef>break</span>
+    <span style=color:#66d9ef>end</span>
+  <span style=color:#66d9ef>end</span>
+  first_even
+<span style=color:#66d9ef>end</span>
+</code></pre></div><p>Of course, this example is completely contrived—one could simply use <code>Array#find</code> here. Regardless, when (or if) an even item in the array is found, <code>first_even</code> is set to that item, and <code>break</code> is used to stop iterating.</p>
+<p>The <a href=http://ruby-doc.org/core-2.3.4/doc/syntax/control_expressions_rdoc.html#label-break+Statement target=_blank rel=noopener>break statement documentation</a> has this to say:</p>
+<blockquote>
+<p>Use break to leave a block early.</p>
+</blockquote>
+<p>OK! Let&rsquo;s try using <code>break</code> in our block.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#66d9ef>break</span> }
+<span style=color:#75715e>#=&gt; nil</span>
+</code></pre></div><p>What&rsquo;s that? Silence? Something odd has happened here. The end of the <code>foo</code> method had this line:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>puts <span style=color:#e6db74>&#34;End of foo&#34;</span>
+</code></pre></div><p>However, that message wasn&rsquo;t printed to the console. Why?</p>
+<p>It appears that the <code>break</code> statement in a block actually returns from the calling method. When you consider our example above, this behavior seems to make sense. <code>Array#each</code> calls the given block with each element of the array, in turn. When we call <code>break</code>, it doesn&rsquo;t exit from the block that <code>each</code> would then call again with the next item—it exits from the <code>Array#each</code> call.</p>
+<h3 id=next>next <a href=#next class=anchor>🔗</a></h3><p>Using this insight, there&rsquo;s another alternative! Let&rsquo;s make another contrived example.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>evens_from_array</span>(array)
+  evens <span style=color:#f92672>=</span> <span style=color:#f92672>[]</span>
+  array<span style=color:#f92672>.</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>item<span style=color:#f92672>|</span>
+    <span style=color:#66d9ef>next</span> <span style=color:#66d9ef>if</span> item<span style=color:#f92672>.</span>odd?
+    evens <span style=color:#f92672>&lt;&lt;</span> item
+  <span style=color:#66d9ef>end</span>
+  evens
+<span style=color:#66d9ef>end</span>
+</code></pre></div><p>Naturally, you could have just used <code>Array#select</code> instead. In any event, on each iteration, we skip over the rest of the block if the item is odd. This seems like what we want! Let&rsquo;s give it a try.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#66d9ef>next</span> }
+<span style=color:#75715e>#=&gt; End of foo</span>
+</code></pre></div><p>Perfect!</p>
+<p>Let&rsquo;s make a somewhat less contrived example, just to make sure that it really does work the way that we hope. Here is an (admittedly worthless) &ldquo;calculation&rdquo; method.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>calculation</span>(a, b)
+  <span style=color:#66d9ef>yield</span>(a, b)
+<span style=color:#66d9ef>end</span>
+</code></pre></div><p>Let&rsquo;s use a guard method to exit from the block early.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>calculation(<span style=color:#ae81ff>23</span>, <span style=color:#ae81ff>0</span>) <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>a, b<span style=color:#f92672>|</span>
+  <span style=color:#66d9ef>next</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> b <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#75715e># 23 ** 0 will always be 1.</span>
+  puts <span style=color:#e6db74>&#34;Calculating...&#34;</span>
+  a <span style=color:#f92672>**</span> b
+<span style=color:#66d9ef>end</span>
+<span style=color:#75715e>#=&gt; 1</span>
+</code></pre></div><p>Great! The &ldquo;Calculating&mldr;&rdquo; message is not printed, as we exited the block prior to that point. Now let&rsquo;s use the same block, but call <code>calculation</code> with arguments that will not trigger the guard clause.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>calculation(<span style=color:#ae81ff>23</span>, <span style=color:#ae81ff>2</span>) <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>a, b<span style=color:#f92672>|</span>
+  <span style=color:#66d9ef>next</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> b <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#75715e># 23 ** 0 will always be 1.</span>
+  puts <span style=color:#e6db74>&#34;Calculating...&#34;</span>
+  a <span style=color:#f92672>**</span> b
+<span style=color:#66d9ef>end</span>
+<span style=color:#75715e>#=&gt; Calculating...</span>
+<span style=color:#75715e>#=&gt; 529</span>
+</code></pre></div><p>It works!</p>
+<p>I hope that—in the edge case that you, too, share a preference for guard clauses <em>and</em> find yourself needing to pass some sort of large block—have found this helpful are able to put this knowledge to good use!</p>
+<p>I don&rsquo;t use comments on my site, but if you have some feedback that you&rsquo;d like to share, feel free to tweet at me or send me an email using the links below.</p>
+</div>
+<div class=tags>
+<a href=http://j3rn.com/tags/ruby>ruby</a>
+</div>
+</section>
+</main>
+<footer id=footer>
+<div id=social>
+<a class=symbol href=https://github.com/J3RN rel=me target=_blank><svg fill="#bbb" width="28" height="28" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Github</title><desc>Created with Sketch.</desc><defs/><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Social-Icons---Rounded-Black" transform="translate(-264.000000, -939.000000)"><g id="Github" transform="translate(264.000000, 939.000000)"><path d="M8 72H64c4.418278.0 8-3.581722 8-8V8c0-4.418278-3.581722-8-8-8H8c-4.418278 811624501e-24-8 3.581722-8 8V64c541083001e-24 4.418278 3.581722 8 8 8z" id="Rounded" fill="#bbb"/><path d="M35.9985 13C22.746 13 12 23.7870921 12 37.096644c0 10.6440272 6.876 19.6751861 16.4145 22.8617681C29.6145 60.1797862 30.0525 59.4358488 30.0525 58.7973276 30.0525 58.2250681 30.0315 56.7100863 30.0195 54.6996482c-6.6765 1.4562499-8.085-3.2302544-8.085-3.2302544-1.0905-2.7829884-2.664-3.5239139-2.664-3.5239139C17.091 46.4500754 19.4355 46.4801943 19.4355 46.4801943c2.4075.1701719 3.675 2.4833051 3.675 2.4833051 2.142 3.6820383 5.6175 2.6188404 6.9855 2.0014024C30.3135 49.4077535 30.9345 48.3460615 31.62 47.7436831 26.2905 47.1352808 20.688 45.0691228 20.688 35.8361671c0-2.6308879.9345-4.781379 2.4705-6.4665327C22.911 28.7597262 22.0875 26.3110578 23.3925 22.9934585c0 0 2.016-.6475568 6.6 2.4697516C31.908 24.9285993 33.96 24.6620468 36.0015 24.6515052 38.04 24.6620468 40.0935 24.9285993 42.0105 25.4632101c4.581-3.1173084 6.5925-2.4697516 6.5925-2.4697516C49.9125 26.3110578 49.089 28.7597262 48.8415 29.3696344 50.3805 31.0547881 51.309 33.2052792 51.309 35.8361671c0 9.2555448-5.6115 11.29309-10.9575 11.8894446.860999999999997.7439374 1.629 2.2137408 1.629 4.4621184C41.9805 55.4089489 41.9505 58.0067059 41.9505 58.7973276 41.9505 59.4418726 42.3825 60.1918338 43.6005 59.9554002 53.13 56.7627944 60 47.7376593 60 37.096644 60 23.7870921 49.254 13 35.9985 13" fill="#fff"/></g></g></g></svg>
+</a>
+</div>
+<div class=copyright>
+© Copyright
+2021
+<span class=split><svg fill="#bbb" width="15" height="15" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path d="M13.91 6.75c-1.17 2.25-4.3 5.31-6.07 6.94-.1903.1718-.4797.1718-.67.0C5.39 12.06 2.26 9 1.09 6.75-1.48 1.8 5-1.5 7.5 3.45 10-1.5 16.48 1.8 13.91 6.75z"/></svg>
+</span>
+Jonathan Arnett
+</div>
+<div class=powerby>
+Powered by <a href=http://www.gohugo.io/>Hugo</a> Theme By <a href=https://github.com/nodejh/hugo-theme-cactus-plus>nodejh</a>
+</div>
+</footer>
+</body>
+</html>
