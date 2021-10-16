@@ -2,7 +2,6 @@
 layout: post
 title: "Elixir Behaviours vs Protocols"
 date: 2021-10-14T22:40:42-04:00
-draft: true
 tags:
 - elixir
 ---
@@ -15,7 +14,7 @@ Behaviours are conceptually quite simple:
 
 > A behaviour module defines a set of functions and macros (referred to as callbacks) that callback modules implementing that behaviour must export.
 
-A commonly use behaviour is GenServer, used like so:
+For instance, a commonly used behaviour is GenServer, used like so:
 
 ```elixir
 defmodule MyApp.APICache do
@@ -29,7 +28,9 @@ However, this module fails to compile with the following error:
 warning: function init/1 required by behaviour GenServer is not implemented (in module MyApp.APICache)
 ```
 
-In other words, the GenServer behaviour specified that modules implementing it _must_ define an `init/1` function. The rationale behind behviours is to allow modules to be _interchangeable_. By enforcing the existence of an `init/1` function, the GenServer behaviour ensures that if a module knows how to start one implementation of GenServer, it knows how to start _all implementations of GenServer_.
+In other words, the GenServer behaviour specified that modules implementing it _must_ define an `init/1` function that starts the GenServer process. By enforcing the existence of an `init/1` function, the GenServer behaviour ensures that if a module knows how to start one implementation of GenServer, it knows how to start _all implementations of GenServer_.
+
+This demonstrates the central proposition of behaviours: behaviours allow modules to be _interchangeable_.
 
 This property of interchangeability lends itself to use with the Dispatcher Pattern. Let's say that we are writing an application that takes the name of a product and tries to find a price for that item on an online marketplace. We could write our application like so:
 
@@ -52,7 +53,7 @@ defmodule PriceFinder do
   # ...
 ```
 
-This is fine, but consider the case where a developer makes a small change such that `BoatTraderAPI.find_boat_price/1` now returns a float instead of an integer. Whoops! Sadly, this is the kind of error that Dialyzer isn't likely to catch[¹]. To remedy this, a well-meaning developer might make the following change:
+This is fine, but consider the case where a developer makes a small change such that `BoatTraderAPI.find_boat_price/1` now returns a float instead of an integer. Whoops! Sadly, this is the kind of error that Dialyzer isn't likely to catch[^1]. To remedy this, a well-meaning developer might make the following change:
 
 ```diff
 -      BoatTraderAPI.find_boat_price(product_name)
@@ -83,16 +84,17 @@ defmodule PriceFinder do
 
   # ...
 ```
+[^2]
 
 In this case, `BoatTraderAPI`, `NeweggAPI`, and `JoydriveAPI` (collectively, the implementations) should all contain `@behaviour PriceFinder`. This way, `PriceFinder.product_price/1` (the dispatcher) can be assured that a `product_price/1` function exists within each of those modules, and Dialyzer can check that the implementations conform to the typespec specified. Consequently, type-related errors should be harder to introduce and the dispatcher leaves no room for vendor-specific bloat to creep in.
 
 ## Protocols
 
-Given what we now know about behaviours, the summary of protocols is somewhat confusing:
+Given what we now know about behaviours, [the documentation's summary of protocols](https://hexdocs.pm/elixir/Protocol.html) is somewhat confusing:
 
 > A protocol specifies an API that should be defined by its implementations. A protocol is defined with `Kernel.defprotocol/2` and its implementations with `Kernel.defimpl/3`.
 
-This sounds _exactly_ like what behaviours are for, and indeed, protocols use behaviours under-the-hood. However, where protocols and behaviours deviate is with a constraint that the summary did not specify. Namely, that each implementation of a protocol _must be for a distinct data type_.
+This sounds _exactly_ like what behaviours are for, and indeed, protocols use behaviours under-the-hood. However, where protocols and behaviours differ is with a constraint that the summary did not specify. Namely, that each implementation of a protocol _must be for a distinct data type_.
 
 To understand this further, let's take a look at a protocol in the Elixir standard library: `String.Chars`. While this may sound unfamiliar to you, you have certainly used it before as [`Kernel.to_string/1`](https://github.com/elixir-lang/elixir/blob/v1.12/lib/elixir/lib/kernel.ex#L3094-L3096):
 
@@ -102,7 +104,7 @@ defmacro to_string(term) do
 end
 ```
 
-All the macro is doing here is transforming your `to_string(my_string)` call to `String.Chars.to_string(my_string)` at compile-time.
+This strange-looking macro is simply transforming your `to_string(my_string)` call to `String.Chars.to_string(my_string)` at compile-time.
 
 Alright, so how then is `String.Chars.to_string/1` defined? This is the entirety of the `String.Chars` module with the documentation removed for brevity:
 
@@ -113,7 +115,7 @@ defprotocol String.Chars do
 end
 ```
 
-However, just below that protocol's definition in [`string/chars.ex`](https://github.com/elixir-lang/elixir/blob/v1.12/lib/elixir/lib/string/chars.ex) are the implementations for many of Elixir's datatypes. Excerpted implementations for `Integer` and `Float`:
+However, just below that protocol's definition in [`string/chars.ex`](https://github.com/elixir-lang/elixir/blob/v1.12/lib/elixir/lib/string/chars.ex) are the implementations for many of Elixir's datatypes. Here are implementations for `Integer` and `Float`:
 
 ```elixir
 defimpl String.Chars, for: Integer do
@@ -158,11 +160,11 @@ to_string(%Boat{length: 41, fuel_type: "diesel"})
 #=> "A 41' boat powered by diesel"
 ```
 
-This has also exposed another power of protocols: a protocol can dispatch to a module that is not known to it. For instance, the authors of the `String.Chars` protocol had no idea that I would come along and implement their protocol for my `Boat` struct. And they didn't have to! Using protocols replaces the explicitly defined `implementation/1` function in the behaviour example above with something more flexible—so long as the implementation is determined solely based on the type of the argument.
+This has also exposed another power of protocols: a protocol can dispatch to a module that is not known to it. For instance, the authors of the `String.Chars` protocol had no idea that I would come along and implement their protocol for my `Boat` struct. And they didn't have to! Protocols essentially implement the `implementation/1` function we defined in the behaviour example above by dispatching solely by the type of the argument, and the dispatcher is automatically extended to any new implementations.
 
-The popular [Jason library](https://hexdocs.pm/jason) uses this concept with its `Jason.Encoder` protocol. You can implement the `Jason.Encoder` protocol to tell Jason how to JSON-encode your structs.
+The popular [Jason library](https://hexdocs.pm/jason) uses this concept with its [`Jason.Encoder` protocol](https://hexdocs.pm/jason/Jason.Encoder.html#content). You can implement the `Jason.Encoder` protocol on your structs to tell Jason how to JSON-encode them.
 
-Alright, let's tie what we've now learned about protocols with our example from earlier, but with a slight twist. Instead of the user providing us the _name_ of a product, they will choose a product from our collection of `Boat`s, `Component`s, and `Car`s (where `Boat`, `Component`, and `Car` are each modules defining a struct).
+Alright, let's tie what we've now learned about protocols together with our example from earlier, but with a slight twist. Instead of the user providing us the _name_ of a product, they will choose a product from our collection of `Boat`s, `Component`s, and `Car`s (where `Boat`, `Component`, and `Car` are structs).
 
 Modifying our behaviour-based solution from earlier to fit this new model yields the following:
 ```elixir
@@ -184,7 +186,7 @@ defmodule PriceFinder do
 end
 ```
 
-Not bad! However, now that our `implementation` function is based solely around "types", we can use a protocol instead!
+Not bad! However, now that our `implementation/1` function is based solely around "types", we can use a protocol instead!
 
 ```elixir
 defprotocol PriceFinder do
@@ -205,8 +207,14 @@ defimpl PriceFinder, for: Car do
 end
 ```
 
-Whether you prefer the style of the behaviour approach or the protocol approach is a matter of personal taste. However, if our `PriceFinder` module is going to be shipped as part of a library, the protocol approach would allow users of the library to implement the `PriceFinder` protocol for their own structs.
+Whether you prefer the style of the behaviour approach or the protocol approach is a matter of personal taste. However, if our `PriceFinder` module is going to be shipped as part of a library, the protocol approach would allow users of the library to implement the `PriceFinder` protocol for their own structs.[^3]
 
 ## Conclusion
 
 In short, both behaviours and protocols define an interface which must be fulfilled by its implementations. Behaviours are more general-purpose than protocols, and are sometimes used with dispatchers. Protocols are built on top of behaviours and have a type-based dispatcher built-in—one that is extensible to external types as well.
+
+[^1]: [Dialyzer only reports issues with typespecs that _will never be met_](https://erlang.org/doc/man/dialyzer.html#description). Since our `product_price/1` function can _sometimes_ comply with its typespec when the `find_boat_price` function has the wrong return type (namely the `find_component_price` and `find_car_price` functions and corresponding `cond` arms will still return the correct type), Dialyzer will ignore the potential discrepancy.
+
+[^2]: Did you notice the duplicated typespec between `@callback` and `@spec`? Sadly, that is necessary due to another weakness of Dialyzer. Each of our implementations must comply with the `@callback` typing, which means Dialyzer should be able to infer the success typing of `product_price/1` to be the same. However, Dialyzer sees the return type of `product_price/1` as being the return type of `apply(module, :product_price, [String.t()])`. Dialyzer will not visit each module to see what its `product_price/1` return type is—or even if some `product_price/1` function even exists! It simply knows that the return type of `apply/3` is `any` and bubbles that result up to the `product_price/1` function. Therefore, we must provide a meaningful return type for `product_price/1` such that Dialyzer may check the places where `product_price/1` is called.
+
+[^3]: Notice the `@spec` in the protocol definition? Not only does that apply to the generated `PriceFinder.product_price/1` function, but it will also be applied to each implementation as well.
