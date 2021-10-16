@@ -2,6 +2,7 @@
 layout: post
 title: "Elixir Behaviours vs Protocols"
 date: 2021-10-14T22:40:42-04:00
+description: As developers begin learning Elixir, they often have a very understandable confusion around the difference between Elixir's behaviours and protocols. These are similar constructs, but with important differences.
 tags:
 - elixir
 ---
