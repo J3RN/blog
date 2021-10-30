@@ -2,6 +2,8 @@
 layout: post
 title: "The Harmful Duality of Elixir's nil"
 date: 2020-12-13 20:46:00 -0500
+description: |
+  In Elixir, nil can mean "what was sought was not found" and also "this is intentionally blank". This disparity in the intentionality of nil makes life difficult for Elixir developers.
 tags:
 - elixir
 - nil

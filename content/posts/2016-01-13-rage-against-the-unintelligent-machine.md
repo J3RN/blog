@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Rage Against the Unintelligent Machine"
+description: |
+  "Classical AI" (fancy single-purpose algorithms) is still being taught in university AI courses. In this post I argue that computer science, as a field, should focus more on general AI and neuromorphic computing, while also noting ambiguity of the word "intelligence."
 date: 2016-01-13 10:08:00 -0500
 tags:
 - ai

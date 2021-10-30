@@ -2,6 +2,8 @@
 layout: post
 title: "The Agile Myth"
 date: 2021-03-06 15:10:00 -0500
+description: |
+  Who actually follows the Agile Manifesto? Is it even reasonable to expect that anyone would?
 tags:
 - software development
 - agile
@@ -44,7 +46,7 @@ At this point, let's take a step back and ask: _Why don't developers have direct
 
 One theory is simply that non-software industries—automotive, manufacturing, etc—have been doing business long before software came on the scene, and are not prepared to let seventeen unelected programmers tell them how to run their businesses. Long before software, these companies were selling products using dedicated sales teams and managing clients with account managers. Agile methodologies may have revolutionized the software industry, but they didn't revolutionize banking.
 
-Another theory is that companies worry about their developer's communication skills—and for good reason! In order for developers to engage in "customer collaboration," developers need to be able to communicate clearly with their non-technical counterparts. The trope of a developer blurting a string of barely coherent jargon in response to questions like "Could we add a 'Save' button to this page?" is founded in reality. I've seen it happen. Out of fear of scaring off customers by insisting that they collaborate with engineers, companies install an engineering manager as a buffer between the engineers and the customer.
+Another theory is that companies worry about their developer's communication skills—and for good reason! In order for developers to engage in "customer collaboration," developers need to be able to communicate clearly with their non-technical counterparts. The trope of a developer blurting a string of barely coherent jargon in response to questions like "Could we add a 'Save' button to this page?" is founded in reality: I've seen it happen. Out of fear of scaring off customers by insisting that they collaborate with engineers, companies install an engineering manager as a buffer between the engineers and the customer.
 
 Whatever the reason, the truth is that customer collaboration and receiving timely feedback are simply not realities of software development at many, perhaps even most, companies. While managers may say "We do Agile here," this is at least half myth.
 

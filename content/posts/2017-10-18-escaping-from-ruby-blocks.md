@@ -2,6 +2,8 @@
 layout: post
 title: "Escaping from Ruby Blocks"
 date: 2017-10-18 12:00:00 -0400
+description: |
+  If you need to bail out of a Ruby block before the end, how is that accomplished?
 tags:
 - ruby
 ---

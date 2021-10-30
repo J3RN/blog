@@ -2,6 +2,8 @@
 layout: post
 title: "Interpolating Ruby Strings"
 date: 2014-12-19 22:14:25 -0500
+description: |
+  Sometimes I want string templates that I can pass around. In this post, I discuss how this can be accomplished in Ruby.
 comments: true
 tags:
 - ruby

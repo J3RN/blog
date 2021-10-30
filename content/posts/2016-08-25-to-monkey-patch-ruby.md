@@ -2,6 +2,8 @@
 layout: post
 title: "To Monkey Patch Ruby"
 date: 2016-08-25 16:07:49 -0400
+description: |
+  Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?
 category: j3rnvsj3rn
 tags:
 - monkey patching
