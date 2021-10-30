@@ -32,11 +32,7 @@
 <time datetime="2021-10-14 22:40:42 -0400 -0400">Oct 14, 2021</time>
 </div>
 </div>
-<div class=summary>As developers begin learning Elixir, they often have a very understandable confusion around the difference between Elixir’s behaviours and protocols. These are similar constructs, but with important differences.
-Behaviours 🔗Behaviours are conceptually quite simple:
-A behaviour module defines a set of functions and macros (referred to as callbacks) that callback modules implementing that behaviour must export.
-For instance, a commonly used behaviour is GenServer, used like so:
-defmodule MyApp.</div>
+<div class=summary>As developers begin learning Elixir, they often have a very understandable confusion around the difference between Elixir's behaviours and protocols. These are similar constructs, but with important differences.</div>
 </section>
 <section class=item>
 <div>
@@ -45,7 +41,8 @@ defmodule MyApp.</div>
 <time datetime="2021-04-14 15:10:00 -0500 -0500">Apr 14, 2021</time>
 </div>
 </div>
-<div class=summary>José recently announced the availability of Elixir 1.12.0 rc.0, a precursor to the full Elixir 1.12.0 release which should come within the next month or so. This update consists primarily of developer quality-of-life improvements. In his announcement, José elaborated on a few changes, but I couldn’t help but feel that some exciting changes were relegated to footnotes. As such, I’m dedicating this post to trawling through the full changelog and shining a spotlight on a few of my favorite changes.</div>
+<div class=summary>I'm dedicating this post to trawling through the full Elixir 1.12 changelog and shining a spotlight on a few of my favorite changes.
+</div>
 </section>
 <section class=item>
 <div>
@@ -54,7 +51,8 @@ defmodule MyApp.</div>
 <time datetime="2021-03-06 15:10:00 -0500 -0500">Mar 6, 2021</time>
 </div>
 </div>
-<div class=summary>Writing a criticism of Agile after the word Agile has been pronounced dead by one of its authors may seem like overkill, but nothing has put a stop to the software industry’s glut of Agile certifications, occupations of “doing Agile”, and every engineering manager I’ve ever talked to saying “Oh, yes, we do Agile here.” I could write an entire blog post haranguing the profiteering and narcissistic industry (see Dave Thomas' post linked above), but today I want to dive deeper, take a hard look at the original document, and ask “Who actually does this?</div>
+<div class=summary>Who actually follows the Agile Manifesto? Is it even reasonable to expect that anyone would?
+</div>
 </section>
 <section class=item>
 <div>
@@ -63,8 +61,8 @@ defmodule MyApp.</div>
 <time datetime="2020-12-13 20:46:00 -0500 -0500">Dec 13, 2020</time>
 </div>
 </div>
-<div class=summary>The Problem 🔗Have you ever written code like this?
-def get_address(address_id) do case Addresses.get(address_id) do nil -> {:error, :address_not_found} val -> {:ok, val} end end I have. This pattern is commonly used to make the value that Ecto.Repo.get/3 returns (a struct or nil) play well with Elixir’s with construct. Since Ecto.Repo.get/3 will always return some single value, a nil check is required to determine whether that value indicates a success or a failure.</div>
+<div class=summary>In Elixir, nil can mean "what was sought was not found" and also "this is intentionally blank". This disparity in the intentionality of nil makes life difficult for Elixir developers.
+</div>
 </section>
 <section class=item>
 <div>
@@ -73,7 +71,8 @@ def get_address(address_id) do case Addresses.get(address_id) do nil -> {:error,
 <time datetime="2017-10-18 12:00:00 -0400 -0400">Oct 18, 2017</time>
 </div>
 </div>
-<div class=summary>Guard Clauses 🔗Once upon a time, Rubocop taught me to love guard clauses. When I first started learning to program, I was deeply conflicted about guard clauses. On the one hand, guard clauses can prevent the need to have deeply nested ifs. On the other hand, it can be hard to remember the context deep into a method without being able to reference the enveloping ifs (similarly to RSpec contexts). In any case, Rubocop wants me to use guard clauses, so I do.</div>
+<div class=summary>If you need to bail out of a Ruby block before the end, how is that accomplished?
+</div>
 </section>
 <section class=item>
 <div>
@@ -82,8 +81,8 @@ def get_address(address_id) do case Addresses.get(address_id) do nil -> {:error,
 <time datetime="2016-08-25 16:07:49 -0400 -0400">Aug 25, 2016</time>
 </div>
 </div>
-<div class=summary>This is the first of a series of posts I intend to write in a new “J3RN vs J3RN” style. Essentially, I will be stating a problem with two or more possible solutions, taking both sides in turn, and hopefully ultimately reaching a well thought out solution to the problem.
-The Problem 🔗For my Time Tracker application, I want to have a pretty date and time picker. However, Ruby only natively understands a handful of formats and “American date”, the format used by the pretty date and time picker, is not one of them.</div>
+<div class=summary>Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?
+</div>
 </section>
 <section class=item>
 <div>
@@ -92,7 +91,8 @@ The Problem 🔗For my Time Tracker application, I want to have a pretty date an
 <time datetime="2016-01-13 10:08:00 -0500 -0500">Jan 13, 2016</time>
 </div>
 </div>
-<div class=summary>Today marked the first time I was ever so uncomfortable in a class that I nearly got up and walked out. Such a level of discomfort is not so unfamiliar, though. It was, in fact, common during my review of candidates' projects during my involvement in one of my former employer’s hiring process. Someone might ask the candidate something like “How does user authorization work?” They’d drone on about encryption, throwing out buzzwords and waiting to see a spark in someone’s eye, letting them know that they weren’t a complete failure.</div>
+<div class=summary>"Classical AI" (fancy single-purpose algorithms) is still being taught in university AI courses. In this post I argue that computer science, as a field, should focus more on general AI and neuromorphic computing, while also noting ambiguity of the word "intelligence."
+</div>
 </section>
 <section class=item>
 <div>
@@ -101,29 +101,8 @@ The Problem 🔗For my Time Tracker application, I want to have a pretty date an
 <time datetime="2014-12-19 22:14:25 -0500 -0500">Dec 19, 2014</time>
 </div>
 </div>
-<div class=summary>Let’s talk about interpolation. Sure, you probably know the Ruby string interpolation syntax:
-arg = "world" puts "Hello #{arg}!" #=> "Hello world!" This syntax is pretty useful. However, it has it’s limitations. Let’s say that we are generating strings that are almost the same each time, but with each, one word changes. How are you going to do this now?
-My first inclination was something like this:
-line = "Today the weather is \#{ weather }" weather_conditions = {} ["warm", "cloudy", "windy"].</div>
-</section>
-<section class=item>
-<div>
-<h1 class=title><a href=/posts/2014-01-12-number-windowsprobs/>#WindowsProbs</a></h1>
-<div class=date>
-<time datetime="2014-01-12 17:06:21 -0500 -0500">Jan 12, 2014</time>
+<div class=summary>Sometimes I want string templates that I can pass around. In this post, I discuss how this can be accomplished in Ruby.
 </div>
-</div>
-<div class=summary>Linux is Great 🔗It’s been a long time since I’ve used Windows - probably a few years. It’s been even longer since I legitimately cared about fixing Windows problems and didn’t instead opt for wiping the partition and doing a fresh reinstall.
-Trust me, I’m a Developer 🔗As a computer scientist, naturally I run into people who confuse “developer” with “IT Professional” and ask me to fix their computers for them.</div>
-</section>
-<section class=item>
-<div>
-<h1 class=title><a href=/aesthetic/>Why do you dress that way?</a></h1>
-<div class=date>
-<time datetime="0001-01-01 00:00:00 +0000 UTC">Jan 1, 0001</time>
-</div>
-</div>
-<div class=summary>I get asked this a lot, so I wrote a glorified FAQ page. 🔗 The original reason was social engineering lite. Occasionally I would have to dress up for events in high school, and I noticed that when I did people treated me differently. There’s a ton of research into subconscious biases that’s honestly really fascinating, but suffice it to say that police officers are usually nicer to well-dressed people that they pull over.</div>
 </section>
 </div>
 </main>
