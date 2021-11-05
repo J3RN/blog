@@ -10,3 +10,6 @@ github = "https://github.com/J3RN"
 author = "Jonathan Arnett"
 description = "My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design."
 enableRSS = true
+
+[markup.goldmark.renderer]
+unsafe = true
