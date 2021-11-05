@@ -1,0 +1,237 @@
+<!doctype html><html lang=en-us>
+<head>
+<title>Truly Declarative: Logic Programming | J3RN's Blog</title>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<meta name=viewport content="width=device-width,minimum-scale=1">
+<meta name=description content="I solve a simple math problem with three languages representing three paradigms which I see placed along the sliding scale of &#34;declarativeness&#34;.
+">
+<meta name=generator content="Hugo 0.88.0">
+<meta name=ROBOTS content="NOINDEX, NOFOLLOW">
+<link rel=stylesheet href=/css/style.css>
+<link rel="shortcut icon" href=/images/favicon.ico type=image/x-icon>
+<script defer data-domain=j3rn.com src=https://plausible.io/js/plausible.js></script>
+</head>
+<body>
+<nav class=navigation>
+<a href=/> <span class=arrow>←</span>Home</a>
+<a href=/posts>Archive</a>
+<a href=/tags>Tags</a>
+<a class=button href=http://j3rn.com/index.xml>Subscribe</a>
+</nav>
+<main class=main>
+<section id=single>
+<h1 class=title>Truly Declarative: Logic Programming</h1>
+<div class=tip>
+<time datetime="2021-10-30 10:21:19 -0400 -0400">Oct 30, 2021</time>
+<span class=split>
+·
+</span>
+<span>
+1934 words
+</span>
+<span class=split>
+·
+</span>
+<span>
+10 minute read
+</span>
+</div>
+<div class=content>
+<p>While reading through Miran Lipovača&rsquo;s excellent <a href=http://learnyouahaskell.com/ target=_blank rel=noopener><em>Learn You a Haskell</em></a>, I came across the following problem:</p>
+<blockquote>
+<p>Which right triangle that has integers for all sides and all sides equal to or smaller than 10 has a perimeter of 24?</p>
+</blockquote>
+<p>To demonstrate some properties of different programming languages, I&rsquo;ll solve this problem in three languages embodying three different paradigms:</p>
+<ul>
+<li>C (imperative and procedural)</li>
+<li>Haskell (functional)</li>
+<li>Prolog (logic and constraint)</li>
+</ul>
+<h2 id=c>C <a href=#c class=anchor>🔗</a></h2><p>The general approach I&rsquo;ll be taking here is to generate every set of possible lengths fitting the constraints (namely being integers between 1 and 10) and then check to see if the other two conditions are met (being a right triangle, having a perimeter of 24).</p>
+<p>Let&rsquo;s start with the side-length piece<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>right_triangle</span>() {
+  <span style=color:#66d9ef>int</span> a, b, c;
+
+  <span style=color:#66d9ef>for</span> (c <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; c <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>10</span>; c<span style=color:#f92672>++</span>) {
+    <span style=color:#66d9ef>for</span> (b <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; b <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>10</span>; b<span style=color:#f92672>++</span>) {
+      <span style=color:#66d9ef>for</span> (a <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; a <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>10</span>; a<span style=color:#f92672>++</span>) {
+        <span style=color:#75715e># TODO: Perform perimeter and right triangle checks
+</span><span style=color:#75715e></span>        printf(<span style=color:#e6db74>&#34;[%i, %i, %i]</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, a, b, c);
+      }
+    }
+  }
+}
+</code></pre></div><p>Running this code shows not only every possible set of sides, but every possible <em>permutation</em> of every possible set of side lengths! That&rsquo;s a bit much. Let&rsquo;s decide that <code>c</code> is the hypotenuse, <code>b</code> is the next longest side, and <code>a</code> is that last side that is at most equal in length to <code>b</code>. These constraints also reduce our search space, making the code run faster!</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>right_triangle</span>() {
+  <span style=color:#66d9ef>int</span> a, b, c;
+
+  <span style=color:#66d9ef>for</span> (c <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; c <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>10</span>; c<span style=color:#f92672>++</span>) {
+    <span style=color:#66d9ef>for</span> (b <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; b <span style=color:#f92672>&lt;</span> c; b<span style=color:#f92672>++</span>) {
+      <span style=color:#66d9ef>for</span> (a <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; a <span style=color:#f92672>&lt;=</span> b; a<span style=color:#f92672>++</span>) {
+        <span style=color:#75715e># TODO: Perform perimeter and right triangle checks
+</span><span style=color:#75715e></span>        printf(<span style=color:#e6db74>&#34;[%i, %i, %i]</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, a, b, c);
+      }
+    }
+  }
+}
+</code></pre></div><p>OK, great. Now let&rsquo;s check our perimeter and right triangle constraints. The former is simply a matter of adding up the side lengths, nothing special there. For checking that our side lengths create a right triangle, Pythagorus tells us that, given that the hypotenuse of a triangle is represented by &ldquo;c&rdquo; and the other two sides by &ldquo;a&rdquo; and &ldquo;b&rdquo;, the side lengths must follow the rule a² + b² = c².</p>
+<p>Let&rsquo;s add those checks:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>right_triangle</span>() {
+  <span style=color:#66d9ef>int</span> a, b, c;
+
+  <span style=color:#66d9ef>for</span> (c <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; c <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>10</span>; c<span style=color:#f92672>++</span>) {
+    <span style=color:#66d9ef>for</span> (b <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; b <span style=color:#f92672>&lt;=</span> c; b<span style=color:#f92672>++</span>) {
+      <span style=color:#66d9ef>for</span> (a <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>; a <span style=color:#f92672>&lt;=</span> b; a<span style=color:#f92672>++</span>) {
+        <span style=color:#66d9ef>if</span> (a <span style=color:#f92672>+</span> b <span style=color:#f92672>+</span> c <span style=color:#f92672>==</span> <span style=color:#ae81ff>24</span> <span style=color:#f92672>&amp;&amp;</span> pow(a, <span style=color:#ae81ff>2</span>) <span style=color:#f92672>+</span> pow(b, <span style=color:#ae81ff>2</span>) <span style=color:#f92672>==</span> pow(c, <span style=color:#ae81ff>2</span>)) {
+          printf(<span style=color:#e6db74>&#34;[%i, %i, %i]</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>, a, b, c);
+        }
+      }
+    }
+  }
+}
+</code></pre></div><p>That&rsquo;s it! When we call this function, the solution to the problem (<code>[6, 8, 10]</code>) is printed to the console.</p>
+<p>Try it for yourself!</p>
+<iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/C-solution?lite=true"></iframe>
+<h2 id=haskell>Haskell <a href=#haskell class=anchor>🔗</a></h2><p>In Haskell, the most analogous way to solve this problem is via a &ldquo;list comprehension&rdquo;. This construct exists in other languages, and often looks quite similar<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup>.</p>
+<p>Let&rsquo;s break down how list comprehensions work. They have three parts:</p>
+<ol>
+<li>Generator(s)</li>
+<li>Filter(s)</li>
+<li>Mapper</li>
+</ol>
+<h3 id=generators>Generators <a href=#generators class=anchor>🔗</a></h3><p>Let&rsquo;s start with the generators. Using our optimization from the C solution, our first generator is <code>c &lt;- [1..10]</code>, which will give the binding <code>c</code> each value between <code>1</code> and <code>10</code>, followed by <code>b &lt;- [1..c]</code>, which will give <code>b</code> each value between <code>1</code> and <code>c</code>, and ending with <code>a &lt;- [1..b]</code>, which will give <code>a</code> each value between <code>1</code> and <code>b</code>.</p>
+<p>The comprehension with only our generators (and technically also a mapper, but we&rsquo;ll get to that in a moment) looks like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-haskell data-lang=haskell><span style=color:#f92672>&gt;</span> [(a, b, c) <span style=color:#f92672>|</span> c <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span><span style=color:#ae81ff>10</span>], b <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>c], a <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>b]]
+[(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>),(<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>3</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>),(<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>3</span>) <span style=color:#f92672>...</span>
+</code></pre></div><p>(the result is very long, and has been truncated)</p>
+<p>See for yourself!</p>
+<iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Haskell-Generators?lite=true"></iframe>
+<h3 id=filters>Filters <a href=#filters class=anchor>🔗</a></h3><p>Now we need to filter out all sets of sides that don&rsquo;t form a right triangle or don&rsquo;t sum to 24. Filters go after generators (though I think the two can be interspersed), and are simply boolean expressions. For instance, the perimeter filter is the boolean expression <code>a + b + c == 24</code> and the right triangle filter is the boolean expression <code>a^2 + b^2 == c^2</code>.<sup id=fnref:3><a href=#fn:3 class=footnote-ref role=doc-noteref>3</a></sup></p>
+<p>This gives us:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-haskell data-lang=haskell><span style=color:#f92672>&gt;</span> [(a, b, c) <span style=color:#f92672>|</span> c <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span><span style=color:#ae81ff>10</span>], b <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>c], a <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>b], a <span style=color:#f92672>+</span> b <span style=color:#f92672>+</span> c <span style=color:#f92672>==</span> <span style=color:#ae81ff>24</span>, a<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>+</span> b<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>==</span> c<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span>]
+[(<span style=color:#ae81ff>6</span>,<span style=color:#ae81ff>8</span>,<span style=color:#ae81ff>10</span>)]
+</code></pre></div><p>There&rsquo;s our solution! Try it!</p>
+<iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Haskell-Triangle-Solution?lite=true"></iframe>
+<h3 id=mappers>Mappers <a href=#mappers class=anchor>🔗</a></h3><p>But wait, there&rsquo;s more! Did you notice the <code>(a, b, c)</code> bit at the beginning of each comprehension? What happens if we changed that to something different?</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-haskell data-lang=haskell><span style=color:#f92672>&gt;</span> [(a <span style=color:#f92672>*</span> b) <span style=color:#f92672>/</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>|</span> c <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span><span style=color:#ae81ff>10</span>], b <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>c], a <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>b], a <span style=color:#f92672>+</span> b <span style=color:#f92672>+</span> c <span style=color:#f92672>==</span> <span style=color:#ae81ff>24</span>, a<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>+</span> b<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>==</span> c<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span>]
+[<span style=color:#ae81ff>24.0</span>]
+</code></pre></div><p>I changed the expression <code>(a, b, c)</code> to the expression <code>(a * b) / 2</code>, which gives us the area of the triangle instead of a tuple of the lengths of its sides. But why call it a mapper? Well, that&rsquo;s because each set of generated values that make it past the filters are given to the mapper to be turned into some kind of final result. In the case of this problem, there&rsquo;s only one set of values that make it past the filters (<code>c</code> being 10, <code>b</code> being 8, and <code>a</code> being 6) and so only that one set of values gets &ldquo;mapped&rdquo;.</p>
+<p>See for yourself!</p>
+<iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Haskell-Mapper?lite=true"></iframe>
+<h2 id=prolog>Prolog <a href=#prolog class=anchor>🔗</a></h2><p>The Prolog solution that we&rsquo;ll write will be profoundly different from the previous two. While the Haskell syntax is far more concise and expressive than the C syntax, the solutions in both languages follow essentially the same two steps:</p>
+<ol>
+<li>Generate all possible combinations of side lengths</li>
+<li>Check each set of side lengths to see if it&rsquo;s the solution.</li>
+</ol>
+<p>However, Prolog doesn&rsquo;t have the facilities to do these things, at least not in the same way. A Prolog program consists of two elements: facts and rules.</p>
+<h3 id=facts>Facts <a href=#facts class=anchor>🔗</a></h3><p>Facts are exactly what they sound like. For instance, the following fact states that <code>mike</code> is the father of <code>john</code>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#a6e22e>father</span>(<span style=color:#e6db74>mike</span>, <span style=color:#e6db74>john</span>).
+</code></pre></div><p>The term <code>father</code> in the fact above is referred to as a &ldquo;relation&rdquo; because it describes the relationship between <code>mike</code> and <code>john</code>.</p>
+<p>Having defined a fact, we can ask Prolog about it<sup id=fnref:4><a href=#fn:4 class=footnote-ref role=doc-noteref>4</a></sup>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#e6db74>?-</span> <span style=color:#a6e22e>father</span>(<span style=color:#e6db74>mike</span>, <span style=color:#e6db74>john</span>).
+<span style=color:#e6db74>true</span>.
+<span style=color:#e6db74>?-</span> <span style=color:#a6e22e>father</span>(A, <span style=color:#e6db74>john</span>).
+A <span style=color:#f92672>=</span> <span style=color:#e6db74>mike</span>.
+</code></pre></div><p>(<em><code>?-</code> is the Prolog REPL prompt, where you can make queries</em>)</p>
+<p>Prolog can tell us if a statement is true, or how we might make it true. Nifty!</p>
+<p>Here, try it for yourself!</p>
+<iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Prolog-Fact-Example?lite=true"></iframe>
+<h3 id=rules>Rules <a href=#rules class=anchor>🔗</a></h3><p>Rules represent ways in which we can extend our existing facts or rules to derive more information. For instance, below is an <code>ancestor</code> rule that builds upon our <code>father</code> relation. It can tell us if <code>A</code> is a paternal ancestor of <code>B</code>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#a6e22e>ancestor</span>(A, B) :-
+  <span style=color:#a6e22e>father</span>(A, B);
+  <span style=color:#a6e22e>father</span>(C, B), <span style=color:#a6e22e>ancestor</span>(A, C).
+</code></pre></div><p>In Prolog, <code>;</code> is read as &ldquo;or&rdquo; and <code>,</code> is read as &ldquo;and&rdquo;, making the above rule:</p>
+<blockquote>
+<p>A is an ancestor of B if A is the father of B or if C is the father of B and A is an ancestor of C.</p>
+</blockquote>
+<p>Try it! When Prolog returns a result but doesn&rsquo;t create a new prompt, this indicates that there may be more than one result, and Prolog wants you to tell it whether you want it to try to find the next answer or stop. To tell Prolog to try to find another solution, type <code>;</code>. To tell Prolog to stop searching for solutions, type <code>.</code>.</p>
+<iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Prolog-Rule-Example?lite=true"></iframe>
+<h3 id=back-to-triangles>Back to Triangles <a href=#back-to-triangles class=anchor>🔗</a></h3><p><strong>Interesting! But what does this all this have to do with triangles?</strong> Well, nothing, other than that relations can also be used to express <em>constraints</em> (since 1982&rsquo;s Prolog II). For instance, the following line states that <code>A</code> must be between 1 and 10 (inclusive):</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#e6db74>?-</span> <span style=color:#a6e22e>between</span>(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>10</span>, A).
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>6</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>7</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>8</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>9</span> ;
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>10.</span>
+</code></pre></div><p>Note that I didn&rsquo;t have to define <code>between/3</code>, it is built-in to Prolog.</p>
+<p>In fact, we can phrase our entire problem as a set of constraints on the triangle&rsquo;s sides!</p>
+<ol>
+<li>The lengths of the three sides must be between 1 and 10.</li>
+<li>The perimeter of the triangle (the sum of the sides) must equal 24.</li>
+<li>The sides must form a right triangle.</li>
+</ol>
+<p>Therefore, our complete Prolog solution is this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#a6e22e>solution</span>(A, B, C) :-
+    <span style=color:#a6e22e>between</span>(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>10</span>, C), <span style=color:#a6e22e>between</span>(<span style=color:#ae81ff>1</span>, C, B), <span style=color:#a6e22e>between</span>(<span style=color:#ae81ff>1</span>, B, A),
+    <span style=color:#ae81ff>24</span> <span style=color:#f92672>is</span> A <span style=color:#f92672>+</span> B <span style=color:#f92672>+</span> C,
+    <span style=color:#ae81ff>0</span> <span style=color:#f92672>is</span> A<span style=color:#e6db74>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>+</span> B<span style=color:#e6db74>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>-</span> C<span style=color:#e6db74>^</span><span style=color:#ae81ff>2.</span>
+</code></pre></div><p>(<em>Note that I also included our additional constraints on A and B to preclude permutations here.</em>)</p>
+<p>Queried like so:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#e6db74>?-</span> <span style=color:#a6e22e>solution</span>(A, B, C).
+A <span style=color:#f92672>=</span> <span style=color:#ae81ff>6</span>,
+B <span style=color:#f92672>=</span> <span style=color:#ae81ff>8</span>,
+C <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>
+</code></pre></div><p>Try it!</p>
+<iframe frameborder=0 height=500px width=100% src="https://replit.com/@J3RN/Prolog-Triangle-Solution?lite=true"></iframe>
+<p>Now, you&rsquo;ve probably noticed something strange about some of these rules: Namely, that I used <code>is</code> instead of <code>=</code> whenever I had to do math. This is, sadly, just part of the way Prolog is; math is largely an afterthought. Doubly so, because the left side of <code>is</code> is required to be a number or variable, but not an expression. For instance, the following is invalid:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog>C<span style=color:#e6db74>**</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>is</span> A<span style=color:#e6db74>**</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>+</span> B<span style=color:#e6db74>**</span><span style=color:#ae81ff>2.</span>
+</code></pre></div><p>Pretty gnarly, isn&rsquo;t it?</p>
+<h2 id=conclusions>Conclusions <a href=#conclusions class=anchor>🔗</a></h2><p>Of the above three, I&rsquo;m particularly fond of the Prolog solution despite it&rsquo;s gnarly math limitations. <strong><em>&ldquo;Why?"</em></strong> you ask? Well, because the Prolog solution is the most <em>declarative</em>. <a href=https://wiki.c2.com/?DeclarativeProgramming target=_blank rel=noopener>Ward Cunningham defines declarative programming as the following</a>:</p>
+<blockquote>
+<p>Programming where problems are described, or conditions on a solution are described, and the computer finds a solution.</p>
+</blockquote>
+<p>In the Prolog solution, as opposed to the C and Haskell solutions, I was not required to give any information about <em>how</em> to go about solving this problem; Prolog was able to do that on it&rsquo;s own. Heck, it may have created 220 threads to check each possible combination of side lengths simultaneously or it may have just tried numbers at random; it&rsquo;s really no concern of mine. And I <em>love</em> that.</p>
+<p>However, Prolog, as we&rsquo;ve seen, isn&rsquo;t the most practical or pretty language. While it was well-suited to the problem that I addressed here, it is not well-suited to every problem, perhaps not even a <em>majority</em> of problems. Additionally, Prolog intends to be a standalone programming language and most distributions (such as <a href=https://www.swi-prolog.org/ target=_blank rel=noopener>SWI-Prolog</a> or <a href=http://www.gprolog.org/ target=_blank rel=noopener>GNU Prolog</a>) include rules for performing side-effects (such as writing to the console), which don&rsquo;t really make sense in logic or constraint programming.</p>
+<p>With that said, there is a promising new trend of logic and constraint DSLs that can be used within functional or imperative languages, such as <a href=http://minikanren.org/ target=_blank rel=noopener>miniKanren</a> and <a href=https://github.com/rvirding/erlog target=_blank rel=noopener>Erlog</a>. Introducing these paradigms inside of existing languages (which commonly already feature DSLs for purposes such as building regular expressions or constructing SQL queries) allows developers to reach for them when they provide the most elegant solution and ignore them otherwise. This, I feel, is the future for logic and constraint languages, and I personally can&rsquo;t wait!</p>
+<section class=footnotes role=doc-endnotes>
+<hr>
+<ol>
+<li id=fn:1 role=doc-endnote>
+<p>While I declared my variables at the top of my function, I think modern C allows for you to write variable declarations inline in <code>for</code> loops (e.g. <code>for (int c = 1; ...</code>). I&rsquo;m old-fashioned though.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+<li id=fn:2 role=doc-endnote>
+<p>Equivalent solution in Erlang:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-erlang data-lang=erlang><span style=color:#a6e22e>right_triangles</span>() <span style=color:#f92672>-&gt;</span>
+  [{A, B, C} || C <span style=color:#f92672>&lt;-</span> lists:<span style=color:#a6e22e>seq</span>(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>10</span>), B <span style=color:#f92672>&lt;-</span> lists:<span style=color:#a6e22e>seq</span>(<span style=color:#ae81ff>1</span>, C), A <span style=color:#f92672>&lt;-</span> lists:<span style=color:#a6e22e>seq</span>(<span style=color:#ae81ff>1</span>, B), math:<span style=color:#a6e22e>pow</span>(A, <span style=color:#ae81ff>2</span>) <span style=color:#f92672>+</span> math:<span style=color:#a6e22e>pow</span>(B, <span style=color:#ae81ff>2</span>) <span style=color:#f92672>==</span> math:<span style=color:#a6e22e>pow</span>(C, <span style=color:#ae81ff>2</span>), A <span style=color:#f92672>+</span> B <span style=color:#f92672>+</span> C <span style=color:#f92672>==</span> <span style=color:#ae81ff>24</span>].
+</code></pre></div><p>The Erlang syntax is much more verbose, but fundamentally we&rsquo;ve only traded <code>(a, b, c)</code> for <code>{A, B, C}</code>, <code>|</code> for <code>||</code>, <code>[a..b]</code> for <code>lists:seq(A, B)</code>, and <code>a^b</code> for <code>math:pow(A, B)</code>.&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+<li id=fn:3 role=doc-endnote>
+<p><code>^</code> is the exponentiation operator in Haskell&#160;<a href=#fnref:3 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+<li id=fn:4 role=doc-endnote>
+<p>In Prolog, terms starting with a lowercase letter are atoms and terms starting with an uppercase letter are variables.&#160;<a href=#fnref:4 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</div>
+<div class=tags>
+<a href=http://j3rn.com/tags/logic-programming>logic programming</a>
+<a href=http://j3rn.com/tags/prolog>prolog</a>
+<a href=http://j3rn.com/tags/haskell>haskell</a>
+</div>
+</section>
+</main>
+<footer id=footer>
+<div id=social>
+<a class=symbol href=https://github.com/J3RN rel=me target=_blank><svg fill="#bbb" width="28" height="28" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Github</title><desc>Created with Sketch.</desc><defs/><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Social-Icons---Rounded-Black" transform="translate(-264.000000, -939.000000)"><g id="Github" transform="translate(264.000000, 939.000000)"><path d="M8 72H64c4.418278.0 8-3.581722 8-8V8c0-4.418278-3.581722-8-8-8H8c-4.418278 811624501e-24-8 3.581722-8 8V64c541083001e-24 4.418278 3.581722 8 8 8z" id="Rounded" fill="#bbb"/><path d="M35.9985 13C22.746 13 12 23.7870921 12 37.096644c0 10.6440272 6.876 19.6751861 16.4145 22.8617681C29.6145 60.1797862 30.0525 59.4358488 30.0525 58.7973276 30.0525 58.2250681 30.0315 56.7100863 30.0195 54.6996482c-6.6765 1.4562499-8.085-3.2302544-8.085-3.2302544-1.0905-2.7829884-2.664-3.5239139-2.664-3.5239139C17.091 46.4500754 19.4355 46.4801943 19.4355 46.4801943c2.4075.1701719 3.675 2.4833051 3.675 2.4833051 2.142 3.6820383 5.6175 2.6188404 6.9855 2.0014024C30.3135 49.4077535 30.9345 48.3460615 31.62 47.7436831 26.2905 47.1352808 20.688 45.0691228 20.688 35.8361671c0-2.6308879.9345-4.781379 2.4705-6.4665327C22.911 28.7597262 22.0875 26.3110578 23.3925 22.9934585c0 0 2.016-.6475568 6.6 2.4697516C31.908 24.9285993 33.96 24.6620468 36.0015 24.6515052 38.04 24.6620468 40.0935 24.9285993 42.0105 25.4632101c4.581-3.1173084 6.5925-2.4697516 6.5925-2.4697516C49.9125 26.3110578 49.089 28.7597262 48.8415 29.3696344 50.3805 31.0547881 51.309 33.2052792 51.309 35.8361671c0 9.2555448-5.6115 11.29309-10.9575 11.8894446.860999999999997.7439374 1.629 2.2137408 1.629 4.4621184C41.9805 55.4089489 41.9505 58.0067059 41.9505 58.7973276 41.9505 59.4418726 42.3825 60.1918338 43.6005 59.9554002 53.13 56.7627944 60 47.7376593 60 37.096644 60 23.7870921 49.254 13 35.9985 13" fill="#fff"/></g></g></g></svg>
+</a>
+</div>
+<div class=copyright>
+© Copyright
+2021
+<span class=split><svg fill="#bbb" width="15" height="15" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path d="M13.91 6.75c-1.17 2.25-4.3 5.31-6.07 6.94-.1903.1718-.4797.1718-.67.0C5.39 12.06 2.26 9 1.09 6.75-1.48 1.8 5-1.5 7.5 3.45 10-1.5 16.48 1.8 13.91 6.75z"/></svg>
+</span>
+Jonathan Arnett
+</div>
+<div class=powerby>
+Powered by <a href=http://www.gohugo.io/>Hugo</a> Theme By <a href=https://github.com/nodejh/hugo-theme-cactus-plus>nodejh</a>
+</div>
+</footer>
+</body>
+</html>

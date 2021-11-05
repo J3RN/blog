@@ -28,7 +28,7 @@
 ·
 </span>
 <span>
-549 words
+550 words
 </span>
 <span class=split>
 ·
@@ -43,7 +43,7 @@
 <p><strong>The time specified in the date and picker, available as a string, needs to be converted to a <code>Time</code> instance on save, then converted back into the American date string when displayed.</strong></p>
 <p>My first solution was to put two methods in a controller, <code>from_american_date</code> and <code>to_american_date</code>, which would perform these functions. However, this approach felt messy. Why should the controller know about converting time formats? What if I need this functionality in another controller?</p>
 <p>I saw two alternatives: Monkey patching <code>Time</code> and creating a new module, <code>AmericanDate</code>.</p>
-<h2 id=to-monkey-patch>To Monkey Patch <a href=#to-monkey-patch class=anchor>🔗</a></h2><p>If you look at Ruby&rsquo;s <code>Time</code> class, you will notice that it has an <code>iso8601</code> class method as well as some <code>rfc****</code> class methods whose purposes are to parse strings from those formats into <code>Time</code> instances. Additionally, each of these class methods has a corresponding instance method that converts the <code>Time</code> instance into the proper string. Thus, it would make sense to simply define a <code>Time.american_date</code> method to parse <code>Time</code> instances from American date strings and a <code>Time#american_date</code> method to convert <code>Time</code> instances into American date strings.<a href=#one>1</a></p>
+<h2 id=to-monkey-patch>To Monkey Patch <a href=#to-monkey-patch class=anchor>🔗</a></h2><p>If you look at Ruby&rsquo;s <code>Time</code> class, you will notice that it has an <code>iso8601</code> class method as well as some <code>rfc****</code> class methods whose purposes are to parse strings from those formats into <code>Time</code> instances. Additionally, each of these class methods has a corresponding instance method that converts the <code>Time</code> instance into the proper string. Thus, it would make sense to simply define a <code>Time.american_date</code> method to parse <code>Time</code> instances from American date strings and a <code>Time#american_date</code> method to convert <code>Time</code> instances into American date strings.<a href=#one><sup>1</sup></a></p>
 <p>Since Ruby modules can only provide instance methods through <code>include</code>, we will need to separate the class and instance methods into separate modules, which will be added to <code>Time</code> through <code>extend</code> and <code>include</code>, respectively.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#75715e># lib/core_extensions/time/custom_formats.rb</span>
 <span style=color:#66d9ef>module</span> CoreExtensions
@@ -86,7 +86,7 @@
 </code></pre></div><p>Done! Wasn&rsquo;t that simple?</p>
 <p>Why do it this way? It&rsquo;s easy. If I one day want to turn this into a gem (though an <a href=https://rubygems.org/gems/american_date target=_blank rel=noopener>American date gem</a> already exists), it would be pretty simple.</p>
 <h2 id=conclusion>Conclusion <a href=#conclusion class=anchor>🔗</a></h2><p>I&rsquo;m going to monkey patch <code>Time</code> and add the method to <code>ApplicationHelper</code>. While the module solution is simpler, it doesn&rsquo;t come near the elegance of the monkey patching solution. Hopefully, Monkey patching responsibly will help to avoid many of its pitfalls.</p>
-<p>1 The style of monkey patching I used came from <a href=http://www.justinweiss.com/articles/3-ways-to-monkey-patch-without-making-a-mess/ target=_blank rel=noopener>a great blog post by Justin Weiss</a>.</p>
+<p><a name=one></a><sup>1</sup> The style of monkey patching I used came from <a href=http://www.justinweiss.com/articles/3-ways-to-monkey-patch-without-making-a-mess/ target=_blank rel=noopener>a great blog post by Justin Weiss</a>.</p>
 </div>
 <div class=tags>
 <a href=http://j3rn.com/tags/monkey-patching>monkey patching</a>
