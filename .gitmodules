@@ -1,3 +1,6 @@
 [submodule "themes/mini"]
 	path = themes/mini
 	url = https://github.com/J3RN/hugo-theme-mini.git
+[submodule "static/goe"]
+	path = static/goe
+	url = https://github.com/J3RN/game-of-evolution
