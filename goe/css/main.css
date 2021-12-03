@@ -1,0 +1,89 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+html, body {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  color: #282828;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+canvas#canvas {
+  border: 1px solid black;
+  margin-top: 1vmin;
+  height: 98vmin;
+  width: 98vmin;
+}
+
+#inspect {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid black;
+  padding: 5px;
+  z-index: 100;
+  display: none;
+}
+
+#control {
+  background: white;
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 1em 1em 0 0;
+  padding: 2em 0;
+  -moz-box-shadow: 0 2px 5px 2px rgba(0,0,0,0.15);
+  -webkit-box-shadow: 0 2px 5px 2px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 5px 2px rgba(0,0,0,0.15);
+}
+
+button {
+  font-size: 1em;
+  color: #FFF;
+  margin: 2em 0 0 0;
+  background: #FF3F3F;
+  padding: 0.25em 1.5em;
+  border-radius: 2px;
+  border: none;
+  box-shadow: none;
+}
+
+td > span.swatch {
+    padding-left: 1em;
+    margin-right: 0.5em;
+    height: 1em;
+}
+
+table, td {
+  text-align: left;
+}
+
+table.stat-table {
+  margin-top: 3em;
+  box-sizing: border-box;
+  width: 15em;
+}
+
+table.stat-table td {
+  height: 1.5em;
+  line-height: 1.5em;
+  vertical-align: middle;
+  padding: 0 0.5em;
+  width: 50%;
+}
+
+table.stat-table thead td {
+    text-align: center;
+    width: 100%;
+}
+
+table.stat-table thead tr {
+  border-bottom: 2px solid #DBDBDB;
+}
+
+table.stat-table tr {
+  display: flex;
+}
+
+table, #control {
+  border-radius: 4px;
+}
