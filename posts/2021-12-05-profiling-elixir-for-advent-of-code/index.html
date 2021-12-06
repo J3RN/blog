@@ -1,0 +1,205 @@
+<!doctype html><html lang=en-us>
+<head>
+<title>Profiling Elixir for Advent of Code | J3RN's Blog</title>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
+<meta name=viewport content="width=device-width,minimum-scale=1">
+<meta name=description content="Every now and again, you may run into a problem that isn't hard to solve using functional programming, but which is hard to solve _quickly_ using functional programming. For me, today, that problem was Advent of Code, Day 5.
+">
+<meta name=generator content="Hugo 0.88.0">
+<meta name=ROBOTS content="NOINDEX, NOFOLLOW">
+<link rel=stylesheet href=/css/style.css>
+<link rel="shortcut icon" href=/images/favicon.ico type=image/x-icon>
+<script defer data-domain=j3rn.com src=https://plausible.io/js/plausible.js></script>
+</head>
+<body>
+<nav class=navigation>
+<a href=/> <span class=arrow>←</span>Home</a>
+<a href=/posts>Archive</a>
+<a href=/tags>Tags</a>
+<a class=button href=http://j3rn.com/index.xml>Subscribe</a>
+</nav>
+<main class=main>
+<section id=single>
+<h1 class=title>Profiling Elixir for Advent of Code</h1>
+<div class=tip>
+<time datetime="2021-12-05 15:34:07 -0500 -0500">Dec 5, 2021</time>
+<span class=split>
+·
+</span>
+<span>
+1534 words
+</span>
+<span class=split>
+·
+</span>
+<span>
+8 minute read
+</span>
+</div>
+<div class=content>
+<p>Every now and again, you may run into a problem that isn&rsquo;t hard to solve using functional programming, but which is hard to solve <em>quickly</em> using functional programming. For me, today, that problem was <a href=https://adventofcode.com/2021/ target=_blank rel=noopener>Advent of Code</a>, <a href=https://adventofcode.com/2021/day/5 target=_blank rel=noopener>Day 5</a>.</p>
+<p>If you&rsquo;re participating in Advent of Code and you haven&rsquo;t yet solved Day 5, this is your last chance to leave the page without spoilers. You have been warned!</p>
+<h2 id=the-problem>The Problem <a href=#the-problem class=anchor>🔗</a></h2><p>You are provided with a list of lines of hydrothermal vents on the ocean floor. These lines are represented by start and end coordinates, such as <code>0,9 -> 5.9</code>. In this example, this means that there are hydrothermal vents at coordinates <code>0,9</code>, <code>1,9</code>, <code>2,9</code>, <code>3,9</code>, <code>4,9</code>, and <code>5,9</code>. Interestingly, two &ldquo;lines&rdquo; of vents may intersect or overlap, which create areas of increased concern.</p>
+<p>For instance, given the input</p>
+<pre tabindex=0><code>0,9 -&gt; 5,9
+8,0 -&gt; 0,8
+9,4 -&gt; 3,4
+2,2 -&gt; 2,1
+7,0 -&gt; 7,4
+6,4 -&gt; 2,0
+0,9 -&gt; 2,9
+3,4 -&gt; 1,4
+0,0 -&gt; 8,8
+5,5 -&gt; 8,2
+</code></pre><p>You could visualize the map of the ocean floor as such:</p>
+<pre tabindex=0><code>1.1....11.
+.111...2..
+..2.1.111.
+...1.2.2..
+.112313211
+...1.2....
+..1...1...
+.1.....1..
+1.......1.
+222111....
+</code></pre><p>Here, each <code>.</code> represents a coordinate where there are no vents, each <code>1</code> represents that there is one line of vents that occupies that coordinate, <code>2</code> represents that there are two lines of vents that occupy that coordinate, etc.</p>
+<p>The goal is to calculate the overall number of coordinates of increased concern (i.e. spaces whose number is <code>2</code> or higher).</p>
+<h2 id=my-first-solution>My First Solution <a href=#my-first-solution class=anchor>🔗</a></h2><p>For starters, I parsed the input into a list of tuples of tuples, something like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>coordinate_pairs <span style=color:#f92672>=</span>
+  [
+    {{<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>9</span>}, {<span style=color:#ae81ff>5</span>, <span style=color:#ae81ff>9</span>}},
+    {{<span style=color:#ae81ff>8</span>, <span style=color:#ae81ff>0</span>}, {<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>8</span>}},
+    <span style=color:#75715e># ...</span>
+</code></pre></div><p>Next, I generated a list of lists to represent the ocean floor. I found the maximum x coordinate and maximum y coordinate in the input data, and generated the list of lists like so:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>ocean_floor_map <span style=color:#f92672>=</span> <span style=color:#a6e22e>List</span><span style=color:#f92672>.</span>duplicate(<span style=color:#a6e22e>List</span><span style=color:#f92672>.</span>duplicate(<span style=color:#ae81ff>0</span>, max_x <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>), max_y <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)
+</code></pre></div><p>Easy. Next, my idea was to perform a <code>reduce</code> where each pair of coordinates would be &ldquo;applied&rdquo; to the <code>ocean_floor_map</code> (details on that to come). Something like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>finished_ocean_map <span style=color:#f92672>=</span> <span style=color:#a6e22e>Enum</span><span style=color:#f92672>.</span>reduce(pairs, ocean_floor_map, <span style=color:#f92672>&amp;</span>apply_pair<span style=color:#f92672>/</span><span style=color:#ae81ff>2</span>)
+</code></pre></div><p>OK, simple. For the implementation of <code>apply_pair/2</code>, I used Elixir&rsquo;s <a href=https://hexdocs.pm/elixir/Kernel.SpecialForms.html#for/1 target=_blank rel=noopener><code>for</code> macro</a>—it&rsquo;s list comprehension construct—to generate all coordinate pairs between the start coordinate and the end coordinate, and then used <a href=https://hexdocs.pm/elixir/Kernel.html#update_in/3 target=_blank rel=noopener><code>update_in/3</code></a> to increment the value at those locations. It looked like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#66d9ef>def</span> apply_pair(coordinate_pair, ocean_floor_map) <span style=color:#66d9ef>do</span>
+  <span style=color:#66d9ef>case</span> coordinate_pair <span style=color:#66d9ef>do</span>
+    {{x, y1}, {x, y2}} <span style=color:#f92672>-&gt;</span>
+      <span style=color:#a6e22e>Enum</span><span style=color:#f92672>.</span>reduce(y1<span style=color:#f92672>..</span>y2, ocean_floor_map, <span style=color:#66d9ef>fn</span> y, acc <span style=color:#f92672>-&gt;</span>
+        update_in(acc, [<span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(x), <span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(y)], <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>))
+      <span style=color:#66d9ef>end</span>)
+
+    {{x1, y}, {x2, y}} <span style=color:#f92672>-&gt;</span>
+      <span style=color:#a6e22e>Enum</span><span style=color:#f92672>.</span>reduce(x1<span style=color:#f92672>..</span>x2, ocean_floor_map, <span style=color:#66d9ef>fn</span> x, acc <span style=color:#f92672>-&gt;</span>
+        update_in(acc, [<span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(x), <span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(y)], <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>))
+      <span style=color:#66d9ef>end</span>)
+
+    {{x1, y1}, {x2, y2}} <span style=color:#f92672>-&gt;</span>
+      <span style=color:#a6e22e>Enum</span><span style=color:#f92672>.</span>reduce(<span style=color:#a6e22e>Enum</span><span style=color:#f92672>.</span>zip(x1<span style=color:#f92672>..</span>x2, y1<span style=color:#f92672>..</span>y2), ocean_floor_map, <span style=color:#66d9ef>fn</span> {x, y}, acc <span style=color:#f92672>-&gt;</span>
+        update_in(acc, [<span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(x), <span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(y)], <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>))
+      <span style=color:#66d9ef>end</span>)
+  <span style=color:#66d9ef>end</span>
+<span style=color:#66d9ef>end</span>
+</code></pre></div><p>Once we have our <code>finished_ocean_map</code>, calculating the number or coordinates of concern was pretty simple:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#a6e22e>Enum</span><span style=color:#f92672>.</span>count(<span style=color:#a6e22e>List</span><span style=color:#f92672>.</span>flatten(finished_ocean_map), <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>))
+</code></pre></div><p><em>Voila</em>. Only one small problem: This solution is <em>slow</em>. For part one, the code only needed to consider horizontal or vertical lines of vents (i.e. not diagonal vent lines). On my laptop, this solution took nearly three seconds to run. Pretty slow. For part two, we consider all this lines. On my laptop, this solution took around 5.5 seconds—long enough for me to sit around twiddling my thumbs impatiently.</p>
+<h2 id=improving-performance>Improving Performance <a href=#improving-performance class=anchor>🔗</a></h2><p>In order to figure out why my solution was so godawful slow, I used a built-in Elixir profiling tool, <a href=https://hexdocs.pm/mix/Mix.Tasks.Profile.Eprof.html target=_blank rel=noopener><code>mix profile.eprof</code></a>, to profile part one. There are several built-in profiling tools, but I chose <code>eprof</code> as it gives me both time consumed (in some unit and also as a fraction of the whole) and also number of calls. The output looked like this:</p>
+<pre tabindex=0><code>Profile results of #PID&lt;0.112.0&gt;
+#                                                   CALLS     %     TIME µS/CALL
+Total                                           108705146 100.0 12921412    0.12
+:gen_server.call/3                                      1  0.00        0    0.00
+:erlang.list_to_tuple/1                                 1  0.00        0    0.00
+:erlang.dt_spread_tag/1                                 1  0.00        0    0.00
+...
+:lists.do_flatten/2                                983071  1.67   215602    0.22
+:lists.reverse/2                                   207142  1.96   253151    1.22
+Access.get_and_update_at/5                      102804415 90.37 11677306    0.11
+
+Profile done over 82 matching functions
+</code></pre><p>The output is truncated because it is <em>long</em>. Weirdly, in my opinion, <code>eprof</code> puts the function that consumes the most time at the bottom. In any case, that function turned out to be <code>Access.get_and_update_at/5</code>, using 90.37% of the total running time! Wow!</p>
+<p>My old friend <code>Access</code> had betrayed me. The solution was too elegant, I thought, and I needed to resort to more limited <code>List</code> module functions. I changed the lines</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>update_in(acc, [<span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(y), <span style=color:#a6e22e>Access</span><span style=color:#f92672>.</span>at(x)], <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>))
+</code></pre></div><p>to</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#a6e22e>List</span><span style=color:#f92672>.</span>update_at(acc, y, <span style=color:#66d9ef>fn</span> row <span style=color:#f92672>-&gt;</span> <span style=color:#a6e22e>List</span><span style=color:#f92672>.</span>update_at(row, x, <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)) <span style=color:#66d9ef>end</span>)
+</code></pre></div><p>This does functionally the same thing, but is a bit more verbose. Let&rsquo;s profile it!</p>
+<pre tabindex=0><code>Profile results of #PID&lt;0.112.0&gt;
+#                                                   CALLS     %     TIME µS/CALL
+Total                                           107395276 100.0 21435654    0.20
+:gen_server.call/3                                      1  0.00        0    0.00
+:erlang.list_to_tuple/1                                 1  0.00        0    0.00
+:erlang.dt_spread_tag/1                                 1  0.00        0    0.00
+...
+Enum.&quot;-count/2-lists^foldl/2-0-&quot;/3                 981091  0.93   198430    0.20
+:lists.do_flatten/2                                983071  0.95   203816    0.21
+List.do_update_at/3                             102804415 96.23 20627578    0.20
+
+Profile done over 78 matching functions
+</code></pre><p>This solution is managed to shave a couple hundred milliseconds off the runtime, but wasn&rsquo;t the substantial gain I was looking for. Part two still took almost five seconds to run!</p>
+<p>It was then that I realized that I had completely missed the point. In languages like C with &ldquo;true&rdquo; arrays and mutation, a solution resembling this one would be blazing fast. After all, finding the point we need to update in our matrix would be some trivial pointer arithmetic, followed by around three instructions to actually perform the update. Quick and easy. However, in Elixir, as with many other functional languages, we are working with <em>immutable datastructures</em>—meaning that we can&rsquo;t <em>update</em> them, we can only make a copy resembling the first but with some differences.</p>
+<p>In this case, if I was performing an operation such as <code>update_in(acc, [Access.at(9), Access.at(5)], &(&1 + 1))</code>, the runtime needs to create a new list for row 9, copying all values for each column except the value for column 5, which needs to be incremented. Since a row in the ocean floor map has been &ldquo;modified,&rdquo; the runtime also needs to create a whole new ocean floor map. If the runtime is clever, the other rows can be reused since they haven&rsquo;t changed. Either way, this is obviously a lot more work than the efficient C-style solution.</p>
+<p>But what if we changed our <code>ocean_floor_map</code> datastructure to something that handles updates more efficiently than a list of lists? Let&rsquo;s try a <code>Map</code>,
+where the keys represent coordinates and the values are the number of vent lines intersection that spot (initialized to zero):</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>ocean_floor_map <span style=color:#f92672>=</span> <span style=color:#66d9ef>for</span> x <span style=color:#f92672>&lt;-</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>(max_x <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>), y <span style=color:#f92672>&lt;-</span> (<span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>max_y <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>), <span style=color:#e6db74>into</span>: %{}, <span style=color:#e6db74>do</span>: {{x, y}, <span style=color:#ae81ff>0</span>}
+</code></pre></div><p>Now that we&rsquo;re using a <code>Map</code> for our <code>ocean_floor_map</code>, we&rsquo;ll need to update our <code>apply_pair</code> function accordingly. For this, I changed instances of</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#a6e22e>List</span><span style=color:#f92672>.</span>update_at(acc, y, <span style=color:#66d9ef>fn</span> row <span style=color:#f92672>-&gt;</span> <span style=color:#a6e22e>List</span><span style=color:#f92672>.</span>update_at(row, x, <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>)) <span style=color:#66d9ef>end</span>)
+</code></pre></div><p>to</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#a6e22e>Map</span><span style=color:#f92672>.</span>update!(acc, {x, y}, <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>))
+</code></pre></div><p>That&rsquo;s actually pretty clean! Last bit, let&rsquo;s update our counting code:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#a6e22e>Enum</span><span style=color:#f92672>.</span>count(finished_ocean_map, <span style=color:#66d9ef>fn</span> {_coordinate, vent_count} <span style=color:#f92672>-&gt;</span> vent_count <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>end</span>)
+</code></pre></div><p>That&rsquo;s pretty clean too! We were able to get rid of our <code>List.flatten</code> call.</p>
+<p>Alright, time to profile it:</p>
+<pre tabindex=0><code>Profile results of #PID&lt;0.112.0&gt;
+#                                                 CALLS     %   TIME   µS/CALL
+Total                                           7343728 100.0 224661      0.31
+:gen_server.call/3                                    1  0.00      0      0.00
+:erlang.list_to_tuple/1                               1  0.00      0      0.00
+:erlang.dt_spread_tag/1                               1  0.00      0      0.00
+...
+anonymous fn/1 in Day5.apply_pair/2               48900 11.25 252832      5.17
+:maps.fold_1/3                                   983073 13.20 296612      0.30
+anonymous fn/3 in Day5.problem1/0                983072 14.51 325883      0.33
+
+Profile done over 79 matching functions
+</code></pre><p>You may have noticed that updating the ocean floor map is no longer dominating our running time. Also, in practice this dropped the running time for part one and part two to 1.5 seconds 1.8 seconds, respectively. Not bad!</p>
+<p>I knew we could do even better, though. When I was writing this solution, I remembered that <a href=https://hexdocs.pm/elixir/Map.html#update!/3 target=_blank rel=noopener><code>Map.update!/3</code></a> has a companion form, <a href=https://hexdocs.pm/elixir/Map.html#update/4 target=_blank rel=noopener><code>Map.update/4</code></a>. The primary difference between these two is their behavior when the specified key does not exist in the map. In the former, a runtime error is raised. In the latter, the &ldquo;default&rdquo; argument will populated into the map as the value for the key instead of running the function argument. By switching from <code>Map.update!/3</code> to <code>Map.update/4</code>, we could avoid storing data for coordinates where no vents exist! The less data we store, the faster <del>updating</del> copying will be.</p>
+<p>First, let&rsquo;s simplify our <code>ocean_floor_map</code> initialization:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>ocean_floor_map <span style=color:#f92672>=</span> %{}
+</code></pre></div><p>Love it! 💖</p>
+<p>Alright, and let&rsquo;s update our <code>Map.update!/3</code> to a <code>Map.update/4</code>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#a6e22e>Map</span><span style=color:#f92672>.</span>update(acc, {x, y}, <span style=color:#ae81ff>1</span>, <span style=color:#f92672>&amp;</span>(&amp;1 <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>))
+</code></pre></div><p>Simple enough! And, finally, let&rsquo;s profile it:</p>
+<pre tabindex=0><code>Profile results of #PID&lt;0.112.0&gt;
+#                                                CALLS     %  TIME µS/CALL
+Total                                           821805 100.0 24199    0.29
+:gen_server.call/3                                   1  0.00     0    0.00
+:erlang.list_to_tuple/1                              1  0.00     0    0.00
+:erlang.dt_spread_tag/1                              1  0.00     0    0.00
+...
+anonymous fn/3 in Enum.count/2                   97075  9.76 23614    0.24
+:maps.fold_1/3                                   97076 14.82 35873    0.37
+Map.update/4                                    103571 31.17 75427    0.73
+
+Profile done over 58 matching functions
+</code></pre><p>This resulted in part one and part two completing in 0.63 seconds and 0.75 seconds, respectively. Seeing as the BEAM takes roughly 500 ms to launch on my laptop anyhow, I&rsquo;m very satisfied with this performance.</p>
+<p>You can find <a href=https://github.com/j3rn/advent-of-code/blob/main/2021/day5/day5.ex target=_blank rel=noopener>the finished code for the solution on GitHub</a>.</p>
+<p>I hope you enjoyed taking this adventure with me, and happy hacking!</p>
+</div>
+<div class=tags>
+<a href=http://j3rn.com/tags/elixir>elixir</a>
+<a href=http://j3rn.com/tags/profiling>profiling</a>
+<a href=http://j3rn.com/tags/performance>performance</a>
+</div>
+</section>
+</main>
+<footer id=footer>
+<div id=social>
+<a class=symbol href=https://github.com/J3RN rel=me target=_blank><svg fill="#bbb" width="28" height="28" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Github</title><desc>Created with Sketch.</desc><defs/><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Social-Icons---Rounded-Black" transform="translate(-264.000000, -939.000000)"><g id="Github" transform="translate(264.000000, 939.000000)"><path d="M8 72H64c4.418278.0 8-3.581722 8-8V8c0-4.418278-3.581722-8-8-8H8c-4.418278 811624501e-24-8 3.581722-8 8V64c541083001e-24 4.418278 3.581722 8 8 8z" id="Rounded" fill="#bbb"/><path d="M35.9985 13C22.746 13 12 23.7870921 12 37.096644c0 10.6440272 6.876 19.6751861 16.4145 22.8617681C29.6145 60.1797862 30.0525 59.4358488 30.0525 58.7973276 30.0525 58.2250681 30.0315 56.7100863 30.0195 54.6996482c-6.6765 1.4562499-8.085-3.2302544-8.085-3.2302544-1.0905-2.7829884-2.664-3.5239139-2.664-3.5239139C17.091 46.4500754 19.4355 46.4801943 19.4355 46.4801943c2.4075.1701719 3.675 2.4833051 3.675 2.4833051 2.142 3.6820383 5.6175 2.6188404 6.9855 2.0014024C30.3135 49.4077535 30.9345 48.3460615 31.62 47.7436831 26.2905 47.1352808 20.688 45.0691228 20.688 35.8361671c0-2.6308879.9345-4.781379 2.4705-6.4665327C22.911 28.7597262 22.0875 26.3110578 23.3925 22.9934585c0 0 2.016-.6475568 6.6 2.4697516C31.908 24.9285993 33.96 24.6620468 36.0015 24.6515052 38.04 24.6620468 40.0935 24.9285993 42.0105 25.4632101c4.581-3.1173084 6.5925-2.4697516 6.5925-2.4697516C49.9125 26.3110578 49.089 28.7597262 48.8415 29.3696344 50.3805 31.0547881 51.309 33.2052792 51.309 35.8361671c0 9.2555448-5.6115 11.29309-10.9575 11.8894446.860999999999997.7439374 1.629 2.2137408 1.629 4.4621184C41.9805 55.4089489 41.9505 58.0067059 41.9505 58.7973276 41.9505 59.4418726 42.3825 60.1918338 43.6005 59.9554002 53.13 56.7627944 60 47.7376593 60 37.096644 60 23.7870921 49.254 13 35.9985 13" fill="#fff"/></g></g></g></svg>
+</a>
+</div>
+<div class=copyright>
+© Copyright
+2021
+<span class=split><svg fill="#bbb" width="15" height="15" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path d="M13.91 6.75c-1.17 2.25-4.3 5.31-6.07 6.94-.1903.1718-.4797.1718-.67.0C5.39 12.06 2.26 9 1.09 6.75-1.48 1.8 5-1.5 7.5 3.45 10-1.5 16.48 1.8 13.91 6.75z"/></svg>
+</span>
+Jonathan Arnett
+</div>
+<div class=powerby>
+Powered by <a href=http://www.gohugo.io/>Hugo</a> Theme By <a href=https://github.com/nodejh/hugo-theme-cactus-plus>nodejh</a>
+</div>
+</footer>
+</body>
+</html>
