@@ -37,8 +37,8 @@ showDate = false
 [markup.goldmark.renderer]
 unsafe = true
 
-[highlight]
-noClasses = false
+[markup.highlight]
+style='vim'
 
 [[menus.main]]
 name = "Tags"
