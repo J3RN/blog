@@ -19,6 +19,9 @@ colorScheme = "congo"
 darkToggle = true
 logo = "avatar.png"
 
+[params.plausible]
+domain = "j3rn.com"
+
 [params.homepage]
 layout = "custom"
 showRecent = true
