@@ -1,44 +1,68 @@
-<!doctype html><html lang=en-us>
-<head>
-<title>Truly Declarative: Logic Programming | J3RN's Blog</title>
+<!doctype html><html lang=en-us><head>
 <meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge,chrome=1">
-<meta name=viewport content="width=device-width,minimum-scale=1">
+<meta http-equiv=content-language content="en-us">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<title>Truly Declarative: Logic Programming &#183; J3RN's Blog</title>
+<meta name=title content="Truly Declarative: Logic Programming &#183; J3RN's Blog">
 <meta name=description content="I solve a simple math problem with three languages representing three paradigms which I see placed along the sliding scale of &#34;declarativeness&#34;.
 ">
+<link rel=canonical href=http://j3rn.com/posts/2021-10-30-truly-declarative-logic-programming/>
+<link type=text/css rel=stylesheet href=/css/schemes/congo.min.b48d6ba061dc77186a2524fb8aac5ac3823b2679a9299ca60325abbccc9c1764c884715f0ba24b4e2776cb3814df4af1f4c854b87207cd5d4c7a254da9b55751.css integrity="sha512-tI1roGHcdxhqJST7iqxaw4I7JnmpKZymAyWrvMycF2TIhHFfC6JLTid2yzgU30rx9MhUuHIHzV1MeiVNqbVXUQ==">
+<link type=text/css rel=stylesheet href=/css/compiled/main.min.ddad44a8f5230b8ef69a765868fe7f04acadbbca1865ea52155ea19b24f870001279d43e55ba79041b83c1b212abcefb2e899127d2cfc7c6d1e8d4e4d68e2342.css integrity="sha512-3a1EqPUjC472mnZYaP5/BKytu8oYZepSFV6hmyT4cAASedQ+Vbp5BBuDwbISq877LomRJ9LPx8bR6NTk1o4jQg==">
+<script>function loadPreferredAppearance(){localStorage.preferredAppearance==="dark"||!("preferredAppearance"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function setPreferredAppearance(a){a=="default"?localStorage.removeItem("preferredAppearance"):localStorage.preferredAppearance=a,loadPreferredAppearance()}loadPreferredAppearance(),window.matchMedia("(prefers-color-scheme: dark)").addListener(loadPreferredAppearance)</script>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/site.webmanifest>
+<meta property="og:title" content="Truly Declarative: Logic Programming">
+<meta property="og:description" content="I solve a simple math problem with three languages representing three paradigms which I see placed along the sliding scale of &#34;declarativeness&#34;.
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://j3rn.com/posts/2021-10-30-truly-declarative-logic-programming/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-10-30T10:21:19-04:00">
+<meta property="article:modified_time" content="2021-10-30T10:21:19-04:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Truly Declarative: Logic Programming">
+<meta name=twitter:description content="I solve a simple math problem with three languages representing three paradigms which I see placed along the sliding scale of &#34;declarativeness&#34;.
+">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","articleSection":"Posts","name":"Truly Declarative: Logic Programming","headline":"Truly Declarative: Logic Programming","description":"I solve a simple math problem with three languages representing three paradigms which I see placed along the sliding scale of \u0022declarativeness\u0022.\n","inLanguage":"en-us","author":{"@type":"Person","name":"Jonathan Arnett"},"creator":{"@type":"Person","name":"Jonathan Arnett"},"copyrightHolder":"Jonathan Arnett","copyrightYear":"2021","dateCreated":"2021-10-30T10:21:19-04:00","datePublished":"2021-10-30T10:21:19-04:00","dateModified":"2021-10-30T10:21:19-04:00","url":"http:\/\/j3rn.com\/posts\/2021-10-30-truly-declarative-logic-programming\/","keywords":["logic programming","prolog","haskell"],"wordCount":"1944"}</script>
 <meta name=generator content="Hugo 0.88.0">
-<meta name=ROBOTS content="NOINDEX, NOFOLLOW">
-<link rel=stylesheet href=/css/style.css>
-<link rel="shortcut icon" href=/images/favicon.ico type=image/x-icon>
-<script defer data-domain=j3rn.com src=https://plausible.io/js/plausible.js></script>
+<meta name=author content="Jonathan Arnett">
 </head>
-<body>
-<nav class=navigation>
-<a href=/> <span class=arrow>←</span>Home</a>
-<a href=/posts>Archive</a>
-<a href=/tags>Tags</a>
-<a class=button href=http://j3rn.com/index.xml>Subscribe</a>
-</nav>
-<main class=main>
-<section id=single>
-<h1 class=title>Truly Declarative: Logic Programming</h1>
-<div class=tip>
-<time datetime="2021-10-30 10:21:19 -0400 -0400">Oct 30, 2021</time>
-<span class=split>
-·
-</span>
-<span>
-1934 words
-</span>
-<span class=split>
-·
-</span>
-<span>
-10 minute read
-</span>
+<body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 bg-neutral text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral max-w-7xl"><header class="flex justify-between py-6 font-semibold sm:items-center sm:py-10 text-neutral-900 dark:text-neutral">
+<div>
+<a href=/>
+<img src=/avatar.png width=250 height=250 class="max-w-[2rem] max-h-[2rem] mr-1 object-scale-down object-left rounded inline-block" alt="J3RN's Blog">
+</a>
+<a class="hover:underline hover:underline-primary-500 hover:underline-thickness-bold hover:underline-offset-small" rel=me href=/>J3RN&rsquo;s Blog</a>
 </div>
-<div class=content>
-<p>While reading through Miran Lipovača&rsquo;s excellent <a href=http://learnyouahaskell.com/ target=_blank rel=noopener><em>Learn You a Haskell</em></a>, I came across the following problem:</p>
+<nav>
+<ul class="flex flex-col list-none sm:flex-row">
+<li class="mb-1 text-right sm:mb-0 sm:mr-7 sm:last:mr-0">
+<a class="hover:underline hover:underline-primary-500 hover:underline-thickness-bold hover:underline-offset-small" href=/categories/ title=Categories>Categories</a>
+</li>
+<li class="mb-1 text-right sm:mb-0 sm:mr-7 sm:last:mr-0">
+<a class="hover:underline hover:underline-primary-500 hover:underline-thickness-bold hover:underline-offset-small" href=/tags/ title=Tags>Tags</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=flex-grow>
+<article class=max-w-prose>
+<header>
+<h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+Truly Declarative: Logic Programming
+</h1>
+<div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400">
+<div class="flex flex-row items-center">
+<time datetime="2021-10-30 10:21:19 -0400 -0400">2021-10-30</time>
+<span class="px-2 text-primary-500">&#183;</span><span title="Reading time">10 mins</span>
+</div>
+</div>
+</header>
+<section class="prose dark:prose-light">
+<p>While reading through Miran Lipovača&rsquo;s excellent <a href=http://learnyouahaskell.com/><em>Learn You a Haskell</em></a>, I came across the following problem:</p>
 <blockquote>
 <p>Which right triangle that has integers for all sides and all sides equal to or smaller than 10 has a perimeter of 24?</p>
 </blockquote>
@@ -48,7 +72,8 @@
 <li>Haskell (functional)</li>
 <li>Prolog (logic and constraint)</li>
 </ul>
-<h2 id=c>C <a href=#c class=anchor>🔗</a></h2><p>The general approach I&rsquo;ll be taking here is to generate every set of possible lengths fitting the constraints (namely being integers between 1 and 10) and then check to see if the other two conditions are met (being a right triangle, having a perimeter of 24).</p>
+<h2 id=c>C <a class=heading-anchor href=#c aria-label=Anchor>#</a></h2>
+<p>The general approach I&rsquo;ll be taking here is to generate every set of possible lengths fitting the constraints (namely being integers between 1 and 10) and then check to see if the other two conditions are met (being a right triangle, having a perimeter of 24).</p>
 <p>Let&rsquo;s start with the side-length piece<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup>:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>right_triangle</span>() {
   <span style=color:#66d9ef>int</span> a, b, c;
@@ -93,39 +118,45 @@
 </code></pre></div><p>That&rsquo;s it! When we call this function, the solution to the problem (<code>[6, 8, 10]</code>) is printed to the console.</p>
 <p>Try it for yourself!</p>
 <iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/C-solution?lite=true"></iframe>
-<h2 id=haskell>Haskell <a href=#haskell class=anchor>🔗</a></h2><p>In Haskell, the most analogous way to solve this problem is via a &ldquo;list comprehension&rdquo;. This construct exists in other languages, and often looks quite similar<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup>.</p>
+<h2 id=haskell>Haskell <a class=heading-anchor href=#haskell aria-label=Anchor>#</a></h2>
+<p>In Haskell, the most analogous way to solve this problem is via a &ldquo;list comprehension&rdquo;. This construct exists in other languages, and often looks quite similar<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup>.</p>
 <p>Let&rsquo;s break down how list comprehensions work. They have three parts:</p>
 <ol>
 <li>Generator(s)</li>
 <li>Filter(s)</li>
 <li>Mapper</li>
 </ol>
-<h3 id=generators>Generators <a href=#generators class=anchor>🔗</a></h3><p>Let&rsquo;s start with the generators. Using our optimization from the C solution, our first generator is <code>c &lt;- [1..10]</code>, which will give the binding <code>c</code> each value between <code>1</code> and <code>10</code>, followed by <code>b &lt;- [1..c]</code>, which will give <code>b</code> each value between <code>1</code> and <code>c</code>, and ending with <code>a &lt;- [1..b]</code>, which will give <code>a</code> each value between <code>1</code> and <code>b</code>.</p>
+<h3 id=generators>Generators <a class=heading-anchor href=#generators aria-label=Anchor>#</a></h3>
+<p>Let&rsquo;s start with the generators. Using our optimization from the C solution, our first generator is <code>c &lt;- [1..10]</code>, which will give the binding <code>c</code> each value between <code>1</code> and <code>10</code>, followed by <code>b &lt;- [1..c]</code>, which will give <code>b</code> each value between <code>1</code> and <code>c</code>, and ending with <code>a &lt;- [1..b]</code>, which will give <code>a</code> each value between <code>1</code> and <code>b</code>.</p>
 <p>The comprehension with only our generators (and technically also a mapper, but we&rsquo;ll get to that in a moment) looks like this:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-haskell data-lang=haskell><span style=color:#f92672>&gt;</span> [(a, b, c) <span style=color:#f92672>|</span> c <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span><span style=color:#ae81ff>10</span>], b <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>c], a <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>b]]
 [(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>),(<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>3</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>),(<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>),(<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>3</span>) <span style=color:#f92672>...</span>
 </code></pre></div><p>(the result is very long, and has been truncated)</p>
 <p>See for yourself!</p>
 <iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Haskell-Generators?lite=true"></iframe>
-<h3 id=filters>Filters <a href=#filters class=anchor>🔗</a></h3><p>Now we need to filter out all sets of sides that don&rsquo;t form a right triangle or don&rsquo;t sum to 24. Filters go after generators (though I think the two can be interspersed), and are simply boolean expressions. For instance, the perimeter filter is the boolean expression <code>a + b + c == 24</code> and the right triangle filter is the boolean expression <code>a^2 + b^2 == c^2</code>.<sup id=fnref:3><a href=#fn:3 class=footnote-ref role=doc-noteref>3</a></sup></p>
+<h3 id=filters>Filters <a class=heading-anchor href=#filters aria-label=Anchor>#</a></h3>
+<p>Now we need to filter out all sets of sides that don&rsquo;t form a right triangle or don&rsquo;t sum to 24. Filters go after generators (though I think the two can be interspersed), and are simply boolean expressions. For instance, the perimeter filter is the boolean expression <code>a + b + c == 24</code> and the right triangle filter is the boolean expression <code>a^2 + b^2 == c^2</code>.<sup id=fnref:3><a href=#fn:3 class=footnote-ref role=doc-noteref>3</a></sup></p>
 <p>This gives us:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-haskell data-lang=haskell><span style=color:#f92672>&gt;</span> [(a, b, c) <span style=color:#f92672>|</span> c <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span><span style=color:#ae81ff>10</span>], b <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>c], a <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>b], a <span style=color:#f92672>+</span> b <span style=color:#f92672>+</span> c <span style=color:#f92672>==</span> <span style=color:#ae81ff>24</span>, a<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>+</span> b<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>==</span> c<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span>]
 [(<span style=color:#ae81ff>6</span>,<span style=color:#ae81ff>8</span>,<span style=color:#ae81ff>10</span>)]
 </code></pre></div><p>There&rsquo;s our solution! Try it!</p>
 <iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Haskell-Triangle-Solution?lite=true"></iframe>
-<h3 id=mappers>Mappers <a href=#mappers class=anchor>🔗</a></h3><p>But wait, there&rsquo;s more! Did you notice the <code>(a, b, c)</code> bit at the beginning of each comprehension? What happens if we changed that to something different?</p>
+<h3 id=mappers>Mappers <a class=heading-anchor href=#mappers aria-label=Anchor>#</a></h3>
+<p>But wait, there&rsquo;s more! Did you notice the <code>(a, b, c)</code> bit at the beginning of each comprehension? What happens if we changed that to something different?</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-haskell data-lang=haskell><span style=color:#f92672>&gt;</span> [(a <span style=color:#f92672>*</span> b) <span style=color:#f92672>/</span> <span style=color:#ae81ff>2</span> <span style=color:#f92672>|</span> c <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span><span style=color:#ae81ff>10</span>], b <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>c], a <span style=color:#f92672>&lt;-</span> [<span style=color:#ae81ff>1</span><span style=color:#f92672>..</span>b], a <span style=color:#f92672>+</span> b <span style=color:#f92672>+</span> c <span style=color:#f92672>==</span> <span style=color:#ae81ff>24</span>, a<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>+</span> b<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>==</span> c<span style=color:#f92672>^</span><span style=color:#ae81ff>2</span>]
 [<span style=color:#ae81ff>24.0</span>]
 </code></pre></div><p>I changed the expression <code>(a, b, c)</code> to the expression <code>(a * b) / 2</code>, which gives us the area of the triangle instead of a tuple of the lengths of its sides. But why call it a mapper? Well, that&rsquo;s because each set of generated values that make it past the filters are given to the mapper to be turned into some kind of final result. In the case of this problem, there&rsquo;s only one set of values that make it past the filters (<code>c</code> being 10, <code>b</code> being 8, and <code>a</code> being 6) and so only that one set of values gets &ldquo;mapped&rdquo;.</p>
 <p>See for yourself!</p>
 <iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Haskell-Mapper?lite=true"></iframe>
-<h2 id=prolog>Prolog <a href=#prolog class=anchor>🔗</a></h2><p>The Prolog solution that we&rsquo;ll write will be profoundly different from the previous two. While the Haskell syntax is far more concise and expressive than the C syntax, the solutions in both languages follow essentially the same two steps:</p>
+<h2 id=prolog>Prolog <a class=heading-anchor href=#prolog aria-label=Anchor>#</a></h2>
+<p>The Prolog solution that we&rsquo;ll write will be profoundly different from the previous two. While the Haskell syntax is far more concise and expressive than the C syntax, the solutions in both languages follow essentially the same two steps:</p>
 <ol>
 <li>Generate all possible combinations of side lengths</li>
 <li>Check each set of side lengths to see if it&rsquo;s the solution.</li>
 </ol>
 <p>However, Prolog doesn&rsquo;t have the facilities to do these things, at least not in the same way. A Prolog program consists of two elements: facts and rules.</p>
-<h3 id=facts>Facts <a href=#facts class=anchor>🔗</a></h3><p>Facts are exactly what they sound like. For instance, the following fact states that <code>mike</code> is the father of <code>john</code>:</p>
+<h3 id=facts>Facts <a class=heading-anchor href=#facts aria-label=Anchor>#</a></h3>
+<p>Facts are exactly what they sound like. For instance, the following fact states that <code>mike</code> is the father of <code>john</code>:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#a6e22e>father</span>(<span style=color:#e6db74>mike</span>, <span style=color:#e6db74>john</span>).
 </code></pre></div><p>The term <code>father</code> in the fact above is referred to as a &ldquo;relation&rdquo; because it describes the relationship between <code>mike</code> and <code>john</code>.</p>
 <p>Having defined a fact, we can ask Prolog about it<sup id=fnref:4><a href=#fn:4 class=footnote-ref role=doc-noteref>4</a></sup>:</p>
@@ -137,7 +168,8 @@ A <span style=color:#f92672>=</span> <span style=color:#e6db74>mike</span>.
 <p>Prolog can tell us if a statement is true, or how we might make it true. Nifty!</p>
 <p>Here, try it for yourself!</p>
 <iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Prolog-Fact-Example?lite=true"></iframe>
-<h3 id=rules>Rules <a href=#rules class=anchor>🔗</a></h3><p>Rules represent ways in which we can extend our existing facts or rules to derive more information. For instance, below is an <code>ancestor</code> rule that builds upon our <code>father</code> relation. It can tell us if <code>A</code> is a paternal ancestor of <code>B</code>:</p>
+<h3 id=rules>Rules <a class=heading-anchor href=#rules aria-label=Anchor>#</a></h3>
+<p>Rules represent ways in which we can extend our existing facts or rules to derive more information. For instance, below is an <code>ancestor</code> rule that builds upon our <code>father</code> relation. It can tell us if <code>A</code> is a paternal ancestor of <code>B</code>:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#a6e22e>ancestor</span>(A, B) :-
   <span style=color:#a6e22e>father</span>(A, B);
   <span style=color:#a6e22e>father</span>(C, B), <span style=color:#a6e22e>ancestor</span>(A, C).
@@ -147,7 +179,8 @@ A <span style=color:#f92672>=</span> <span style=color:#e6db74>mike</span>.
 </blockquote>
 <p>Try it! When Prolog returns a result but doesn&rsquo;t create a new prompt, this indicates that there may be more than one result, and Prolog wants you to tell it whether you want it to try to find the next answer or stop. To tell Prolog to try to find another solution, type <code>;</code>. To tell Prolog to stop searching for solutions, type <code>.</code>.</p>
 <iframe frameborder=0 width=100% height=500px src="https://replit.com/@J3RN/Prolog-Rule-Example?lite=true"></iframe>
-<h3 id=back-to-triangles>Back to Triangles <a href=#back-to-triangles class=anchor>🔗</a></h3><p><strong>Interesting! But what does this all this have to do with triangles?</strong> Well, nothing, other than that relations can also be used to express <em>constraints</em> (since 1982&rsquo;s Prolog II). For instance, the following line states that <code>A</code> must be between 1 and 10 (inclusive):</p>
+<h3 id=back-to-triangles>Back to Triangles <a class=heading-anchor href=#back-to-triangles aria-label=Anchor>#</a></h3>
+<p><strong>Interesting! But what does this all this have to do with triangles?</strong> Well, nothing, other than that relations can also be used to express <em>constraints</em> (since 1982&rsquo;s Prolog II). For instance, the following line states that <code>A</code> must be between 1 and 10 (inclusive):</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog><span style=color:#e6db74>?-</span> <span style=color:#a6e22e>between</span>(<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>10</span>, A).
 A <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span> ;
 A <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span> ;
@@ -182,13 +215,14 @@ C <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>
 <p>Now, you&rsquo;ve probably noticed something strange about some of these rules: Namely, that I used <code>is</code> instead of <code>=</code> whenever I had to do math. This is, sadly, just part of the way Prolog is; math is largely an afterthought. Doubly so, because the left side of <code>is</code> is required to be a number or variable, but not an expression. For instance, the following is invalid:</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Prolog data-lang=Prolog>C<span style=color:#e6db74>**</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>is</span> A<span style=color:#e6db74>**</span><span style=color:#ae81ff>2</span> <span style=color:#f92672>+</span> B<span style=color:#e6db74>**</span><span style=color:#ae81ff>2.</span>
 </code></pre></div><p>Pretty gnarly, isn&rsquo;t it?</p>
-<h2 id=conclusions>Conclusions <a href=#conclusions class=anchor>🔗</a></h2><p>Of the above three, I&rsquo;m particularly fond of the Prolog solution despite it&rsquo;s gnarly math limitations. <strong><em>&ldquo;Why?"</em></strong> you ask? Well, because the Prolog solution is the most <em>declarative</em>. <a href=https://wiki.c2.com/?DeclarativeProgramming target=_blank rel=noopener>Ward Cunningham defines declarative programming as the following</a>:</p>
+<h2 id=conclusions>Conclusions <a class=heading-anchor href=#conclusions aria-label=Anchor>#</a></h2>
+<p>Of the above three, I&rsquo;m particularly fond of the Prolog solution despite it&rsquo;s gnarly math limitations. <strong><em>&ldquo;Why?"</em></strong> you ask? Well, because the Prolog solution is the most <em>declarative</em>. <a href=https://wiki.c2.com/?DeclarativeProgramming>Ward Cunningham defines declarative programming as the following</a>:</p>
 <blockquote>
 <p>Programming where problems are described, or conditions on a solution are described, and the computer finds a solution.</p>
 </blockquote>
 <p>In the Prolog solution, as opposed to the C and Haskell solutions, I was not required to give any information about <em>how</em> to go about solving this problem; Prolog was able to do that on it&rsquo;s own. Heck, it may have created 220 threads to check each possible combination of side lengths simultaneously or it may have just tried numbers at random; it&rsquo;s really no concern of mine. And I <em>love</em> that.</p>
-<p>However, Prolog, as we&rsquo;ve seen, isn&rsquo;t the most practical or pretty language. While it was well-suited to the problem that I addressed here, it is not well-suited to every problem, perhaps not even a <em>majority</em> of problems. Additionally, Prolog intends to be a standalone programming language and most distributions (such as <a href=https://www.swi-prolog.org/ target=_blank rel=noopener>SWI-Prolog</a> or <a href=http://www.gprolog.org/ target=_blank rel=noopener>GNU Prolog</a>) include rules for performing side-effects (such as writing to the console), which don&rsquo;t really make sense in logic or constraint programming.</p>
-<p>With that said, there is a promising new trend of logic and constraint DSLs that can be used within functional or imperative languages, such as <a href=http://minikanren.org/ target=_blank rel=noopener>miniKanren</a> and <a href=https://github.com/rvirding/erlog target=_blank rel=noopener>Erlog</a>. Introducing these paradigms inside of existing languages (which commonly already feature DSLs for purposes such as building regular expressions or constructing SQL queries) allows developers to reach for them when they provide the most elegant solution and ignore them otherwise. This, I feel, is the future for logic and constraint languages, and I personally can&rsquo;t wait!</p>
+<p>However, Prolog, as we&rsquo;ve seen, isn&rsquo;t the most practical or pretty language. While it was well-suited to the problem that I addressed here, it is not well-suited to every problem, perhaps not even a <em>majority</em> of problems. Additionally, Prolog intends to be a standalone programming language and most distributions (such as <a href=https://www.swi-prolog.org/>SWI-Prolog</a> or <a href=http://www.gprolog.org/>GNU Prolog</a>) include rules for performing side-effects (such as writing to the console), which don&rsquo;t really make sense in logic or constraint programming.</p>
+<p>With that said, there is a promising new trend of logic and constraint DSLs that can be used within functional or imperative languages, such as <a href=http://minikanren.org/>miniKanren</a> and <a href=https://github.com/rvirding/erlog>Erlog</a>. Introducing these paradigms inside of existing languages (which commonly already feature DSLs for purposes such as building regular expressions or constructing SQL queries) allows developers to reach for them when they provide the most elegant solution and ignore them otherwise. This, I feel, is the future for logic and constraint languages, and I personally can&rsquo;t wait!</p>
 <section class=footnotes role=doc-endnotes>
 <hr>
 <ol>
@@ -209,28 +243,59 @@ C <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span>
 </li>
 </ol>
 </section>
-</div>
-<div class=tags>
-<a href=http://j3rn.com/tags/logic-programming>logic programming</a>
-<a href=http://j3rn.com/tags/prolog>prolog</a>
-<a href=http://j3rn.com/tags/haskell>haskell</a>
-</div>
 </section>
-</main>
-<footer id=footer>
-<div id=social>
-<a class=symbol href=https://github.com/J3RN rel=me target=_blank><svg fill="#bbb" width="28" height="28" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>Github</title><desc>Created with Sketch.</desc><defs/><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Social-Icons---Rounded-Black" transform="translate(-264.000000, -939.000000)"><g id="Github" transform="translate(264.000000, 939.000000)"><path d="M8 72H64c4.418278.0 8-3.581722 8-8V8c0-4.418278-3.581722-8-8-8H8c-4.418278 811624501e-24-8 3.581722-8 8V64c541083001e-24 4.418278 3.581722 8 8 8z" id="Rounded" fill="#bbb"/><path d="M35.9985 13C22.746 13 12 23.7870921 12 37.096644c0 10.6440272 6.876 19.6751861 16.4145 22.8617681C29.6145 60.1797862 30.0525 59.4358488 30.0525 58.7973276 30.0525 58.2250681 30.0315 56.7100863 30.0195 54.6996482c-6.6765 1.4562499-8.085-3.2302544-8.085-3.2302544-1.0905-2.7829884-2.664-3.5239139-2.664-3.5239139C17.091 46.4500754 19.4355 46.4801943 19.4355 46.4801943c2.4075.1701719 3.675 2.4833051 3.675 2.4833051 2.142 3.6820383 5.6175 2.6188404 6.9855 2.0014024C30.3135 49.4077535 30.9345 48.3460615 31.62 47.7436831 26.2905 47.1352808 20.688 45.0691228 20.688 35.8361671c0-2.6308879.9345-4.781379 2.4705-6.4665327C22.911 28.7597262 22.0875 26.3110578 23.3925 22.9934585c0 0 2.016-.6475568 6.6 2.4697516C31.908 24.9285993 33.96 24.6620468 36.0015 24.6515052 38.04 24.6620468 40.0935 24.9285993 42.0105 25.4632101c4.581-3.1173084 6.5925-2.4697516 6.5925-2.4697516C49.9125 26.3110578 49.089 28.7597262 48.8415 29.3696344 50.3805 31.0547881 51.309 33.2052792 51.309 35.8361671c0 9.2555448-5.6115 11.29309-10.9575 11.8894446.860999999999997.7439374 1.629 2.2137408 1.629 4.4621184C41.9805 55.4089489 41.9505 58.0067059 41.9505 58.7973276 41.9505 59.4418726 42.3825 60.1918338 43.6005 59.9554002 53.13 56.7627944 60 47.7376593 60 37.096644 60 23.7870921 49.254 13 35.9985 13" fill="#fff"/></g></g></g></svg>
-</a>
-</div>
-<div class=copyright>
-© Copyright
-2022
-<span class=split><svg fill="#bbb" width="15" height="15" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path d="M13.91 6.75c-1.17 2.25-4.3 5.31-6.07 6.94-.1903.1718-.4797.1718-.67.0C5.39 12.06 2.26 9 1.09 6.75-1.48 1.8 5-1.5 7.5 3.45 10-1.5 16.48 1.8 13.91 6.75z"/></svg>
+<footer class=pt-8>
+<div class="pt-8 article-pagination">
+<hr class="border-dotted border-neutral-300 dark:border-neutral-600">
+<div class="flex justify-between pt-3">
+<span>
+<a class=flex href=/posts/2021-12-05-profiling-elixir-for-advent-of-code/>
+<span class="mr-3 article-pagination-direction">&larr;</span>
+<span class="flex flex-col">
+<span class="article-pagination-title mt-[0.1rem] leading-6">Profiling Elixir for Advent of Code</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+<time datetime="2021-12-05 15:34:07 -0500 -0500">2021-12-05</time>
 </span>
-Jonathan Arnett
+</span>
+</a>
+</span>
+<span>
+<a class="flex text-right" href=/posts/2021-10-14-elixir-behaviours-vs-protocols/>
+<span class="flex flex-col">
+<span class="article-pagination-title mt-[0.1rem] leading-6">Elixir Behaviours vs Protocols</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+<time datetime="2021-10-14 22:40:42 -0400 -0400">2021-10-14</time>
+</span>
+</span>
+<span class="ml-3 article-pagination-direction">&rarr;</span>
+</a>
+</span>
 </div>
-<div class=powerby>
-Powered by <a href=http://www.gohugo.io/>Hugo</a> Theme By <a href=https://github.com/nodejh/hugo-theme-cactus-plus>nodejh</a>
+</div>
+</footer>
+</article>
+</main><footer class=py-10>
+<div class="flex justify-between">
+<div>
+<p class="text-sm text-neutral-500 dark:text-neutral-400">
+&copy;
+2022
+Jonathan Arnett
+</p>
+<p class="text-xs text-neutral-400 dark:text-neutral-600">
+Powered by <a class="hover:underline hover:underline-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:underline-primary-400 hover:text-primary-500" href=https://git.io/hugo-congo target=_blank rel="noopener noreferrer">Congo</a>
+</p>
+</div>
+<div class="text-sm cursor-pointer text-neutral-400 dark:text-neutral-500">
+<button id=dark-toggle onclick="setPreferredAppearance('dark')" oncontextmenu="return setPreferredAppearance('default'),!1" class="inline px-2 py-1 border rounded-md border-neutral-200 dark:hidden hover:text-primary-500 hover:border-primary-400" title="Switch to dark appearance">
+<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="moon" class="svg-inline--fa fa-moon fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M283.211 512c78.962.0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954.0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156.0 00283.211.0c-141.309.0-256 114.511-256 256 0 141.309 114.511 256 256 256z"/></svg>
+</span>
+</button>
+<button id=light-toggle onclick="setPreferredAppearance('light')" oncontextmenu="return setPreferredAppearance('default'),!1" class="hidden px-2 py-1 border rounded-md cursor-pointer dark:inline border-neutral-700 hover:text-primary-400 hover:border-primary-500" title="Switch to light appearance">
+<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sun" class="svg-inline--fa fa-sun fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M256 160c-52.9.0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6.0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0s-49.9-131.1.0-181 131.1-49.9 181 0 49.9 131.1.0 181z"/></svg>
+</span>
+</button>
+</div>
 </div>
 </footer>
 </body>
