@@ -1,7 +1,12 @@
 baseURL = "http://j3rn.com/"
 languageCode = "en-us"
+defaultContentLanguage = "en"
 title = "J3RN's Blog"
-theme = "mini"
+theme = "congo"
+
+[author]
+name = "Jonathan Arnett"
+image = "images/avatar.png"
 
 [social]
 github = "https://github.com/J3RN"
@@ -10,6 +15,34 @@ github = "https://github.com/J3RN"
 author = "Jonathan Arnett"
 description = "My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design."
 enableRSS = true
+colorScheme = "congo"
+darkToggle = true
+logo = "avatar.png"
+
+[params.homepage]
+layout = "custom"
+showRecent = true
+
+[params.article]
+showDate = true
+showAuthor = false
+dateFormat = "2006-01-02"
+
+[params.page]
+showDate = false
 
 [markup.goldmark.renderer]
 unsafe = true
+
+[highlight]
+noClasses = false
+
+[[menus.main]]
+  name = "Categories"
+  pageRef = "categories"
+  weight = 20
+
+[[menus.main]]
+  name = "Tags"
+  pageRef = "tags"
+  weight = 30

@@ -4,3 +4,7 @@
 [submodule "static/goe"]
 	path = static/goe
 	url = https://github.com/J3RN/game-of-evolution
+[submodule "themes/congo"]
+	path = themes/congo
+	url = https://github.com/jpanther/congo.git
+	branch = stable
