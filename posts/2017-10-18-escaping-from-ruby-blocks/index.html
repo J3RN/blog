@@ -12,10 +12,7 @@
 <link type=text/css rel=stylesheet href=/css/compiled/main.min.ddad44a8f5230b8ef69a765868fe7f04acadbbca1865ea52155ea19b24f870001279d43e55ba79041b83c1b212abcefb2e899127d2cfc7c6d1e8d4e4d68e2342.css integrity="sha512-3a1EqPUjC472mnZYaP5/BKytu8oYZepSFV6hmyT4cAASedQ+Vbp5BBuDwbISq877LomRJ9LPx8bR6NTk1o4jQg==">
 <link type=text/css rel=stylesheet href=/css/custom.min.d426e553f6e0caac4f2b9a5d2ad745734f462d11e27399e2b4df654344c0e39c0598a3997dd17e31df4fdf41ac80d11137a6f5d89c9100c522a45208ad670d7f.css integrity="sha512-1CblU/bgyqxPK5pdKtdFc09GLRHic5nitN9lQ0TA45wFmKOZfdF+Md9P30GsgNERN6b12JyRAMUipFIIrWcNfw==">
 <script>function loadPreferredAppearance(){localStorage.preferredAppearance==="dark"||!("preferredAppearance"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function setPreferredAppearance(a){a=="default"?localStorage.removeItem("preferredAppearance"):localStorage.preferredAppearance=a,loadPreferredAppearance()}loadPreferredAppearance(),window.matchMedia("(prefers-color-scheme: dark)").addListener(loadPreferredAppearance)</script>
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/site.webmanifest>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
 <meta property="og:title" content="Escaping from Ruby Blocks">
 <meta property="og:description" content="If you need to bail out of a Ruby block before the end, how is that accomplished?
 ">
@@ -64,85 +61,85 @@ Escaping from Ruby Blocks
 <h2 id=guard-clauses>Guard Clauses <a class=heading-anchor href=#guard-clauses aria-label=Anchor>#</a></h2>
 <p>Once upon a time, <a href=http://rubocop.readthedocs.io/en/latest/cops_style/#styleguardclause>Rubocop taught me to love guard clauses</a>. When I first started learning to program, I was deeply conflicted about guard clauses. On the one hand, guard clauses can prevent the need to have deeply nested <code>if</code>s. On the other hand, it can be hard to remember the context deep into a method without being able to reference the enveloping <code>if</code>s (similarly to RSpec contexts). In any case, Rubocop wants me to use guard clauses, so I do.</p>
 <p>Here&rsquo;s an example of using a guard clause—if the author is <code>nil</code>, there&rsquo;s no point in continuing with this method.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>describe_author</span>(author)
-  <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span> <span style=color:#66d9ef>if</span> author<span style=color:#f92672>.</span>nil?
-  <span style=color:#e6db74>&#34;</span><span style=color:#e6db74>#{</span>author<span style=color:#f92672>.</span>name<span style=color:#e6db74>}</span><span style=color:#e6db74> (</span><span style=color:#e6db74>#{</span>author<span style=color:#f92672>.</span>birth_year<span style=color:#e6db74>}</span><span style=color:#e6db74>–</span><span style=color:#e6db74>#{</span>author<span style=color:#f92672>.</span>death_year<span style=color:#e6db74>}</span><span style=color:#e6db74>)&#34;</span>
-<span style=color:#66d9ef>end</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#cdcd00>def</span> describe_author(author)
+  <span style=color:#cdcd00>return</span> <span style=color:#cd0000>&#34;&#34;</span> <span style=color:#cdcd00>if</span> author<span style=color:#39c>.</span>nil?
+  <span style=color:#cd0000>&#34;</span><span style=color:#cd0000>#{</span>author<span style=color:#39c>.</span>name<span style=color:#cd0000>}</span><span style=color:#cd0000> (</span><span style=color:#cd0000>#{</span>author<span style=color:#39c>.</span>birth_year<span style=color:#cd0000>}</span><span style=color:#cd0000>–</span><span style=color:#cd0000>#{</span>author<span style=color:#39c>.</span>death_year<span style=color:#cd0000>}</span><span style=color:#cd0000>)&#34;</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><h2 id=blocks>Blocks <a class=heading-anchor href=#blocks aria-label=Anchor>#</a></h2>
 <p>The Ruby language has a useful construct to contain blocks of code, aptly called &ldquo;blocks.&rdquo; Actually, Ruby has three ways to contain blocks of code—blocks, procs, and lambdas—but this post will just cover blocks.</p>
 <h2 id=guard-clauses-in-blocks>Guard Clauses in Blocks <a class=heading-anchor href=#guard-clauses-in-blocks aria-label=Anchor>#</a></h2>
 <p>First, in order to use a block, we&rsquo;ll need a function that expects one.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>foo</span>
-  <span style=color:#66d9ef>yield</span> <span style=color:#66d9ef>if</span> block_given?
-  puts <span style=color:#e6db74>&#34;End of foo&#34;</span>
-<span style=color:#66d9ef>end</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#cdcd00>def</span> foo
+  <span style=color:#cdcd00>yield</span> <span style=color:#cdcd00>if</span> <span style=color:#cd00cd>block_given?</span>
+  <span style=color:#cd00cd>puts</span> <span style=color:#cd0000>&#34;End of foo&#34;</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>This method will execute whatever block we give it first (<em>if we gave it one</em>), then print out a message. Let&rsquo;s give it a block.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { puts <span style=color:#e6db74>&#34;Inside block!&#34;</span> }
-<span style=color:#75715e>#=&gt; Inside block!</span>
-<span style=color:#75715e>#=&gt; End of foo</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#cd00cd>puts</span> <span style=color:#cd0000>&#34;Inside block!&#34;</span> }
+<span style=color:navy>#=&gt; Inside block!</span>
+<span style=color:navy>#=&gt; End of foo</span>
 </code></pre></div><p>Now let&rsquo;s suppose that we want a guard clause in the block that we send.</p>
 <h3 id=return>return <a class=heading-anchor href=#return aria-label=Anchor>#</a></h3>
 <p>My first inclination on how to do this was with the <code>return</code> keyword. Seeing <code>return</code> in a block, though, would probably raise some questions about whether it&rsquo;s the block that&rsquo;s being returned from or the method that <code>yield</code>s to it. Let&rsquo;s try it and find out.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#66d9ef>return</span> }
-<span style=color:#75715e>#=&gt; LocalJumpError: unexpected return</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#cdcd00>return</span> }
+<span style=color:navy>#=&gt; LocalJumpError: unexpected return</span>
 </code></pre></div><p>It doesn&rsquo;t return from the block or the calling method, it just crashes. Interesting!</p>
 <h3 id=break>break <a class=heading-anchor href=#break aria-label=Anchor>#</a></h3>
 <p>The <code>break</code> keyword was the next suggestion to come to mind. You may have seen the <code>break</code> keyword used to break out of blocks early in cases like this:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>find_first_even</span>(array)
-  first_even <span style=color:#f92672>=</span> <span style=color:#66d9ef>nil</span>
-  array<span style=color:#f92672>.</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>item<span style=color:#f92672>|</span>
-    <span style=color:#66d9ef>if</span> item<span style=color:#f92672>.</span>even?
-      first_even <span style=color:#f92672>=</span> item
-      <span style=color:#66d9ef>break</span>
-    <span style=color:#66d9ef>end</span>
-  <span style=color:#66d9ef>end</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#cdcd00>def</span> find_first_even(array)
+  first_even <span style=color:#39c>=</span> <span style=color:#cdcd00>nil</span>
+  array<span style=color:#39c>.</span>each <span style=color:#cdcd00>do</span> <span style=color:#39c>|</span>item<span style=color:#39c>|</span>
+    <span style=color:#cdcd00>if</span> item<span style=color:#39c>.</span>even?
+      first_even <span style=color:#39c>=</span> item
+      <span style=color:#cdcd00>break</span>
+    <span style=color:#cdcd00>end</span>
+  <span style=color:#cdcd00>end</span>
   first_even
-<span style=color:#66d9ef>end</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>Of course, this example is completely contrived—one could simply use <code>Array#find</code> here. Regardless, when (or if) an even item in the array is found, <code>first_even</code> is set to that item, and <code>break</code> is used to stop iterating.</p>
 <p>The <a href=http://ruby-doc.org/core-2.3.4/doc/syntax/control_expressions_rdoc.html#label-break+Statement>break statement documentation</a> has this to say:</p>
 <blockquote>
 <p>Use break to leave a block early.</p>
 </blockquote>
 <p>OK! Let&rsquo;s try using <code>break</code> in our block.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#66d9ef>break</span> }
-<span style=color:#75715e>#=&gt; nil</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#cdcd00>break</span> }
+<span style=color:navy>#=&gt; nil</span>
 </code></pre></div><p>What&rsquo;s that? Silence? Something odd has happened here. The end of the <code>foo</code> method had this line:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>puts <span style=color:#e6db74>&#34;End of foo&#34;</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#cd00cd>puts</span> <span style=color:#cd0000>&#34;End of foo&#34;</span>
 </code></pre></div><p>However, that message wasn&rsquo;t printed to the console. Why?</p>
 <p>It appears that the <code>break</code> statement in a block actually returns from the calling method. When you consider our example above, this behavior seems to make sense. <code>Array#each</code> calls the given block with each element of the array, in turn. When we call <code>break</code>, it doesn&rsquo;t exit from the block that <code>each</code> would then call again with the next item—it exits from the <code>Array#each</code> call.</p>
 <h3 id=next>next <a class=heading-anchor href=#next aria-label=Anchor>#</a></h3>
 <p>Using this insight, there&rsquo;s another alternative! Let&rsquo;s make another contrived example.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>evens_from_array</span>(array)
-  evens <span style=color:#f92672>=</span> <span style=color:#f92672>[]</span>
-  array<span style=color:#f92672>.</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>item<span style=color:#f92672>|</span>
-    <span style=color:#66d9ef>next</span> <span style=color:#66d9ef>if</span> item<span style=color:#f92672>.</span>odd?
-    evens <span style=color:#f92672>&lt;&lt;</span> item
-  <span style=color:#66d9ef>end</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#cdcd00>def</span> evens_from_array(array)
+  evens <span style=color:#39c>=</span> <span style=color:#39c>[]</span>
+  array<span style=color:#39c>.</span>each <span style=color:#cdcd00>do</span> <span style=color:#39c>|</span>item<span style=color:#39c>|</span>
+    <span style=color:#cdcd00>next</span> <span style=color:#cdcd00>if</span> item<span style=color:#39c>.</span>odd?
+    evens <span style=color:#39c>&lt;&lt;</span> item
+  <span style=color:#cdcd00>end</span>
   evens
-<span style=color:#66d9ef>end</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>Naturally, you could have just used <code>Array#select</code> instead. In any event, on each iteration, we skip over the rest of the block if the item is odd. This seems like what we want! Let&rsquo;s give it a try.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#66d9ef>next</span> }
-<span style=color:#75715e>#=&gt; End of foo</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>foo { <span style=color:#cdcd00>next</span> }
+<span style=color:navy>#=&gt; End of foo</span>
 </code></pre></div><p>Perfect!</p>
 <p>Let&rsquo;s make a somewhat less contrived example, just to make sure that it really does work the way that we hope. Here is an (admittedly worthless) &ldquo;calculation&rdquo; method.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>calculation</span>(a, b)
-  <span style=color:#66d9ef>yield</span>(a, b)
-<span style=color:#66d9ef>end</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#cdcd00>def</span> calculation(a, b)
+  <span style=color:#cdcd00>yield</span>(a, b)
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>Let&rsquo;s use a guard method to exit from the block early.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>calculation(<span style=color:#ae81ff>23</span>, <span style=color:#ae81ff>0</span>) <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>a, b<span style=color:#f92672>|</span>
-  <span style=color:#66d9ef>next</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> b <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#75715e># 23 ** 0 will always be 1.</span>
-  puts <span style=color:#e6db74>&#34;Calculating...&#34;</span>
-  a <span style=color:#f92672>**</span> b
-<span style=color:#66d9ef>end</span>
-<span style=color:#75715e>#=&gt; 1</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>calculation(<span style=color:#cd00cd>23</span>, <span style=color:#cd00cd>0</span>) <span style=color:#cdcd00>do</span> <span style=color:#39c>|</span>a, b<span style=color:#39c>|</span>
+  <span style=color:#cdcd00>next</span> <span style=color:#cd00cd>1</span> <span style=color:#cdcd00>if</span> b <span style=color:#39c>==</span> <span style=color:#cd00cd>0</span> <span style=color:navy># 23 ** 0 will always be 1.</span>
+  <span style=color:#cd00cd>puts</span> <span style=color:#cd0000>&#34;Calculating...&#34;</span>
+  a <span style=color:#39c>**</span> b
+<span style=color:#cdcd00>end</span>
+<span style=color:navy>#=&gt; 1</span>
 </code></pre></div><p>Great! The &ldquo;Calculating&mldr;&rdquo; message is not printed, as we exited the block prior to that point. Now let&rsquo;s use the same block, but call <code>calculation</code> with arguments that will not trigger the guard clause.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>calculation(<span style=color:#ae81ff>23</span>, <span style=color:#ae81ff>2</span>) <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>a, b<span style=color:#f92672>|</span>
-  <span style=color:#66d9ef>next</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> b <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#75715e># 23 ** 0 will always be 1.</span>
-  puts <span style=color:#e6db74>&#34;Calculating...&#34;</span>
-  a <span style=color:#f92672>**</span> b
-<span style=color:#66d9ef>end</span>
-<span style=color:#75715e>#=&gt; Calculating...</span>
-<span style=color:#75715e>#=&gt; 529</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>calculation(<span style=color:#cd00cd>23</span>, <span style=color:#cd00cd>2</span>) <span style=color:#cdcd00>do</span> <span style=color:#39c>|</span>a, b<span style=color:#39c>|</span>
+  <span style=color:#cdcd00>next</span> <span style=color:#cd00cd>1</span> <span style=color:#cdcd00>if</span> b <span style=color:#39c>==</span> <span style=color:#cd00cd>0</span> <span style=color:navy># 23 ** 0 will always be 1.</span>
+  <span style=color:#cd00cd>puts</span> <span style=color:#cd0000>&#34;Calculating...&#34;</span>
+  a <span style=color:#39c>**</span> b
+<span style=color:#cdcd00>end</span>
+<span style=color:navy>#=&gt; Calculating...</span>
+<span style=color:navy>#=&gt; 529</span>
 </code></pre></div><p>It works!</p>
 <p>I hope that—in the edge case that you, too, share a preference for guard clauses <em>and</em> find yourself needing to pass some sort of large block—have found this helpful are able to put this knowledge to good use!</p>
 <p>I don&rsquo;t use comments on my site, but if you have some feedback that you&rsquo;d like to share, feel free to tweet at me or send me an email using the links below.</p>

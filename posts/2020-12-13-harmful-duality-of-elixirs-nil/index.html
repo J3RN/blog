@@ -12,10 +12,7 @@
 <link type=text/css rel=stylesheet href=/css/compiled/main.min.ddad44a8f5230b8ef69a765868fe7f04acadbbca1865ea52155ea19b24f870001279d43e55ba79041b83c1b212abcefb2e899127d2cfc7c6d1e8d4e4d68e2342.css integrity="sha512-3a1EqPUjC472mnZYaP5/BKytu8oYZepSFV6hmyT4cAASedQ+Vbp5BBuDwbISq877LomRJ9LPx8bR6NTk1o4jQg==">
 <link type=text/css rel=stylesheet href=/css/custom.min.d426e553f6e0caac4f2b9a5d2ad745734f462d11e27399e2b4df654344c0e39c0598a3997dd17e31df4fdf41ac80d11137a6f5d89c9100c522a45208ad670d7f.css integrity="sha512-1CblU/bgyqxPK5pdKtdFc09GLRHic5nitN9lQ0TA45wFmKOZfdF+Md9P30GsgNERN6b12JyRAMUipFIIrWcNfw==">
 <script>function loadPreferredAppearance(){localStorage.preferredAppearance==="dark"||!("preferredAppearance"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function setPreferredAppearance(a){a=="default"?localStorage.removeItem("preferredAppearance"):localStorage.preferredAppearance=a,loadPreferredAppearance()}loadPreferredAppearance(),window.matchMedia("(prefers-color-scheme: dark)").addListener(loadPreferredAppearance)</script>
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/site.webmanifest>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
 <meta property="og:title" content="The Harmful Duality of Elixir's nil">
 <meta property="og:description" content="In Elixir, nil can mean &#34;what was sought was not found&#34; and also &#34;this is intentionally blank&#34;. This disparity in the intentionality of nil makes life difficult for Elixir developers.
 ">
@@ -63,49 +60,49 @@ The Harmful Duality of Elixir's nil
 <section class="prose dark:prose-light">
 <h3 id=the-problem>The Problem <a class=heading-anchor href=#the-problem aria-label=Anchor>#</a></h3>
 <p>Have you ever written code like this?</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#66d9ef>def</span> get_address(address_id) <span style=color:#66d9ef>do</span>
-  <span style=color:#66d9ef>case</span> <span style=color:#a6e22e>Addresses</span><span style=color:#f92672>.</span>get(address_id) <span style=color:#66d9ef>do</span>
-    <span style=color:#66d9ef>nil</span> <span style=color:#f92672>-&gt;</span> {<span style=color:#e6db74>:error</span>, <span style=color:#e6db74>:address_not_found</span>}
-    val <span style=color:#f92672>-&gt;</span> {<span style=color:#e6db74>:ok</span>, val}
-  <span style=color:#66d9ef>end</span>
-<span style=color:#66d9ef>end</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir><span style=color:#00cd00>def</span> get_address(address_id) <span style=color:#cdcd00>do</span>
+  <span style=color:#cdcd00>case</span> <span style=color:#00cdcd>Addresses</span><span style=color:#39c>.</span>get(address_id) <span style=color:#cdcd00>do</span>
+    nil <span style=color:#39c>-&gt;</span> {<span style=color:#cd0000>:error</span>, <span style=color:#cd0000>:address_not_found</span>}
+    val <span style=color:#39c>-&gt;</span> {<span style=color:#cd0000>:ok</span>, val}
+  <span style=color:#cdcd00>end</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>I have. This pattern is commonly used to make the value that <a href=https://hexdocs.pm/ecto/Ecto.Repo.html#c:get/3>Ecto.Repo.get/3</a> returns (a struct or <code>nil</code>) play well with Elixir&rsquo;s <a href=https://hexdocs.pm/elixir/Kernel.SpecialForms.html#with/1><code>with</code></a> construct. Since <code>Ecto.Repo.get/3</code> will always return some single value, a <code>nil</code> check is required to determine whether that value indicates a success or a failure. Doing this check inline is somewhat clumsy:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>with address <span style=color:#f92672>when</span> <span style=color:#f92672>not</span> is_nil(address) <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>Addresses</span><span style=color:#f92672>.</span>get(address_id) <span style=color:#66d9ef>do</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>with address <span style=color:#cdcd00>when</span> <span style=color:#cdcd00>not</span> is_nil(address) <span style=color:#39c>&lt;-</span> <span style=color:#00cdcd>Addresses</span><span style=color:#39c>.</span>get(address_id) <span style=color:#cdcd00>do</span>
 </code></pre></div><p>There&rsquo;s a lot happening in that line, which makes the alternative attractive:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>with {<span style=color:#e6db74>:ok</span>, address} <span style=color:#f92672>&lt;-</span> get_address(address_id) <span style=color:#66d9ef>do</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>with {<span style=color:#cd0000>:ok</span>, address} <span style=color:#39c>&lt;-</span> get_address(address_id) <span style=color:#cdcd00>do</span>
 </code></pre></div><p>This is a minor complaint, but it points to a much larger issue with <code>nil</code> in Elixir. First, consider the fact that <code>nil</code> serves two purposes:</p>
 <ol>
 <li>Indicate when something cannot be found</li>
 <li>Represent an empty value; nothingness</li>
 </ol>
 <p>While Elixir gives us the convention of <code>:error</code> as the &ldquo;operation did not succeed&rdquo; value, in specific cases <code>nil</code> will also serve that purpose. Why is this an issue? Let me show you an example.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>iex(<span style=color:#ae81ff>1</span>)<span style=color:#f92672>&gt;</span> map1 <span style=color:#f92672>=</span> %{<span style=color:#e6db74>key</span>: <span style=color:#66d9ef>nil</span>}
-%{<span style=color:#e6db74>key</span>: <span style=color:#66d9ef>nil</span>}
-iex(<span style=color:#ae81ff>2</span>)<span style=color:#f92672>&gt;</span> map2 <span style=color:#f92672>=</span> %{}
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>iex(<span style=color:#cd00cd>1</span>)<span style=color:#39c>&gt;</span> map1 <span style=color:#39c>=</span> %{<span style=color:#cd0000>key</span>: nil}
+%{<span style=color:#cd0000>key</span>: nil}
+iex(<span style=color:#cd00cd>2</span>)<span style=color:#39c>&gt;</span> map2 <span style=color:#39c>=</span> %{}
 %{}
-iex(<span style=color:#ae81ff>3</span>)<span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>Map</span><span style=color:#f92672>.</span>get(map1, <span style=color:#e6db74>:key</span>)
-<span style=color:#66d9ef>nil</span>
-iex(<span style=color:#ae81ff>4</span>)<span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>Map</span><span style=color:#f92672>.</span>get(map2, <span style=color:#e6db74>:key</span>)
-<span style=color:#66d9ef>nil</span>
+iex(<span style=color:#cd00cd>3</span>)<span style=color:#39c>&gt;</span> <span style=color:#00cdcd>Map</span><span style=color:#39c>.</span>get(map1, <span style=color:#cd0000>:key</span>)
+nil
+iex(<span style=color:#cd00cd>4</span>)<span style=color:#39c>&gt;</span> <span style=color:#00cdcd>Map</span><span style=color:#39c>.</span>get(map2, <span style=color:#cd0000>:key</span>)
+nil
 </code></pre></div><p>In this example, <a href=https://hexdocs.pm/elixir/Map.html#get/3><code>Map.get/3</code></a> returns <code>nil</code> when passed <code>map1</code> or <code>map2</code>, but for <em>different reasons</em>. In a less contrived scenario, this can lead to some head-scratching bugs. Consider the case where the value associated with a key is intentionally <code>nil</code> to clear out some previously set value in a record. If you were using <code>Map.get/3</code> to lookup the key in the map, the return value would not indicate if the key and value simply weren&rsquo;t supplied (and thus no corresponding update to the record should occur) or if they were supplied and the value happened to be <code>nil</code> (and the old value in the record should be cleared).</p>
 <p>This issue is also present with <a href=https://hexdocs.pm/elixir/Keyword.html#get/3><code>Keyword.get/3</code></a>, <a href=https://hexdocs.pm/elixir/Access.html#get/3><code>Access.get/3</code></a>, and even <a href=https://hexdocs.pm/elixir/Application.html#get_env/3><code>Application.get_env/3</code></a>.</p>
 <h3 id=the-remedy>The Remedy <a class=heading-anchor href=#the-remedy aria-label=Anchor>#</a></h3>
 <p>As I alluded to earlier, the remedy here is to take away one of <code>nil</code>&rsquo;s jobs, specifically in indicating failure. The astute among you may have already realized that the third argument (not used in my examples above) to the various <code>get/3</code> functions is a &ldquo;default&rdquo;. You could certainly change the default to <code>:error</code> whenever you call these functions, but there&rsquo;s likely an even better option.</p>
 <p><strong>Enter <code>fetch/2</code></strong>. For each <code>get/3</code> function I previously mentioned, there is a <code>fetch/2</code> equivalent (specifically <a href=https://hexdocs.pm/elixir/Map.html#fetch/2><code>Map.fetch/2</code></a>, <a href=https://hexdocs.pm/elixir/Keyword.html#fetch/2><code>Keyword.fetch/2</code></a>, <a href=https://hexdocs.pm/elixir/Access.html#fetch/2><code>Access.fetch/2</code></a>, and <a href=https://hexdocs.pm/elixir/Application.html#fetch_env/2><code>Application.fetch_env/2</code></a>). These functions work similarly to their <code>get/3</code> counterparts, but return <code>{:ok, value}</code> when they succeed and <code>:error</code> otherwise. Consider the <code>Map.get/3</code> example from earlier, but using <code>Map.fetch/2</code> instead:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>iex(<span style=color:#ae81ff>1</span>)<span style=color:#f92672>&gt;</span> map1 <span style=color:#f92672>=</span> %{<span style=color:#e6db74>key</span>: <span style=color:#66d9ef>nil</span>}
-%{<span style=color:#e6db74>key</span>: <span style=color:#66d9ef>nil</span>}
-iex(<span style=color:#ae81ff>2</span>)<span style=color:#f92672>&gt;</span> map2 <span style=color:#f92672>=</span> %{}
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>iex(<span style=color:#cd00cd>1</span>)<span style=color:#39c>&gt;</span> map1 <span style=color:#39c>=</span> %{<span style=color:#cd0000>key</span>: nil}
+%{<span style=color:#cd0000>key</span>: nil}
+iex(<span style=color:#cd00cd>2</span>)<span style=color:#39c>&gt;</span> map2 <span style=color:#39c>=</span> %{}
 %{}
-iex(<span style=color:#ae81ff>3</span>)<span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>Map</span><span style=color:#f92672>.</span>fetch(map1, <span style=color:#e6db74>:key</span>)
-{<span style=color:#e6db74>:ok</span>, <span style=color:#66d9ef>nil</span>}
-iex(<span style=color:#ae81ff>4</span>)<span style=color:#f92672>&gt;</span> <span style=color:#a6e22e>Map</span><span style=color:#f92672>.</span>fetch(map2, <span style=color:#e6db74>:key</span>)
-<span style=color:#e6db74>:error</span>
+iex(<span style=color:#cd00cd>3</span>)<span style=color:#39c>&gt;</span> <span style=color:#00cdcd>Map</span><span style=color:#39c>.</span>fetch(map1, <span style=color:#cd0000>:key</span>)
+{<span style=color:#cd0000>:ok</span>, nil}
+iex(<span style=color:#cd00cd>4</span>)<span style=color:#39c>&gt;</span> <span style=color:#00cdcd>Map</span><span style=color:#39c>.</span>fetch(map2, <span style=color:#cd0000>:key</span>)
+<span style=color:#cd0000>:error</span>
 </code></pre></div><p>There is now a clear distinction between the case where the key and value exist and is the value happens to be <code>nil</code> and the case where the lookup has failed. The added bonus of <code>fetch/2</code> over specifying a default to <code>get/3</code> is that <code>fetch</code>&rsquo;s <code>{:ok, value}</code> return is more <code>with</code>-friendly.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>with {<span style=color:#e6db74>:ok</span>, value} <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>Map</span><span style=color:#f92672>.</span>fetch(map1, <span style=color:#e6db74>:key</span>) <span style=color:#66d9ef>do</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-elixir data-lang=elixir>with {<span style=color:#cd0000>:ok</span>, value} <span style=color:#39c>&lt;-</span> <span style=color:#00cdcd>Map</span><span style=color:#39c>.</span>fetch(map1, <span style=color:#cd0000>:key</span>) <span style=color:#cdcd00>do</span>
   perform_operation(value)
-<span style=color:#66d9ef>else</span>
-  <span style=color:#e6db74>:error</span> <span style=color:#f92672>-&gt;</span> {<span style=color:#e6db74>:error</span>, <span style=color:#e6db74>&#34;Value not found&#34;</span>}
-<span style=color:#66d9ef>end</span>
+<span style=color:#cdcd00>else</span>
+  <span style=color:#cd0000>:error</span> <span style=color:#39c>-&gt;</span> {<span style=color:#cd0000>:error</span>, <span style=color:#cd0000>&#34;Value not found&#34;</span>}
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>&ldquo;But wait,&rdquo; you might say, &ldquo;what about the example with <code>Ecto.Repo.get/3</code>? Is there an <code>Ecto.Repo.fetch/2</code>?&rdquo;</p>
 <p>Sadly, the answer is &ldquo;no.&rdquo; Your only options when looking up a record by its primary key are <code>Ecto.Repo.get/3</code> and <a href=https://hexdocs.pm/ecto/Ecto.Repo.html#c:get!/3><code>Ecto.Repo.get!/3</code></a> (which raises an error when the record is not found).</p>
 <p>In a way, this makes sense. Since <code>Ecto.Repo.get/3</code> will always return a struct on success, there is no way a <code>nil</code> return could be confused for anything less than a lookup failure. However, by choosing <code>nil</code> as the failed lookup value, Ecto has pigeon-holed <code>nil</code> into its usage that makes less sense. Should a <code>nil</code> returned by <code>Ecto.Repo.get/3</code> propagate out the context of Ecto, the confusion over whether it constitutes a failure or an intentionally blank value will ensue.</p>

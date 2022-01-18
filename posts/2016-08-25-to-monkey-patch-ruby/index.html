@@ -12,10 +12,7 @@
 <link type=text/css rel=stylesheet href=/css/compiled/main.min.ddad44a8f5230b8ef69a765868fe7f04acadbbca1865ea52155ea19b24f870001279d43e55ba79041b83c1b212abcefb2e899127d2cfc7c6d1e8d4e4d68e2342.css integrity="sha512-3a1EqPUjC472mnZYaP5/BKytu8oYZepSFV6hmyT4cAASedQ+Vbp5BBuDwbISq877LomRJ9LPx8bR6NTk1o4jQg==">
 <link type=text/css rel=stylesheet href=/css/custom.min.d426e553f6e0caac4f2b9a5d2ad745734f462d11e27399e2b4df654344c0e39c0598a3997dd17e31df4fdf41ac80d11137a6f5d89c9100c522a45208ad670d7f.css integrity="sha512-1CblU/bgyqxPK5pdKtdFc09GLRHic5nitN9lQ0TA45wFmKOZfdF+Md9P30GsgNERN6b12JyRAMUipFIIrWcNfw==">
 <script>function loadPreferredAppearance(){localStorage.preferredAppearance==="dark"||!("preferredAppearance"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function setPreferredAppearance(a){a=="default"?localStorage.removeItem("preferredAppearance"):localStorage.preferredAppearance=a,loadPreferredAppearance()}loadPreferredAppearance(),window.matchMedia("(prefers-color-scheme: dark)").addListener(loadPreferredAppearance)</script>
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/site.webmanifest>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
 <meta property="og:title" content="To Monkey Patch Ruby">
 <meta property="og:description" content="Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?
 ">
@@ -70,45 +67,45 @@ To Monkey Patch Ruby
 <h2 id=to-monkey-patch>To Monkey Patch <a class=heading-anchor href=#to-monkey-patch aria-label=Anchor>#</a></h2>
 <p>If you look at Ruby&rsquo;s <code>Time</code> class, you will notice that it has an <code>iso8601</code> class method as well as some <code>rfc****</code> class methods whose purposes are to parse strings from those formats into <code>Time</code> instances. Additionally, each of these class methods has a corresponding instance method that converts the <code>Time</code> instance into the proper string. Thus, it would make sense to simply define a <code>Time.american_date</code> method to parse <code>Time</code> instances from American date strings and a <code>Time#american_date</code> method to convert <code>Time</code> instances into American date strings.<a href=#one><sup>1</sup></a></p>
 <p>Since Ruby modules can only provide instance methods through <code>include</code>, we will need to separate the class and instance methods into separate modules, which will be added to <code>Time</code> through <code>extend</code> and <code>include</code>, respectively.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#75715e># lib/core_extensions/time/custom_formats.rb</span>
-<span style=color:#66d9ef>module</span> CoreExtensions
-  <span style=color:#66d9ef>module</span> Time
-    <span style=color:#66d9ef>module</span> CustomFormats
-      <span style=color:#66d9ef>AMERICAN_DATE_FORMAT</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;%m/%d/%Y %H:%M %p&#34;</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:navy># lib/core_extensions/time/custom_formats.rb</span>
+<span style=color:#cdcd00>module</span> CoreExtensions
+  <span style=color:#cdcd00>module</span> Time
+    <span style=color:#cdcd00>module</span> CustomFormats
+      AMERICAN_DATE_FORMAT <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;%m/%d/%Y %H:%M %p&#34;</span>
 
-      <span style=color:#66d9ef>module</span> InstanceMethods
-        <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>american_date</span>
-          strftime(<span style=color:#66d9ef>AMERICAN_DATE_FORMAT</span>)
-        <span style=color:#66d9ef>end</span>
-      <span style=color:#66d9ef>end</span>
+      <span style=color:#cdcd00>module</span> InstanceMethods
+        <span style=color:#cdcd00>def</span> american_date
+          strftime(AMERICAN_DATE_FORMAT)
+        <span style=color:#cdcd00>end</span>
+      <span style=color:#cdcd00>end</span>
 
-      <span style=color:#66d9ef>module</span> ClassMethods
-        <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>american_date</span> str
-          strptime(str, <span style=color:#66d9ef>AMERICAN_DATE_FORMAT</span>)
-        <span style=color:#66d9ef>end</span>
-      <span style=color:#66d9ef>end</span>
-    <span style=color:#66d9ef>end</span>
-  <span style=color:#66d9ef>end</span>
-<span style=color:#66d9ef>end</span>
+      <span style=color:#cdcd00>module</span> ClassMethods
+        <span style=color:#cdcd00>def</span> american_date str
+          strptime(str, AMERICAN_DATE_FORMAT)
+        <span style=color:#cdcd00>end</span>
+      <span style=color:#cdcd00>end</span>
+    <span style=color:#cdcd00>end</span>
+  <span style=color:#cdcd00>end</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>This results in the following initializer:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#75715e># config/initializers/monkey_patching.rb</span>
-<span style=color:#66d9ef>Time</span><span style=color:#f92672>.</span>extend <span style=color:#66d9ef>CoreExtensions</span><span style=color:#f92672>::</span><span style=color:#66d9ef>Time</span><span style=color:#f92672>::</span><span style=color:#66d9ef>CustomFormats</span><span style=color:#f92672>::</span><span style=color:#66d9ef>ClassMethods</span>
-<span style=color:#66d9ef>Time</span><span style=color:#f92672>.</span>include <span style=color:#66d9ef>CoreExtensions</span><span style=color:#f92672>::</span><span style=color:#66d9ef>Time</span><span style=color:#f92672>::</span><span style=color:#66d9ef>CustomFormats</span><span style=color:#f92672>::</span><span style=color:#66d9ef>InstanceMethods</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:navy># config/initializers/monkey_patching.rb</span>
+Time<span style=color:#39c>.</span>extend CoreExtensions<span style=color:#39c>::</span>Time<span style=color:#39c>::</span>CustomFormats<span style=color:#39c>::</span>ClassMethods
+Time<span style=color:#39c>.</span>include CoreExtensions<span style=color:#39c>::</span>Time<span style=color:#39c>::</span>CustomFormats<span style=color:#39c>::</span>InstanceMethods
 </code></pre></div><p>Why do it this way? It&rsquo;s elegant. It fits with the other methods in <code>Time</code> and follows Rails conventions.</p>
 <h2 id=not-to-monkey-patch>Not to Monkey Patch <a class=heading-anchor href=#not-to-monkey-patch aria-label=Anchor>#</a></h2>
 <p>Ruby gems are almost all modules. Perhaps because of this, perhaps simply because modules are cool, modules are a common way to encapsulate functionality in Ruby, even outside of gems. In fact, <a href=http://blog.codeclimate.com/blog/2012/02/07/what-code-goes-in-the-lib-directory/>this is what the <code>lib</code> directory in a Rails application is for</a>. In order to move our methods out of the controller, we would simply create a module in the <code>lib</code> directory.</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:#75715e># lib/american_date.rb</span>
-<span style=color:#66d9ef>module</span> AmericanDate
-  <span style=color:#66d9ef>AMERICAN_DATE_FORMAT</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;%m/%d/%Y %H:%M %p&#34;</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:navy># lib/american_date.rb</span>
+<span style=color:#cdcd00>module</span> AmericanDate
+  AMERICAN_DATE_FORMAT <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;%m/%d/%Y %H:%M %p&#34;</span>
 
-  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>to_time</span> str
-    <span style=color:#66d9ef>Time</span><span style=color:#f92672>.</span>strptime(str, <span style=color:#66d9ef>AMERICAN_DATE_FORMAT</span>)<span style=color:#f92672>.</span>in_time_zone
-  <span style=color:#66d9ef>end</span>
+  <span style=color:#cdcd00>def</span> to_time str
+    Time<span style=color:#39c>.</span>strptime(str, AMERICAN_DATE_FORMAT)<span style=color:#39c>.</span>in_time_zone
+  <span style=color:#cdcd00>end</span>
 
-  <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>to_string</span> time
-    time<span style=color:#f92672>.</span>strftime(<span style=color:#66d9ef>AMERICAN_DATE_FORMAT</span>)
-  <span style=color:#66d9ef>end</span>
-<span style=color:#66d9ef>end</span>
+  <span style=color:#cdcd00>def</span> to_string time
+    time<span style=color:#39c>.</span>strftime(AMERICAN_DATE_FORMAT)
+  <span style=color:#cdcd00>end</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>Done! Wasn&rsquo;t that simple?</p>
 <p>Why do it this way? It&rsquo;s easy. If I one day want to turn this into a gem (though an <a href=https://rubygems.org/gems/american_date>American date gem</a> already exists), it would be pretty simple.</p>
 <h2 id=conclusion>Conclusion <a class=heading-anchor href=#conclusion aria-label=Anchor>#</a></h2>

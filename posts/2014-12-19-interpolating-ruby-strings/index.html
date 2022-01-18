@@ -12,10 +12,7 @@
 <link type=text/css rel=stylesheet href=/css/compiled/main.min.ddad44a8f5230b8ef69a765868fe7f04acadbbca1865ea52155ea19b24f870001279d43e55ba79041b83c1b212abcefb2e899127d2cfc7c6d1e8d4e4d68e2342.css integrity="sha512-3a1EqPUjC472mnZYaP5/BKytu8oYZepSFV6hmyT4cAASedQ+Vbp5BBuDwbISq877LomRJ9LPx8bR6NTk1o4jQg==">
 <link type=text/css rel=stylesheet href=/css/custom.min.d426e553f6e0caac4f2b9a5d2ad745734f462d11e27399e2b4df654344c0e39c0598a3997dd17e31df4fdf41ac80d11137a6f5d89c9100c522a45208ad670d7f.css integrity="sha512-1CblU/bgyqxPK5pdKtdFc09GLRHic5nitN9lQ0TA45wFmKOZfdF+Md9P30GsgNERN6b12JyRAMUipFIIrWcNfw==">
 <script>function loadPreferredAppearance(){localStorage.preferredAppearance==="dark"||!("preferredAppearance"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function setPreferredAppearance(a){a=="default"?localStorage.removeItem("preferredAppearance"):localStorage.preferredAppearance=a,loadPreferredAppearance()}loadPreferredAppearance(),window.matchMedia("(prefers-color-scheme: dark)").addListener(loadPreferredAppearance)</script>
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/site.webmanifest>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
 <meta property="og:title" content="Interpolating Ruby Strings">
 <meta property="og:description" content="Sometimes I want string templates that I can pass around. In this post, I discuss how this can be accomplished in Ruby.
 ">
@@ -62,34 +59,34 @@ Interpolating Ruby Strings
 </header>
 <section class="prose dark:prose-light">
 <p>Let&rsquo;s talk about interpolation. Sure, you probably know the Ruby string interpolation syntax:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>arg <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;world&#34;</span>
-puts <span style=color:#e6db74>&#34;Hello </span><span style=color:#e6db74>#{</span>arg<span style=color:#e6db74>}</span><span style=color:#e6db74>!&#34;</span> <span style=color:#75715e>#=&gt; &#34;Hello world!&#34;</span>
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>arg <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;world&#34;</span>
+<span style=color:#cd00cd>puts</span> <span style=color:#cd0000>&#34;Hello </span><span style=color:#cd0000>#{</span>arg<span style=color:#cd0000>}</span><span style=color:#cd0000>!&#34;</span> <span style=color:navy>#=&gt; &#34;Hello world!&#34;</span>
 </code></pre></div><p>This syntax is pretty useful. However, it has it&rsquo;s limitations. Let&rsquo;s say that we are generating strings that are almost the same each time, but with each, one word changes. How are you going to do this now?</p>
 <p>My first inclination was something like this:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>line <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Today the weather is </span><span style=color:#ae81ff>\#</span><span style=color:#e6db74>{ weather }&#34;</span>
-weather_conditions <span style=color:#f92672>=</span> {}
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>line <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;Today the weather is </span><span style=color:#cd0000>\#</span><span style=color:#cd0000>{ weather }&#34;</span>
+weather_conditions <span style=color:#39c>=</span> {}
 
-<span style=color:#f92672>[</span><span style=color:#e6db74>&#34;warm&#34;</span>, <span style=color:#e6db74>&#34;cloudy&#34;</span>, <span style=color:#e6db74>&#34;windy&#34;</span><span style=color:#f92672>].</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>weather<span style=color:#f92672>|</span>
-  weather_conditions<span style=color:#f92672>[</span>weather<span style=color:#f92672>]</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>%r/line/i</span>
-<span style=color:#66d9ef>end</span>
+<span style=color:#39c>[</span><span style=color:#cd0000>&#34;warm&#34;</span>, <span style=color:#cd0000>&#34;cloudy&#34;</span>, <span style=color:#cd0000>&#34;windy&#34;</span><span style=color:#39c>].</span>each <span style=color:#cdcd00>do</span> <span style=color:#39c>|</span>weather<span style=color:#39c>|</span>
+  weather_conditions<span style=color:#39c>[</span>weather<span style=color:#39c>]</span> <span style=color:#39c>=</span> <span style=color:#cd0000>%r/line/i</span>
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>It&rsquo;s not hard to see why this didn&rsquo;t work. Well, it occurred to me shortly thereafter that ERB might be the right way to go with this.</p>
 <p>First try with ERB:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>line <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Today the weather is &lt;%= weather %&gt;&#34;</span>
-weather_conditions <span style=color:#f92672>=</span> {}
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>line <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;Today the weather is &lt;%= weather %&gt;&#34;</span>
+weather_conditions <span style=color:#39c>=</span> {}
 
-<span style=color:#f92672>[</span><span style=color:#e6db74>&#34;warm&#34;</span>, <span style=color:#e6db74>&#34;cloudy&#34;</span>, <span style=color:#e6db74>&#34;windy&#34;</span><span style=color:#f92672>].</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>weather<span style=color:#f92672>|</span>
-  weather_conditions<span style=color:#f92672>[</span>weather<span style=color:#f92672>]</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>ERB</span><span style=color:#f92672>.</span>new(line)<span style=color:#f92672>.</span>result
-<span style=color:#66d9ef>end</span>
+<span style=color:#39c>[</span><span style=color:#cd0000>&#34;warm&#34;</span>, <span style=color:#cd0000>&#34;cloudy&#34;</span>, <span style=color:#cd0000>&#34;windy&#34;</span><span style=color:#39c>].</span>each <span style=color:#cdcd00>do</span> <span style=color:#39c>|</span>weather<span style=color:#39c>|</span>
+  weather_conditions<span style=color:#39c>[</span>weather<span style=color:#39c>]</span> <span style=color:#39c>=</span> ERB<span style=color:#39c>.</span>new(line)<span style=color:#39c>.</span>result
+<span style=color:#cdcd00>end</span>
 </code></pre></div><p>This endeavor, however, resulted in the following error:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>NameError - undefined local variable or method <span style=color:#e6db74>`</span>weather<span style=color:#960050;background-color:#1e0010>&#39;</span> <span style=color:#66d9ef>for</span> main:Object:
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>NameError - undefined <span style=color:#cd00cd>local</span> variable or method <span style=color:#cd0000>`</span>weather<span>&#39;</span> <span style=color:#cdcd00>for</span> main:Object:
 </code></pre></div><p>After some searching about on the internet, it appears that there is an ever-present <code>binding</code> variable, that is an instance of the <code>Binding</code> class. Strange as that was, it seems to be needed by <code>ERB.new</code> to properly interpolate variables.</p>
 <p>The final code:</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>line <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Today the weather is &lt;%= weather %&gt;&#34;</span>
-weather_conditions <span style=color:#f92672>=</span> {}
+<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby>line <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;Today the weather is &lt;%= weather %&gt;&#34;</span>
+weather_conditions <span style=color:#39c>=</span> {}
 
-<span style=color:#f92672>[</span><span style=color:#e6db74>&#34;warm&#34;</span>, <span style=color:#e6db74>&#34;cloudy&#34;</span>, <span style=color:#e6db74>&#34;windy&#34;</span><span style=color:#f92672>].</span>each <span style=color:#66d9ef>do</span> <span style=color:#f92672>|</span>weather<span style=color:#f92672>|</span>
-  weather_conditions<span style=color:#f92672>[</span>weather<span style=color:#f92672>]</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>ERB</span><span style=color:#f92672>.</span>new(line)<span style=color:#f92672>.</span>result(binding)
-<span style=color:#66d9ef>end</span>
+<span style=color:#39c>[</span><span style=color:#cd0000>&#34;warm&#34;</span>, <span style=color:#cd0000>&#34;cloudy&#34;</span>, <span style=color:#cd0000>&#34;windy&#34;</span><span style=color:#39c>].</span>each <span style=color:#cdcd00>do</span> <span style=color:#39c>|</span>weather<span style=color:#39c>|</span>
+  weather_conditions<span style=color:#39c>[</span>weather<span style=color:#39c>]</span> <span style=color:#39c>=</span> ERB<span style=color:#39c>.</span>new(line)<span style=color:#39c>.</span>result(<span style=color:#cd00cd>binding</span>)
+<span style=color:#cdcd00>end</span>
 </code></pre></div>
 </section>
 <footer class=pt-8>
