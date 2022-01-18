@@ -38,11 +38,6 @@ unsafe = true
 noClasses = false
 
 [[menus.main]]
-  name = "Categories"
-  pageRef = "categories"
-  weight = 20
-
-[[menus.main]]
-  name = "Tags"
-  pageRef = "tags"
-  weight = 30
+name = "Tags"
+pageRef = "tags"
+weight = 30
