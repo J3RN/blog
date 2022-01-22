@@ -21,3 +21,7 @@ html {
   margin-left: -15.5px;
   margin-right: 5.5px;
 }
+
+.taxonomy-list {
+  display: block;
+}
