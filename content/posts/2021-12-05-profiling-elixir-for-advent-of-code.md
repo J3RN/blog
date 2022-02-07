@@ -16,7 +16,7 @@ If you're participating in Advent of Code and you haven't yet solved Day 5, this
 
 ## The Problem
 
-You are provided with a list of lines of hydrothermal vents on the ocean floor. These lines are represented by start and end coordinates, such as `0,9 -> 5.9`. In this example, this means that there are hydrothermal vents at coordinates `0,9`, `1,9`, `2,9`, `3,9`, `4,9`, and `5,9`. Interestingly, two "lines" of vents may intersect or overlap, which create areas of increased concern.
+You are provided with a list of lines of hydrothermal vents on the ocean floor. These lines are represented by start and end coordinates, such as `0,9 -> 5,9`. In this example, this means that there are hydrothermal vents at coordinates `0,9`, `1,9`, `2,9`, `3,9`, `4,9`, and `5,9`. Interestingly, two "lines" of vents may intersect or overlap, which create areas of increased concern.
 
 For instance, given the input
 
