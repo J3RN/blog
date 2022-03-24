@@ -105,7 +105,7 @@ defmacro to_string(term) do
 end
 ```
 
-This strange-looking macro is simply transforming your `to_string(my_string)` call to `String.Chars.to_string(my_string)` at compile-time.
+This strange-looking macro is simply transforming your `to_string(my_string)` call to `String.Chars.to_string(my_string)` at compile-time. `String.Chars.to_string/1` (and `Kernel.to_string/1`, by virtue of this macro expansion) can take any of a wide variety of data types and return a string representation of them.
 
 Alright, so how then is `String.Chars.to_string/1` defined? This is the entirety of the `String.Chars` module with the documentation removed for brevity:
 
@@ -132,7 +132,9 @@ defimpl String.Chars, for: Float do
 end
 ```
 
-As you can see, inside each `defimpl String.Chars, for: ...` there must be a `to_string/1` function defined that transforms its given datatype (here, either `Integer` or `Float`) to a string.
+As you can see, inside each `defimpl String.Chars, for: ...` there must be a `to_string/1` function defined that transforms its given datatype (here, either `Integer` or `Float`) to a string. When `String.Chars.to_string/1` is called, it will effectively look at the type of the argument it was passed and call the corresponding implementation.
+
+A single function that has differing implementations based on which data type is passed is said to exhibit [ad-hoc polymorphism](https://en.wikipedia.org/wiki/Ad_hoc_polymorphism). This is commonly contrasted with [parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism), where a function can handle different data types but the implementation is the same for all (consider that the single implementation of `Enum.map/2` can handle lists of integers, lists of strings, etc).
 
 What's even more interesting, though, is that each Elixir struct is considered it's own "type" for the purposes of protocols. For fun, let's define our own type:
 
@@ -187,7 +189,7 @@ defmodule PriceFinder do
 end
 ```
 
-Not bad! However, now that our `implementation/1` function is based solely around "types", we can use a protocol instead!
+Not bad! However, now that our `implementation/1` function is based solely around "types", we can use a protocol instead![^3]
 
 ```elixir
 defprotocol PriceFinder do
@@ -208,7 +210,7 @@ defimpl PriceFinder, for: Car do
 end
 ```
 
-Whether you prefer the style of the behaviour approach or the protocol approach is a matter of personal taste. However, if our `PriceFinder` module is going to be shipped as part of a library, the protocol approach would allow users of the library to implement the `PriceFinder` protocol for their own structs.[^3]
+If our `PriceFinder` module is going to be shipped as part of a library, the protocol approach would allow users of the library to implement the `PriceFinder` protocol for their own structs. So long as there exists a `defimpl` of the `PriceFinder` protocol for the type (or struct) being passed, calling `PriceFinder.product_price` will find the appropriate implementation and invoke it.
 
 ## Conclusion
 
