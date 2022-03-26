@@ -15,9 +15,9 @@ While reading through Miran Lipovača's excellent [_Learn You a Haskell_](http:/
 > Which right triangle that has integers for all sides and all sides equal to or smaller than 10 has a perimeter of 24?
 
 To demonstrate some properties of different programming languages, I'll solve this problem in three languages embodying three different paradigms:
-- C (imperative and procedural)
-- Haskell (functional)
-- Prolog (logic and constraint)
+- [C](#c) (imperative and procedural)
+- [Haskell](#haskell) (functional)
+- [Prolog](#prolog) (logic and constraint)
 
 ## C
 
