@@ -1,0 +1,159 @@
+<!doctype html><html lang=en-us><head>
+<meta charset=utf-8>
+<meta http-equiv=content-language content="en-us">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<title>Focusing on What Matters &#183; J3RN's Blog</title>
+<meta name=title content="Focusing on What Matters &#183; J3RN's Blog">
+<meta name=description content="It's easy to get lost when trying to evaluate a programming language and its ecosystem. In this post, I propose a set of qualities that developers should look for in a language and its ecosystem.
+">
+<link rel=canonical href=http://j3rn.com/posts/2022-04-01-focusing-on-what-matters/>
+<link type=text/css rel=stylesheet href=/css/schemes/congo.min.b48d6ba061dc77186a2524fb8aac5ac3823b2679a9299ca60325abbccc9c1764c884715f0ba24b4e2776cb3814df4af1f4c854b87207cd5d4c7a254da9b55751.css integrity="sha512-tI1roGHcdxhqJST7iqxaw4I7JnmpKZymAyWrvMycF2TIhHFfC6JLTid2yzgU30rx9MhUuHIHzV1MeiVNqbVXUQ==">
+<link type=text/css rel=stylesheet href=/css/compiled/main.min.0818de523788be82e4f72318d2cde977bfe6f7a86cf262ae4814150ab2f11b371c44e66ea73d84c75d7103ea6f90913e8472ec8964cfccc07a5c2698aab68db1.css integrity="sha512-CBjeUjeIvoLk9yMY0s3pd7/m96hs8mKuSBQVCrLxGzccROZupz2Ex11xA+pvkJE+hHLsiWTPzMB6XCaYqraNsQ==">
+<link type=text/css rel=stylesheet href=/css/custom.min.ecdb96f43cc276e953847067ecf96bffe39e172a6771f574e6837205e4b9493994d82d366685fbe709de2be2c82f4f7841f47b43d75e7502115e4a4a98327d63.css integrity="sha512-7NuW9DzCdulThHBn7Plr/+OeFypncfV05oNyBeS5STmU2C02ZoX75wneK+LIL094QfR7Q9dedQIRXkpKmDJ9Yw==">
+<script>function loadPreferredAppearance(){localStorage.preferredAppearance==="dark"||!("preferredAppearance"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function setPreferredAppearance(a){a=="default"?localStorage.removeItem("preferredAppearance"):localStorage.preferredAppearance=a,loadPreferredAppearance()}loadPreferredAppearance(),window.matchMedia("(prefers-color-scheme: dark)").addListener(loadPreferredAppearance)</script>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
+<meta property="og:title" content="Focusing on What Matters">
+<meta property="og:description" content="It's easy to get lost when trying to evaluate a programming language and its ecosystem. In this post, I propose a set of qualities that developers should look for in a language and its ecosystem.
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://j3rn.com/posts/2022-04-01-focusing-on-what-matters/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-04-01T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-04-01T00:00:00+00:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Focusing on What Matters">
+<meta name=twitter:description content="It's easy to get lost when trying to evaluate a programming language and its ecosystem. In this post, I propose a set of qualities that developers should look for in a language and its ecosystem.
+">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","articleSection":"Posts","name":"Focusing on What Matters","headline":"Focusing on What Matters","description":"It\u0027s easy to get lost when trying to evaluate a programming language and its ecosystem. In this post, I propose a set of qualities that developers should look for in a language and its ecosystem.\n","inLanguage":"en-us","author":{"@type":"Person","name":"Jonathan Arnett"},"creator":{"@type":"Person","name":"Jonathan Arnett"},"copyrightHolder":"Jonathan Arnett","copyrightYear":"2022","dateCreated":"2022-04-01T00:00:00\u002b00:00","datePublished":"2022-04-01T00:00:00\u002b00:00","dateModified":"2022-04-01T00:00:00\u002b00:00","url":"http:\/\/j3rn.com\/posts\/2022-04-01-focusing-on-what-matters\/","keywords":["language design","software development"],"wordCount":"1115"}</script>
+<meta name=generator content="Hugo 0.88.0">
+<meta name=author content="Jonathan Arnett">
+<script defer data-domain=j3rn.com src=https://plausible.io/js/plausible.js></script>
+</head>
+<body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 bg-neutral text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral max-w-7xl"><header class="flex justify-between py-6 font-semibold sm:items-center sm:py-10 text-neutral-900 dark:text-neutral">
+<div>
+<a href=/>
+<img src=/avatar.png width=250 height=250 class="max-w-[2rem] max-h-[2rem] mr-1 object-scale-down object-left rounded inline-block" alt="J3RN's Blog">
+</a>
+<a class="hover:underline hover:underline-primary-500 hover:underline-thickness-bold hover:underline-offset-small" rel=me href=/>J3RN&rsquo;s Blog</a>
+</div>
+<nav>
+<ul class="flex flex-col list-none sm:flex-row">
+<li class="mb-1 text-right sm:mb-0 sm:mr-7 sm:last:mr-0">
+<a class="hover:underline hover:underline-primary-500 hover:underline-thickness-bold hover:underline-offset-small" href=/tags/ title=Tags>Tags</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=flex-grow>
+<article class=max-w-prose>
+<header>
+<h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+Focusing on What Matters
+</h1>
+<div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400">
+<div class="flex flex-row items-center">
+<time datetime="2022-04-01 00:00:00 +0000 UTC">2022-04-01</time>
+<span class="px-2 text-primary-500">&#183;</span><span title="Reading time">6 mins</span>
+</div>
+</div>
+</header>
+<section class="prose dark:prose-light">
+<p>In an introductory computer science course, our professor instructed us:</p>
+<blockquote>
+<p>Don&rsquo;t become attached to any IDE, text editor, programming language, or operating system. This field is young and constantly evolving; you don&rsquo;t want to be left behind.</p>
+</blockquote>
+<p>I don&rsquo;t think I realized at that time what tremendously insightful advice this was. At that time I was primarily writing Java in Eclipse. Over the next few years I would work professionally in PHP and Ruby and then later migrate to Elixir. I would soon move from Eclipse to Sublime Text and not long after replace that with Vim. After using Vim for about four years, I switched to Emacs and have been using that for the last five or so. My current development environment (Elixir, Emacs) is <em>fine</em>, but there&rsquo;s also ample room for improvement.</p>
+<p>To her credit, I think my professor probably nailed the &ldquo;why&rdquo; of our situation. While developers are a fickle breed, our profession has only existed for roughly fifty years and most of the tools and languages that we use are younger than we are. If this doesn&rsquo;t strike you as incredible, consider that scalpels and trusses, implements used in modern medicine and bridge construction, were used by the Ancient Egyptians and Ancient Romans respectively.</p>
+<p>However, I believe that software developers can make progress as a profession by putting aside the hype—the flavor-of-the-week frameworks, the fancy features and creative syntax—and focus on what matters.</p>
+<h1 id=what-matters>What matters? <a class=heading-anchor href=#what-matters aria-label=Anchor>#</a></h1>
+<p>The reason that we write software in the first place is to create solutions to problems<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup>. Often times these problems can be solved without computers, and in many cases have been for years. Consider, for instance, that the calculations used to determine the trajectory of the Apollo missions were done by humans with pencils and paper. Computers, however, can solve some kinds of problems (like determining rocket trajectories) very quickly and therefore offer a better solution than other methods.</p>
+<p><img src=/images/saturn_v.webp alt="Saturn V rocket">
+<small>Photo by <a href="https://unsplash.com/@nasa?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">NASA</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small></p>
+<p>Therefore, any software solution that doesn&rsquo;t solve the stated problem within given parameters is a failure. If I were to ask a computer to tell me the trajectory needed to get a Saturn V rocket to the moon and it tells me the weather instead, I would be impressed but it would also be a complete failure as I still don&rsquo;t know the answer to my question. Similarly, if the computer only produces the correct trajectory after churning for a decade, chances are I&rsquo;ll have already figured it out by other methods and the effort was wasted. This combination of problem and parameters are generally referred to as &ldquo;requirements&rdquo;. Given a set of requirements, a language and its ecosystem (tooling, libraries, etc) should provide methods to verify that software created by them meets its requirements.</p>
+<p>Requirements for considering a problem &ldquo;solved&rdquo; differ from problem to problem. What follows are the typical kinds of requirements that I see in my day-to-day work. These are in no particular order.</p>
+<h3 id=logical-correctness>Logical Correctness <a class=heading-anchor href=#logical-correctness aria-label=Anchor>#</a></h3>
+<p>Being &ldquo;logically correct&rdquo; means producing the desired output; solving the problem. For instance, if I type <code>2 + 2</code> into a calculator application and it replies with <code>5</code>, this is a logical error, and the application is not logically correct. Similarly, if I type some information into a form and click the &ldquo;Save&rdquo; button, this information should be persisted for later retrieval or else this, too, is a logical error.</p>
+<p><img src=/images/math.jpg alt="Mathematical error"></p>
+<p><small>Photo by <a href="https://unsplash.com/@michalmatlon?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Michal Matlon</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small></p>
+<h3 id=productivity>Productivity <a class=heading-anchor href=#productivity aria-label=Anchor>#</a></h3>
+<p>While the word &ldquo;productivity&rdquo; also lacks a widely-accepted definition in the software industry, for my purposes &ldquo;productivity&rdquo; refers to the amount of time and effort required to extend or modify a system. Less time and effort is &ldquo;more productive&rdquo;, more time and effort is &ldquo;less productive&rdquo;.</p>
+<p>If you&rsquo;ve ever worked as a professional software developer, you&rsquo;ll know that there&rsquo;s always someone wanting their application completed as fast as possible. Completing functionality quickly builds confidence and goodwill with your clients and can be a strategic differentiator for your company. Rather than work late and forego relationships with family and friends, we (software developers) should reach for tools, libraries, and patterns that make creating, extending, and modifying software systems quick and effortless.</p>
+<p><img src=/images/kanban.jpg alt="kanban board">
+<small>Photo by <a href="https://unsplash.com/@lazizli?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Lala Azizli</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small></p>
+<h3 id=stability>Stability <a class=heading-anchor href=#stability aria-label=Anchor>#</a></h3>
+<p>The term &ldquo;stability&rdquo; here means that the application does not crash. If you view a crash as &ldquo;incorrect output&rdquo; (e.g. a server produced a 500 response instead of the expected 200 response), one might view stability as saying &ldquo;an application should be logically correct <em>all the time</em> and not just sometimes.&rdquo;</p>
+<p><img src=/images/jenga.jpg alt="a Jenga tower"></p>
+<p><small>Photo by <a href="https://unsplash.com/@oscaresquivel?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Oscar Ivan Esquivel Arteaga</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small></p>
+<h3 id=availability>Availability <a class=heading-anchor href=#availability aria-label=Anchor>#</a></h3>
+<p>The application should be accessible when it is needed. If an application is only needed twice per day, is available at those times and is unavailable at all other times, it is still meeting its availability requirement (e.g. a timesheet application may have such a requirement). However, if a user tries to use a piece of software and cannot, it is not meeting its availability requirement.</p>
+<p><img src=/images/404.jpg alt="Error page"></p>
+<p><small>Photo by <a href="https://unsplash.com/@introspectivedsgn?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Erik Mclean</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small></p>
+<h3 id=safety>Safety <a class=heading-anchor href=#safety aria-label=Anchor>#</a></h3>
+<p>It seems that every day a company&rsquo;s software systems are breached and the data that users had entrusted to them is leaked. This is an example of a system that is <em>unsafe</em>, whereas a system that is &ldquo;safe&rdquo; does not harm its users. There are a number of ways that users can be harmed by software; physically (think robotics), emotionally (think Facebook), financially (think MtGox), and others.</p>
+<p><img src=/images/railing.jpg alt="guard rail"></p>
+<p><small>Photo by <a href="https://unsplash.com/@introspectivedsgn?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Erik Mclean</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small></p>
+<h3 id=speed>Speed <a class=heading-anchor href=#speed aria-label=Anchor>#</a></h3>
+<p>Sometimes speed is a &ldquo;soft&rdquo; requirement. While users would like pages to load instantaneously in their browsers, they generally will still be satisfied so long as it loads in a second or so<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup>. In other cases, such as audio processing or transmission, a delay of even 100ms is totally untenable as the user would detect that the audio was distorted. In some extreme cases, the software speed requirement is specified down to the millisecond such that the system can continue to interoperate with another system operating a high, set frequency.</p>
+<p><img src=/images/stopwatch.jpg alt=Stopwatch>
+<small>Photo by <a href="https://unsplash.com/@tsvetoslav?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Tsvetoslav Hristov</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small></p>
+<h1 id=going-forward>Going Forward <a class=heading-anchor href=#going-forward aria-label=Anchor>#</a></h1>
+<p>This list is not necessarily comprehensive, and I reserve the right to amend it in the future. In any event, though, I will try to tie future posts around languages and their ecosystems back to this post to show how the topic is related to a concept that <em>matters</em>.</p>
+<section class=footnotes role=doc-endnotes>
+<hr>
+<ol>
+<li id=fn:1 role=doc-endnote>
+<p>Software is also sometimes written for fun—e.g. the TIS-100 video game or solving contrived programming puzzles—but that is not the focus of this article.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+<li id=fn:2 role=doc-endnote>
+<p>Unsurprisingly, &ldquo;how fast should a page load?&rdquo; features a variety of answers from &ldquo;700ms&rdquo; to &ldquo;under 3s&rdquo;. <a href=https://developers.google.com/speed/docs/insights/v5/about>Google&rsquo;s PageSpeed Insights states that a &ldquo;good&rdquo; First Contentful Paint (FCP) time is less than 1800ms</a>&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</section>
+<footer class=pt-8>
+<div class="pt-8 article-pagination">
+<hr class="border-dotted border-neutral-300 dark:border-neutral-600">
+<div class="flex justify-between pt-3">
+<span>
+</span>
+<span>
+<a class="flex text-right" href=/posts/2021-12-05-profiling-elixir-for-advent-of-code/>
+<span class="flex flex-col">
+<span class="article-pagination-title mt-[0.1rem] leading-6">Profiling Elixir for Advent of Code</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+<time datetime="2021-12-05 15:34:07 -0500 -0500">2021-12-05</time>
+</span>
+</span>
+<span class="ml-3 article-pagination-direction">&rarr;</span>
+</a>
+</span>
+</div>
+</div>
+</footer>
+</article>
+</main><footer class=py-10>
+<div class="flex justify-between">
+<div>
+<p class="text-sm text-neutral-500 dark:text-neutral-400">
+&copy;
+2022
+Jonathan Arnett
+</p>
+<p class="text-xs text-neutral-400 dark:text-neutral-600">
+Powered by <a class="hover:underline hover:underline-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:underline-primary-400 hover:text-primary-500" href=https://git.io/hugo-congo target=_blank rel="noopener noreferrer">Congo</a>
+</p>
+</div>
+<div class="text-sm cursor-pointer text-neutral-400 dark:text-neutral-500">
+<button id=dark-toggle onclick="setPreferredAppearance('dark')" oncontextmenu="return setPreferredAppearance('default'),!1" class="inline px-2 py-1 border rounded-md border-neutral-200 dark:hidden hover:text-primary-500 hover:border-primary-400" title="Switch to dark appearance">
+<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="moon" class="svg-inline--fa fa-moon fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M283.211 512c78.962.0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954.0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156.0 00283.211.0c-141.309.0-256 114.511-256 256 0 141.309 114.511 256 256 256z"/></svg>
+</span>
+</button>
+<button id=light-toggle onclick="setPreferredAppearance('light')" oncontextmenu="return setPreferredAppearance('default'),!1" class="hidden px-2 py-1 border rounded-md cursor-pointer dark:inline border-neutral-700 hover:text-primary-400 hover:border-primary-500" title="Switch to light appearance">
+<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sun" class="svg-inline--fa fa-sun fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M256 160c-52.9.0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6.0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0s-49.9-131.1.0-181 131.1-49.9 181 0 49.9 131.1.0 181z"/></svg>
+</span>
+</button>
+</div>
+</div>
+</footer>
+</body>
+</html>
