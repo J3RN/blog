@@ -94,3 +94,5 @@ The ability of Haskell's syntax to clearly convey mathematical concepts is in pa
 While the syntax of a language can make a significant impact on the comprehensibility of applications written in that language, a great deal of the burden of writing comprehensible code falls on the author in the form of application architecture and code organization. For instance, consider this [500+ line Go function in the Lightning Network Daemon]. How long would it take you to understand or explain to someone else what this function does? I'm guessing quite a while. By splitting large procedures into small, independently understandable functions, an author can more clearly convey what a piece of code is doing.
 
 [^3]: Personally I find a non-recursive Haskell implementation that uses ranges to be the most comprehensible: `let fac x = product [1..x]`
+
+[ISWIM]: https://www.cs.cmu.edu/~crary/819-f09/Landin66.pdf
