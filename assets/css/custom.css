@@ -7,14 +7,14 @@ html {
 }
 
 .timeline {
-  border-left: 1px solid var(--color-primary-400);
+  border-left: 1px solid rgba(var(--color-primary-400));
   padding-left: 10px;
 }
 
 .timeline > article > h3:before {
   content: "";
   display: inline-block;
-  background: var(--color-primary-400);
+  background: rgba(var(--color-primary-400));
   min-width: 10px;
   height: 10px;
   border-radius: 5px;

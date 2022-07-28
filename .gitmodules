@@ -6,5 +6,5 @@
 	url = https://github.com/J3RN/game-of-evolution
 [submodule "themes/congo"]
 	path = themes/congo
-	url = https://github.com/jpanther/congo.git
-	branch = stable
+	url = https://github.com/J3RN/hugo-congo-theme.git
+	branch = dev
