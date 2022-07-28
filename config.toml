@@ -38,7 +38,7 @@ showDate = false
 unsafe = true
 
 [markup.highlight]
-style='vim'
+style='doom-one'
 
 [[menus.main]]
 name = "Tags"
