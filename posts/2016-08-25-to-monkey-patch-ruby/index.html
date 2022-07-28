@@ -1,17 +1,13 @@
-<!doctype html><html lang=en-us><head>
+<!doctype html><html lang=en-us dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head>
 <meta charset=utf-8>
 <meta http-equiv=content-language content="en-us">
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta http-equiv=x-ua-compatible content="ie=edge">
-<title>To Monkey Patch Ruby &#183; J3RN's Blog</title>
-<meta name=title content="To Monkey Patch Ruby &#183; J3RN's Blog">
-<meta name=description content="Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?
-">
+<title>To Monkey Patch Ruby &#183; J3RN's Blog</title><meta name=title content="To Monkey Patch Ruby &#183; J3RN's Blog">
+<meta name=description content="My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design.">
 <link rel=canonical href=http://j3rn.com/posts/2016-08-25-to-monkey-patch-ruby/>
-<link type=text/css rel=stylesheet href=/css/schemes/congo.min.b48d6ba061dc77186a2524fb8aac5ac3823b2679a9299ca60325abbccc9c1764c884715f0ba24b4e2776cb3814df4af1f4c854b87207cd5d4c7a254da9b55751.css integrity="sha512-tI1roGHcdxhqJST7iqxaw4I7JnmpKZymAyWrvMycF2TIhHFfC6JLTid2yzgU30rx9MhUuHIHzV1MeiVNqbVXUQ==">
-<link type=text/css rel=stylesheet href=/css/compiled/main.min.0818de523788be82e4f72318d2cde977bfe6f7a86cf262ae4814150ab2f11b371c44e66ea73d84c75d7103ea6f90913e8472ec8964cfccc07a5c2698aab68db1.css integrity="sha512-CBjeUjeIvoLk9yMY0s3pd7/m96hs8mKuSBQVCrLxGzccROZupz2Ex11xA+pvkJE+hHLsiWTPzMB6XCaYqraNsQ==">
-<link type=text/css rel=stylesheet href=/css/custom.min.ecdb96f43cc276e953847067ecf96bffe39e172a6771f574e6837205e4b9493994d82d366685fbe709de2be2c82f4f7841f47b43d75e7502115e4a4a98327d63.css integrity="sha512-7NuW9DzCdulThHBn7Plr/+OeFypncfV05oNyBeS5STmU2C02ZoX75wneK+LIL094QfR7Q9dedQIRXkpKmDJ9Yw==">
-<script>function loadPreferredAppearance(){localStorage.preferredAppearance==="dark"||!("preferredAppearance"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function setPreferredAppearance(a){a=="default"?localStorage.removeItem("preferredAppearance"):localStorage.preferredAppearance=a,loadPreferredAppearance()}loadPreferredAppearance(),window.matchMedia("(prefers-color-scheme: dark)").addListener(loadPreferredAppearance)</script>
+<link type=text/css rel=stylesheet href=/css/main.bundle.min.99f98c53cf271b9db0827426f7c35174a5915fc431b6dae812a8ddda785ed7e3a525215d0e5f85378931d5b96b11751cbbbfaaf45c07a9c4a4b668935a9df524.css integrity="sha512-mfmMU88nG52wgnQm98NRdKWRX8QxttroEqjd2nhe1+OlJSFdDl+FN4kx1blrEXUcu7+q9FwHqcSktmiTWp31JA==">
+<script type=text/javascript src=/js/appearance.min.12e98742cd283574d030a7fe55f29597df4ee214f7ff7075b4d19a64d046a602753c715295550be7899b661619cec89c679049d36c624681671a8013c1249896.js integrity="sha512-EumHQs0oNXTQMKf+VfKVl99O4hT3/3B1tNGaZNBGpgJ1PHFSlVUL54mbZhYZzsicZ5BJ02xiRoFnGoATwSSYlg=="></script>
 <link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
 <meta property="og:title" content="To Monkey Patch Ruby">
 <meta property="og:description" content="Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?
@@ -24,147 +20,107 @@
 <meta name=twitter:title content="To Monkey Patch Ruby">
 <meta name=twitter:description content="Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?
 ">
-<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","articleSection":"Posts","name":"To Monkey Patch Ruby","headline":"To Monkey Patch Ruby","description":"Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?\n","inLanguage":"en-us","author":{"@type":"Person","name":"Jonathan Arnett"},"creator":{"@type":"Person","name":"Jonathan Arnett"},"copyrightHolder":"Jonathan Arnett","copyrightYear":"2016","dateCreated":"2016-08-25T16:07:49-04:00","datePublished":"2016-08-25T16:07:49-04:00","dateModified":"2016-08-25T16:07:49-04:00","url":"http:\/\/j3rn.com\/posts\/2016-08-25-to-monkey-patch-ruby\/","keywords":["monkey patching","ruby"],"wordCount":"554"}</script>
-<meta name=generator content="Hugo 0.88.0">
+<script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"To Monkey Patch Ruby","headline":"To Monkey Patch Ruby","description":"Monkey-patching is a controversial topic in Ruby and other languages. So, should I use it or not?\n","abstract":"This is the first of a series of posts I intend to write in a new \u0026ldquo;J3RN vs J3RN\u0026rdquo; style. Essentially, I will be stating a problem with two or more possible solutions, taking both sides in turn, and hopefully ultimately reaching a well thought out solution to the problem.\nThe Problem # For my Time Tracker application, I want to have a pretty date and time picker. However, Ruby only natively understands a handful of formats and \u0026ldquo;American date\u0026rdquo;, the format used by the pretty date and time picker, is not one of them.","inLanguage":"en-us","url":"http:\/\/j3rn.com\/posts\/2016-08-25-to-monkey-patch-ruby\/","author":{"@type":"Person","name":"Jonathan Arnett"},"copyrightYear":"2016","dateCreated":"2016-08-25T16:07:49-04:00","datePublished":"2016-08-25T16:07:49-04:00","dateModified":"2016-08-25T16:07:49-04:00","keywords":["monkey patching","ruby"],"mainEntityOfPage":"true","wordCount":"554"}]</script>
 <meta name=author content="Jonathan Arnett">
 <script defer data-domain=j3rn.com src=https://plausible.io/js/plausible.js></script>
-</head>
-<body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 bg-neutral text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral max-w-7xl"><header class="flex justify-between py-6 font-semibold sm:items-center sm:py-10 text-neutral-900 dark:text-neutral">
+</head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 bg-neutral text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral max-w-7xl">
+<div id=the-top class="absolute flex self-center">
+<a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 dark:bg-neutral-600 focus:translate-y-0" href=#main-content><span class="font-bold ltr:pr-2 rtl:pl-2 text-primary-600 dark:text-primary-400">&darr;</span>Skip to main content</a>
+</div><header class="py-6 font-semibold sm:py-10 text-neutral-900 dark:text-neutral print:hidden">
+<nav class="flex justify-between">
 <div>
 <a href=/>
 <img src=/avatar.png width=250 height=250 class="max-w-[2rem] max-h-[2rem] mr-1 object-scale-down object-left rounded inline-block" alt="J3RN's Blog">
 </a>
-<a class="hover:underline hover:underline-primary-500 hover:underline-thickness-bold hover:underline-offset-small" rel=me href=/>J3RN&rsquo;s Blog</a>
-</div>
-<nav>
-<ul class="flex flex-col list-none sm:flex-row">
-<li class="mb-1 text-right sm:mb-0 sm:mr-7 sm:last:mr-0">
-<a class="hover:underline hover:underline-primary-500 hover:underline-thickness-bold hover:underline-offset-small" href=/tags/ title=Tags>Tags</a>
-</li>
-</ul>
-</nav>
-</header>
-<main class=flex-grow>
-<article class=max-w-prose>
-<header>
+<a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" rel=me href=/>J3RN&rsquo;s Blog</a>
+</div><ul class="flex flex-col list-none ltr:text-right rtl:text-left sm:flex-row">
+<li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+<a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href=/tags/ title=Tags>Tags</a>
+</li></ul></nav></header><div class="relative flex flex-col grow">
+<main id=main-content class=grow>
+<article>
+<header class=max-w-prose>
 <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
 To Monkey Patch Ruby
-</h1>
-<div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400">
-<div class="flex flex-row items-center">
-<time datetime="2016-08-25 16:07:49 -0400 -0400">2016-08-25</time>
-<span class="px-2 text-primary-500">&#183;</span><span title="Reading time">3 mins</span>
-</div>
-</div>
-</header>
-<section class="prose dark:prose-light">
-<p>This is the first of a series of posts I intend to write in a new &ldquo;J3RN vs J3RN&rdquo; style. Essentially, I will be stating a problem with two or more possible solutions, taking both sides in turn, and hopefully ultimately reaching a well thought out solution to the problem.</p>
-<h2 id=the-problem>The Problem <a class=heading-anchor href=#the-problem aria-label=Anchor>#</a></h2>
-<p>For my <a href=https://github.com/J3RN/timesheet>Time Tracker application</a>, I want to have a pretty date and time picker. However, Ruby only natively understands a handful of formats and &ldquo;<a href=https://en.wikipedia.org/wiki/Date_and_time_notation_in_the_United_States>American date</a>&rdquo;, the format used by the pretty date and time picker, is not one of them.</p>
-<p><strong>The time specified in the date and picker, available as a string, needs to be converted to a <code>Time</code> instance on save, then converted back into the American date string when displayed.</strong></p>
-<p>My first solution was to put two methods in a controller, <code>from_american_date</code> and <code>to_american_date</code>, which would perform these functions. However, this approach felt messy. Why should the controller know about converting time formats? What if I need this functionality in another controller?</p>
-<p>I saw two alternatives: Monkey patching <code>Time</code> and creating a new module, <code>AmericanDate</code>.</p>
-<h2 id=to-monkey-patch>To Monkey Patch <a class=heading-anchor href=#to-monkey-patch aria-label=Anchor>#</a></h2>
-<p>If you look at Ruby&rsquo;s <code>Time</code> class, you will notice that it has an <code>iso8601</code> class method as well as some <code>rfc****</code> class methods whose purposes are to parse strings from those formats into <code>Time</code> instances. Additionally, each of these class methods has a corresponding instance method that converts the <code>Time</code> instance into the proper string. Thus, it would make sense to simply define a <code>Time.american_date</code> method to parse <code>Time</code> instances from American date strings and a <code>Time#american_date</code> method to convert <code>Time</code> instances into American date strings.<a href=#one><sup>1</sup></a></p>
-<p>Since Ruby modules can only provide instance methods through <code>include</code>, we will need to separate the class and instance methods into separate modules, which will be added to <code>Time</code> through <code>extend</code> and <code>include</code>, respectively.</p>
-<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:navy># lib/core_extensions/time/custom_formats.rb</span>
-<span style=color:#cdcd00>module</span> CoreExtensions
-  <span style=color:#cdcd00>module</span> Time
-    <span style=color:#cdcd00>module</span> CustomFormats
-      AMERICAN_DATE_FORMAT <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;%m/%d/%Y %H:%M %p&#34;</span>
-
-      <span style=color:#cdcd00>module</span> InstanceMethods
-        <span style=color:#cdcd00>def</span> american_date
-          strftime(AMERICAN_DATE_FORMAT)
-        <span style=color:#cdcd00>end</span>
-      <span style=color:#cdcd00>end</span>
-
-      <span style=color:#cdcd00>module</span> ClassMethods
-        <span style=color:#cdcd00>def</span> american_date str
-          strptime(str, AMERICAN_DATE_FORMAT)
-        <span style=color:#cdcd00>end</span>
-      <span style=color:#cdcd00>end</span>
-    <span style=color:#cdcd00>end</span>
-  <span style=color:#cdcd00>end</span>
-<span style=color:#cdcd00>end</span>
-</code></pre></div><p>This results in the following initializer:</p>
-<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:navy># config/initializers/monkey_patching.rb</span>
-Time<span style=color:#39c>.</span>extend CoreExtensions<span style=color:#39c>::</span>Time<span style=color:#39c>::</span>CustomFormats<span style=color:#39c>::</span>ClassMethods
-Time<span style=color:#39c>.</span>include CoreExtensions<span style=color:#39c>::</span>Time<span style=color:#39c>::</span>CustomFormats<span style=color:#39c>::</span>InstanceMethods
-</code></pre></div><p>Why do it this way? It&rsquo;s elegant. It fits with the other methods in <code>Time</code> and follows Rails conventions.</p>
-<h2 id=not-to-monkey-patch>Not to Monkey Patch <a class=heading-anchor href=#not-to-monkey-patch aria-label=Anchor>#</a></h2>
-<p>Ruby gems are almost all modules. Perhaps because of this, perhaps simply because modules are cool, modules are a common way to encapsulate functionality in Ruby, even outside of gems. In fact, <a href=http://blog.codeclimate.com/blog/2012/02/07/what-code-goes-in-the-lib-directory/>this is what the <code>lib</code> directory in a Rails application is for</a>. In order to move our methods out of the controller, we would simply create a module in the <code>lib</code> directory.</p>
-<div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=color:navy># lib/american_date.rb</span>
-<span style=color:#cdcd00>module</span> AmericanDate
-  AMERICAN_DATE_FORMAT <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;%m/%d/%Y %H:%M %p&#34;</span>
-
-  <span style=color:#cdcd00>def</span> to_time str
-    Time<span style=color:#39c>.</span>strptime(str, AMERICAN_DATE_FORMAT)<span style=color:#39c>.</span>in_time_zone
-  <span style=color:#cdcd00>end</span>
-
-  <span style=color:#cdcd00>def</span> to_string time
-    time<span style=color:#39c>.</span>strftime(AMERICAN_DATE_FORMAT)
-  <span style=color:#cdcd00>end</span>
-<span style=color:#cdcd00>end</span>
-</code></pre></div><p>Done! Wasn&rsquo;t that simple?</p>
-<p>Why do it this way? It&rsquo;s easy. If I one day want to turn this into a gem (though an <a href=https://rubygems.org/gems/american_date>American date gem</a> already exists), it would be pretty simple.</p>
-<h2 id=conclusion>Conclusion <a class=heading-anchor href=#conclusion aria-label=Anchor>#</a></h2>
-<p>I&rsquo;m going to monkey patch <code>Time</code> and add the method to <code>ApplicationHelper</code>. While the module solution is simpler, it doesn&rsquo;t come near the elegance of the monkey patching solution. Hopefully, Monkey patching responsibly will help to avoid many of its pitfalls.</p>
-<p><a name=one></a><sup>1</sup> The style of monkey patching I used came from <a href=http://www.justinweiss.com/articles/3-ways-to-monkey-patch-without-making-a-mess/>a great blog post by Justin Weiss</a>.</p>
-</section>
-<footer class=pt-8>
-<div class="pt-8 article-pagination">
+</h1><div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+<div class="flex flex-row flex-wrap items-center">
+<time datetime="2016-08-25 16:07:49 -0400 -0400">August 25, 2016</time><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">3 mins</span>
+</div></div></header><section class="flex flex-col max-w-full mt-0 prose lg:flex-row dark:prose-invert">
+<div class="min-w-0 min-h-0 max-w-prose">
+<p>This is the first of a series of posts I intend to write in a new &ldquo;J3RN vs J3RN&rdquo; style. Essentially, I will be stating a problem with two or more possible solutions, taking both sides in turn, and hopefully ultimately reaching a well thought out solution to the problem.</p><h2 id=the-problem class="relative group">The Problem <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#the-problem aria-label=Anchor>#</a></span></h2><p>For my <a href=https://github.com/J3RN/timesheet>Time Tracker application</a>, I want to have a pretty date and time picker. However, Ruby only natively understands a handful of formats and &ldquo;<a href=https://en.wikipedia.org/wiki/Date_and_time_notation_in_the_United_States>American date</a>&rdquo;, the format used by the pretty date and time picker, is not one of them.</p><p><strong>The time specified in the date and picker, available as a string, needs to be converted to a <code>Time</code> instance on save, then converted back into the American date string when displayed.</strong></p><p>My first solution was to put two methods in a controller, <code>from_american_date</code> and <code>to_american_date</code>, which would perform these functions. However, this approach felt messy. Why should the controller know about converting time formats? What if I need this functionality in another controller?</p><p>I saw two alternatives: Monkey patching <code>Time</code> and creating a new module, <code>AmericanDate</code>.</p><h2 id=to-monkey-patch class="relative group">To Monkey Patch <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#to-monkey-patch aria-label=Anchor>#</a></span></h2><p>If you look at Ruby&rsquo;s <code>Time</code> class, you will notice that it has an <code>iso8601</code> class method as well as some <code>rfc****</code> class methods whose purposes are to parse strings from those formats into <code>Time</code> instances. Additionally, each of these class methods has a corresponding instance method that converts the <code>Time</code> instance into the proper string. Thus, it would make sense to simply define a <code>Time.american_date</code> method to parse <code>Time</code> instances from American date strings and a <code>Time#american_date</code> method to convert <code>Time</code> instances into American date strings.<a href=#one><sup>1</sup></a></p><p>Since Ruby modules can only provide instance methods through <code>include</code>, we will need to separate the class and instance methods into separate modules, which will be added to <code>Time</code> through <code>extend</code> and <code>include</code>, respectively.</p><div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span><span style=color:navy># lib/core_extensions/time/custom_formats.rb</span>
+</span></span><span style=display:flex><span><span style=color:#cdcd00>module</span> CoreExtensions
+</span></span><span style=display:flex><span>  <span style=color:#cdcd00>module</span> Time
+</span></span><span style=display:flex><span>    <span style=color:#cdcd00>module</span> CustomFormats
+</span></span><span style=display:flex><span>      AMERICAN_DATE_FORMAT <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;%m/%d/%Y %H:%M %p&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#cdcd00>module</span> InstanceMethods
+</span></span><span style=display:flex><span>        <span style=color:#cdcd00>def</span> american_date
+</span></span><span style=display:flex><span>          strftime(AMERICAN_DATE_FORMAT)
+</span></span><span style=display:flex><span>        <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span>      <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#cdcd00>module</span> ClassMethods
+</span></span><span style=display:flex><span>        <span style=color:#cdcd00>def</span> american_date str
+</span></span><span style=display:flex><span>          strptime(str, AMERICAN_DATE_FORMAT)
+</span></span><span style=display:flex><span>        <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span>      <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span>    <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span>  <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span><span style=color:#cdcd00>end</span>
+</span></span></code></pre></div><p>This results in the following initializer:</p><div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span><span style=color:navy># config/initializers/monkey_patching.rb</span>
+</span></span><span style=display:flex><span>Time<span style=color:#39c>.</span>extend CoreExtensions<span style=color:#39c>::</span>Time<span style=color:#39c>::</span>CustomFormats<span style=color:#39c>::</span>ClassMethods
+</span></span><span style=display:flex><span>Time<span style=color:#39c>.</span>include CoreExtensions<span style=color:#39c>::</span>Time<span style=color:#39c>::</span>CustomFormats<span style=color:#39c>::</span>InstanceMethods
+</span></span></code></pre></div><p>Why do it this way? It&rsquo;s elegant. It fits with the other methods in <code>Time</code> and follows Rails conventions.</p><h2 id=not-to-monkey-patch class="relative group">Not to Monkey Patch <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#not-to-monkey-patch aria-label=Anchor>#</a></span></h2><p>Ruby gems are almost all modules. Perhaps because of this, perhaps simply because modules are cool, modules are a common way to encapsulate functionality in Ruby, even outside of gems. In fact, <a href=http://blog.codeclimate.com/blog/2012/02/07/what-code-goes-in-the-lib-directory/>this is what the <code>lib</code> directory in a Rails application is for</a>. In order to move our methods out of the controller, we would simply create a module in the <code>lib</code> directory.</p><div class=highlight><pre tabindex=0 style=color:#ccc;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span><span style=color:navy># lib/american_date.rb</span>
+</span></span><span style=display:flex><span><span style=color:#cdcd00>module</span> AmericanDate
+</span></span><span style=display:flex><span>  AMERICAN_DATE_FORMAT <span style=color:#39c>=</span> <span style=color:#cd0000>&#34;%m/%d/%Y %H:%M %p&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cdcd00>def</span> to_time str
+</span></span><span style=display:flex><span>    Time<span style=color:#39c>.</span>strptime(str, AMERICAN_DATE_FORMAT)<span style=color:#39c>.</span>in_time_zone
+</span></span><span style=display:flex><span>  <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#cdcd00>def</span> to_string time
+</span></span><span style=display:flex><span>    time<span style=color:#39c>.</span>strftime(AMERICAN_DATE_FORMAT)
+</span></span><span style=display:flex><span>  <span style=color:#cdcd00>end</span>
+</span></span><span style=display:flex><span><span style=color:#cdcd00>end</span>
+</span></span></code></pre></div><p>Done! Wasn&rsquo;t that simple?</p><p>Why do it this way? It&rsquo;s easy. If I one day want to turn this into a gem (though an <a href=https://rubygems.org/gems/american_date>American date gem</a> already exists), it would be pretty simple.</p><h2 id=conclusion class="relative group">Conclusion <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#conclusion aria-label=Anchor>#</a></span></h2><p>I&rsquo;m going to monkey patch <code>Time</code> and add the method to <code>ApplicationHelper</code>. While the module solution is simpler, it doesn&rsquo;t come near the elegance of the monkey patching solution. Hopefully, Monkey patching responsibly will help to avoid many of its pitfalls.</p><p><a name=one></a><sup>1</sup> The style of monkey patching I used came from <a href=http://www.justinweiss.com/articles/3-ways-to-monkey-patch-without-making-a-mess/>a great blog post by Justin Weiss</a>.</p></div></section><footer class="pt-8 max-w-prose print:hidden">
+<div class=pt-8>
 <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
 <div class="flex justify-between pt-3">
 <span>
-<a class=flex href=/posts/2017-10-18-escaping-from-ruby-blocks/>
-<span class="mr-3 article-pagination-direction">&larr;</span>
+<a class="flex group" href=/posts/2016-01-13-rage-against-the-unintelligent-machine/>
+<span class="mr-3 ltr:inline rtl:hidden text-neutral-700 dark:text-neutral group-hover:text-primary-600 dark:group-hover:text-primary-400">&larr;</span>
+<span class="ml-3 ltr:hidden rtl:inline text-neutral-700 dark:text-neutral group-hover:text-primary-600 dark:group-hover:text-primary-400">&rarr;</span>
 <span class="flex flex-col">
-<span class="article-pagination-title mt-[0.1rem] leading-6">Escaping from Ruby Blocks</span>
+<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">Rage Against the Unintelligent Machine</span>
 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
-<time datetime="2017-10-18 12:00:00 -0400 -0400">2017-10-18</time>
+<time datetime="2016-01-13 10:08:00 -0500 -0500">January 13, 2016</time>
 </span>
 </span>
 </a>
 </span>
 <span>
-<a class="flex text-right" href=/posts/2016-01-13-rage-against-the-unintelligent-machine/>
+<a class="flex text-right group" href=/posts/2017-10-18-escaping-from-ruby-blocks/>
 <span class="flex flex-col">
-<span class="article-pagination-title mt-[0.1rem] leading-6">Rage Against the Unintelligent Machine</span>
+<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">Escaping from Ruby Blocks</span>
 <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
-<time datetime="2016-01-13 10:08:00 -0500 -0500">2016-01-13</time>
+<time datetime="2017-10-18 12:00:00 -0400 -0400">October 18, 2017</time>
 </span>
 </span>
-<span class="ml-3 article-pagination-direction">&rarr;</span>
+<span class="ml-3 ltr:inline rtl:hidden text-neutral-700 dark:text-neutral group-hover:text-primary-600 dark:group-hover:text-primary-400">&rarr;</span>
+<span class="mr-3 ltr:hidden rtl:inline text-neutral-700 dark:text-neutral group-hover:text-primary-600 dark:group-hover:text-primary-400">&larr;</span>
 </a>
 </span>
-</div>
-</div>
-</footer>
-</article>
-</main><footer class=py-10>
-<div class="flex justify-between">
+</div></div></footer></article><div class="absolute top-[100vh] ltr:right-0 rtl:left-0 w-12 pointer-events-none bottom-0">
+<a href=#the-top class="w-12 h-12 sticky pointer-events-auto top-[calc(100vh-5.5rem)] bg-neutral/50 dark:bg-neutral-800/50 backdrop-blur rounded-full text-xl flex items-center justify-center text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400" aria-label="Scroll to top" title="Scroll to top">
+&uarr;
+</a>
+</div></main><footer class="py-10 print:hidden">
+<div class="flex items-center justify-between">
 <div>
 <p class="text-sm text-neutral-500 dark:text-neutral-400">
 &copy;
 2022
 Jonathan Arnett
-</p>
-<p class="text-xs text-neutral-400 dark:text-neutral-600">
-Powered by <a class="hover:underline hover:underline-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:underline-primary-400 hover:text-primary-500" href=https://git.io/hugo-congo target=_blank rel="noopener noreferrer">Congo</a>
-</p>
-</div>
-<div class="text-sm cursor-pointer text-neutral-400 dark:text-neutral-500">
-<button id=dark-toggle onclick="setPreferredAppearance('dark')" oncontextmenu="return setPreferredAppearance('default'),!1" class="inline px-2 py-1 border rounded-md border-neutral-200 dark:hidden hover:text-primary-500 hover:border-primary-400" title="Switch to dark appearance">
-<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="moon" class="svg-inline--fa fa-moon fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M283.211 512c78.962.0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954.0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156.0 00283.211.0c-141.309.0-256 114.511-256 256 0 141.309 114.511 256 256 256z"/></svg>
-</span>
-</button>
-<button id=light-toggle onclick="setPreferredAppearance('light')" oncontextmenu="return setPreferredAppearance('default'),!1" class="hidden px-2 py-1 border rounded-md cursor-pointer dark:inline border-neutral-700 hover:text-primary-400 hover:border-primary-500" title="Switch to light appearance">
-<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sun" class="svg-inline--fa fa-sun fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M256 160c-52.9.0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6.0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0s-49.9-131.1.0-181 131.1-49.9 181 0 49.9 131.1.0 181z"/></svg>
-</span>
-</button>
-</div>
-</div>
-</footer>
-</body>
-</html>
+</p><p class="text-xs text-neutral-500 dark:text-neutral-400">
+Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://git.io/hugo-congo target=_blank rel="noopener noreferrer">Congo</a>
+</p></div></div></footer></div></body></html>
