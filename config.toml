@@ -10,6 +10,7 @@ image = "images/avatar.png"
 
 [social]
 github = "https://github.com/J3RN"
+mastodon = "https://fosstodon.org/J3RN"
 
 [params]
 author = "Jonathan Arnett"
