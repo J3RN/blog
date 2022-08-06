@@ -1,5 +1,5 @@
 <section class="timeline">
-  {{ range (.Paginate (where .Site.RegularPages "Type" "in" .Site.Params.mainSections)).Pages }}
+  {{ range (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
     {{ partial "article-link.html" . }}
   {{ end }}
 </section>
