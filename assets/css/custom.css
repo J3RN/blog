@@ -54,11 +54,11 @@ dd {
 }
 
 .prose code::before {
-  content: "";
+  content: none;
 }
 
 .prose code::after {
-  content: "";
+  content: none;
 }
 
 .prose code {
