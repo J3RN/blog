@@ -8,7 +8,7 @@ tags:
 - language design
 - software development
 - clojure
-- C
+- c
 ---
 
 For me, clarity is composed of two smaller ideas: _readability_ and _comprehensibility_.  Neither of these words have widely-accepted definitions in software engineering, so for the purposes of this article, I will define them like so:
