@@ -8,6 +8,7 @@
 <link rel=canonical href=http://j3rn.com/posts/2021-03-06-the-agile-myth/>
 <link type=text/css rel=stylesheet href=/css/main.bundle.min.6abc21f7ba0acbf25fbd89b4604937a9d0c819366c12551e6fc7604275df8fdf0d06649a47d340f81d48f5d3c6a19aa641621a692e3b24da7949f79921e8d9d8.css integrity="sha512-arwh97oKy/JfvYm0YEk3qdDIGTZsElUeb8dgQnXfj98NBmSaR9NA+B1I9dPGoZqmQWIaaS47JNp5SfeZIejZ2A==">
 <script type=text/javascript src=/js/appearance.min.12e98742cd283574d030a7fe55f29597df4ee214f7ff7075b4d19a64d046a602753c715295550be7899b661619cec89c679049d36c624681671a8013c1249896.js integrity="sha512-EumHQs0oNXTQMKf+VfKVl99O4hT3/3B1tNGaZNBGpgJ1PHFSlVUL54mbZhYZzsicZ5BJ02xiRoFnGoATwSSYlg=="></script>
+<script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.3f13b26c02608d661a9515980235ef590ea9c5d860254b6e41c0c2f91ef1754e7013e8df516ab96e7aeef3c240b45f61c846655ca687ea77b8ff9e23f84b8aea.js integrity="sha512-PxOybAJgjWYalRWYAjXvWQ6pxdhgJUtuQcDC+R7xdU5wE+jfUWq5bnru88JAtF9hyEZlXKaH6ne4/54j+EuK6g==" data-copy=Copy data-copied=Copied></script>
 <link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
 <meta property="og:title" content="The Agile Myth">
 <meta property="og:description" content="Who actually follows the Agile Manifesto? Is it even reasonable to expect that anyone would?
@@ -36,6 +37,11 @@
 </div><ul class="flex flex-col list-none ltr:text-right rtl:text-left sm:flex-row">
 <li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
 <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href=/tags/ title=Tags>Tags</a>
+</li><li class="ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+<button id=search-button class="text-base hover:text-primary-600 dark:hover:text-primary-400" title="Search (/)">
+<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+</button>
 </li></ul></nav></header><div class="relative flex flex-col grow">
 <main id=main-content class=grow>
 <article>
@@ -45,6 +51,9 @@ The Agile Myth
 </h1><div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
 <div class="flex flex-row flex-wrap items-center">
 <time datetime="2021-03-06 15:10:00 -0500 -0500">March 6, 2021</time><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">5 mins</span>
+</div><div class="my-1 text-xs text-neutral-500 dark:text-neutral-400">
+<a href=/tags/software-development/ class="px-1 py-[1px] border rounded-md border-neutral-200 dark:border-neutral-600 hover:border-primary-300 hover:text-primary-700 dark:hover:border-primary-600 dark:hover:text-primary-400">software development</a>
+<a href=/tags/agile/ class="px-1 py-[1px] border rounded-md border-neutral-200 dark:border-neutral-600 hover:border-primary-300 hover:text-primary-700 dark:hover:border-primary-600 dark:hover:text-primary-400">agile</a>
 </div></div></header><section class="flex flex-col max-w-full mt-0 prose lg:flex-row dark:prose-invert">
 <div class="min-w-0 min-h-0 max-w-prose">
 <p>Writing a criticism of Agile after <a href=https://pragdave.me/blog/2014/03/04/time-to-kill-agile.html#fn:2>the word &ldquo;Agile&rdquo; has been pronounced dead by one of its authors</a> may seem like overkill, but nothing has put a stop to the software industry&rsquo;s glut of <a href=https://www.bmc.com/blogs/agile-certifications/>Agile certifications</a>, <a href=https://www.projectmanager.com/blog/what-is-a-scrum-master-everything-you-need>occupations of &ldquo;doing Agile&rdquo;</a>, and every engineering manager I&rsquo;ve ever spoken to saying &ldquo;Oh, yes, we do Agile here.&rdquo; I could write an entire blog post haranguing the profiteering and narcissistic industry (see Dave Thomas&rsquo; post linked above), but today I want to dive deeper, take a hard look at the original document, and ask &ldquo;Who actually does this?&rdquo;</p><p>
@@ -56,7 +65,20 @@ The Agile Myth
 <figure>
 <img class="my-0 rounded-md" src=/images/feedback_loop.png alt="Typical feature feedback loop">
 </figure></p><p><strong>In order for developers to truly utilize the Agile approach, they must have direct contact with their customers.</strong></p><p>At this point, let&rsquo;s take a step back and ask: <em>Why don&rsquo;t developers have direct contact with customers?</em></p><p>One theory is simply that non-software industries—automotive, manufacturing, etc—have been doing business long before software came on the scene, and are not prepared to let seventeen unelected programmers tell them how to run their businesses. Long before software, these companies were selling products using dedicated sales teams and managing clients with account managers. Agile methodologies may have revolutionized the software industry, but they didn&rsquo;t revolutionize banking.</p><p>Another theory is that companies worry about their developer&rsquo;s communication skills—and for good reason! In order for developers to engage in &ldquo;customer collaboration,&rdquo; developers need to be able to communicate clearly with their non-technical counterparts. The trope of a developer blurting a string of barely coherent jargon in response to questions like &ldquo;Could we add a &lsquo;Save&rsquo; button to this page?&rdquo; is founded in reality: I&rsquo;ve seen it happen. Out of fear of scaring off customers by insisting that they collaborate with engineers, companies install an engineering manager as a buffer between the engineers and the customer.</p><p>Whatever the reason, the truth is that customer collaboration and receiving timely feedback are simply not realities of software development at many, perhaps even most, companies. While managers may say &ldquo;We do Agile here,&rdquo; this is at least half myth.</p></div></section><footer class="pt-8 max-w-prose print:hidden">
-<div class=pt-8>
+<section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+<a class="bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800 m-1 hover:bg-primary-500 hover:text-neutral rounded min-w-[2.4rem] inline-block text-center p-1" href="https://twitter.com/intent/tweet/?url=http://j3rn.com/posts/2021-03-06-the-agile-myth/&text=The%20Agile%20Myth" title="Tweet on Twitter" aria-label="Tweet on Twitter">
+<span class="relative inline-block align-text-bottom icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M459.37 151.716c.325 4.548.325 9.097.325 13.645.0 138.72-105.583 298.558-298.558 298.558-59.452.0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055.0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421.0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391.0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04.0-57.828 46.782-104.934 104.934-104.934 30.213.0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+</span>
+</a>
+<a class="bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800 m-1 hover:bg-primary-500 hover:text-neutral rounded min-w-[2.4rem] inline-block text-center p-1" href="https://reddit.com/submit/?url=http://j3rn.com/posts/2021-03-06-the-agile-myth/&resubmit=true&title=The%20Agile%20Myth" title="Submit to Reddit" aria-label="Submit to Reddit">
+<span class="relative inline-block align-text-bottom icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M201.5 305.5c-13.8.0-24.9-11.1-24.9-24.6.0-13.8 11.1-24.9 24.9-24.9 13.6.0 24.6 11.1 24.6 24.9.0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4.0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8.0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7.0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9.0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5.0 52.6 59.2 95.2 132 95.2 73.1.0 132.3-42.6 132.3-95.2.0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6.0-2.2-2.2-6.1-2.2-8.3.0-2.5 2.5-2.5 6.4.0 8.6 22.8 22.8 87.3 22.8 110.2.0 2.5-2.2 2.5-6.1.0-8.6-2.2-2.2-6.1-2.2-8.3.0zm7.7-75c-13.6.0-24.6 11.1-24.6 24.9.0 13.6 11.1 24.6 24.6 24.6 13.8.0 24.9-11.1 24.9-24.6.0-13.8-11-24.9-24.9-24.9z"/></svg>
+</span>
+</a>
+<a class="bg-neutral-300 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800 m-1 hover:bg-primary-500 hover:text-neutral rounded min-w-[2.4rem] inline-block text-center p-1" href="https://www.linkedin.com/shareArticle?mini=true&url=http://j3rn.com/posts/2021-03-06-the-agile-myth/&title=The%20Agile%20Myth" title="Share on LinkedIn" aria-label="Share on LinkedIn">
+<span class="relative inline-block align-text-bottom icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentcolor" d="M416 32H31.9C14.3 32 0 46.5.0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6.0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3.0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2.0 38.5 17.3 38.5 38.5.0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6.0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2.0 79.7 44.3 79.7 101.9V416z"/></svg>
+</span>
+</a>
+</section><div class=pt-8>
 <hr class="border-dotted border-neutral-300 dark:border-neutral-600">
 <div class="flex justify-between pt-3">
 <span>
@@ -96,4 +118,29 @@ The Agile Myth
 Jonathan Arnett
 </p><p class="text-xs text-neutral-500 dark:text-neutral-400">
 Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://git.io/hugo-congo target=_blank rel="noopener noreferrer">Congo</a>
-</p></div></div></footer></div></body></html>
+</p></div><div class="text-sm cursor-pointer text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-14 rtl:ml-14">
+<button id=appearance-switcher class="w-12 h-12" type=button title="Switch to dark appearance">
+<span class="inline dark:hidden">
+<span class="relative inline-block align-text-bottom icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg>
+</span>
+</span>
+<span class="hidden dark:inline">
+<span class="relative inline-block align-text-bottom icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg>
+</span>
+</span>
+</button>
+</div></div></footer><div id=search-wrapper class="fixed inset-0 z-50 flex flex-col p-4 sm:p-6 md:p-[10vh] lg:p-[12vh] w-screen h-screen cursor-default bg-neutral-500/50 backdrop-blur-sm dark:bg-neutral-900/50 invisible" data-url=http://j3rn.com/>
+<div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg border-neutral-200 top-20 bg-neutral dark:bg-neutral-800 dark:border-neutral-700">
+<header class="relative z-10 flex items-center justify-between flex-none px-2">
+<form class="flex items-center flex-auto min-w-0">
+<div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+<span class="relative inline-block align-text-bottom icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+</div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-transparent focus:outline-2" placeholder=Search tabindex=0>
+</form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400" title="Close (Esc)">
+<span class="relative inline-block align-text-bottom icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+</button>
+</header><section class="flex-auto px-2 overflow-auto">
+<ul id=search-results>
+</ul></section></div></div></div></body></html>
