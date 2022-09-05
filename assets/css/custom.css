@@ -1,7 +1,3 @@
-html {
-  font-size: 16pt;
-}
-
 .prose p {
   text-align: justify;
 }
@@ -50,6 +46,10 @@ dd {
 
   dd {
     padding-left: 0px;
+  }
+
+  html {
+    font-size: 16pt;
   }
 }
 
