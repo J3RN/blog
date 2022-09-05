@@ -12,13 +12,21 @@ image = "images/avatar.png"
 github = "https://github.com/J3RN"
 mastodon = "https://fosstodon.org/J3RN"
 
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+
 [params]
 author = "Jonathan Arnett"
 description = "My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design."
 enableRSS = true
 colorScheme = "congo"
-darkToggle = true
 logo = "avatar.png"
+enableSearch = true
+# Doesn't work
+# enableCodeCopy = true
+
+[params.footer]
+showAppearanceSwitcher = true
 
 [params.plausible]
 domain = "j3rn.com"
@@ -31,6 +39,15 @@ showRecent = true
 showDate = true
 showAuthor = false
 dateFormat = "2006-01-02"
+# Interesting idea; ignoring for now
+# showEdit = true
+# editURL = "https://github.com/J3RN/blog/edit/master/content/"
+showTaxonomies = true
+sharingLinks = ["twitter", "reddit", "linkedin"]
+
+# Required me to change Congo and even so made the list look cluttered
+# [params.list]
+# showSummary = true
 
 [params.page]
 showDate = false
