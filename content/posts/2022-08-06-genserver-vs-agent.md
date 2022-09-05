@@ -2,7 +2,7 @@
 layout: post
 title: "Elixir GenServers vs Agents"
 date: 2022-08-06
-description: Elixir and the OTP ecosystem it is built upon offer a variety of different kinds of processes. Two of the most common are GenServer and Agent, which are similar put have different application.
+description: Elixir, and the OTP ecosystem it is built upon, offer a variety of different kinds of processes.  Two of the most common are GenServer and Agent, which are similar but have different applications.
 tags:
 - elixir
 ---
