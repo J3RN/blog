@@ -1,6 +1,7 @@
 ---
 title: "#WindowsProbs"
 date: 2014-01-12T17:06:21-0500
+expirydate: 2022-09-04
 description: |
   J3RN tries to figure out how to save an HP laptop from a boot loop issue. He fails.
 draft: false
