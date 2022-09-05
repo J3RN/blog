@@ -1,0 +1,104 @@
+<!doctype html><html lang=en-us dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head>
+<meta charset=utf-8>
+<meta http-equiv=content-language content="en-us">
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<title>Readability vs Comprehensibility &#183; J3RN's Blog</title><meta name=title content="Readability vs Comprehensibility &#183; J3RN's Blog">
+<meta name=description content="My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design.">
+<link rel=canonical href=http://j3rn.com/posts/2022-05-13-readability-vs-comprehensibility/>
+<link type=text/css rel=stylesheet href=/css/main.bundle.min.6abc21f7ba0acbf25fbd89b4604937a9d0c819366c12551e6fc7604275df8fdf0d06649a47d340f81d48f5d3c6a19aa641621a692e3b24da7949f79921e8d9d8.css integrity="sha512-arwh97oKy/JfvYm0YEk3qdDIGTZsElUeb8dgQnXfj98NBmSaR9NA+B1I9dPGoZqmQWIaaS47JNp5SfeZIejZ2A==">
+<script type=text/javascript src=/js/appearance.min.12e98742cd283574d030a7fe55f29597df4ee214f7ff7075b4d19a64d046a602753c715295550be7899b661619cec89c679049d36c624681671a8013c1249896.js integrity="sha512-EumHQs0oNXTQMKf+VfKVl99O4hT3/3B1tNGaZNBGpgJ1PHFSlVUL54mbZhYZzsicZ5BJ02xiRoFnGoATwSSYlg=="></script>
+<link rel=icon type=image/png sizes=32x32 href=/images/favicon.ico>
+<meta property="og:title" content="Readability vs Comprehensibility">
+<meta property="og:description" content="For me, clarity is composed of two smaller ideas: _readability_ and _comprehensibility_.  Neither of these words have widely-accepted definitions in software engineering, but in this post I'll elaborate what I mean by each.
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://j3rn.com/posts/2022-05-13-readability-vs-comprehensibility/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-09-04T00:00:00+00:00">
+<meta property="article:modified_time" content="2022-09-04T00:00:00+00:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Readability vs Comprehensibility">
+<meta name=twitter:description content="For me, clarity is composed of two smaller ideas: _readability_ and _comprehensibility_.  Neither of these words have widely-accepted definitions in software engineering, but in this post I'll elaborate what I mean by each.
+">
+<script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"Readability vs Comprehensibility","headline":"Readability vs Comprehensibility","description":"For me, clarity is composed of two smaller ideas: _readability_ and _comprehensibility_.  Neither of these words have widely-accepted definitions in software engineering, but in this post I\u0027ll elaborate what I mean by each.\n","abstract":"For me, clarity is composed of two smaller ideas: readability and comprehensibility. Neither of these words have widely-accepted definitions in software engineering, so for the purposes of this article, I will define them like so:\n readability ability for a reader to recognize the syntactic constructs in a body of code. comprehensibility ability for a reader to discern the what a body of code does at a high level.  Readability # The LISP family of programming languages have reached the pinnacle of readability.","inLanguage":"en-us","url":"http:\/\/j3rn.com\/posts\/2022-05-13-readability-vs-comprehensibility\/","author":{"@type":"Person","name":"Jonathan Arnett"},"copyrightYear":"2022","dateCreated":"2022-09-04T00:00:00\u002b00:00","datePublished":"2022-09-04T00:00:00\u002b00:00","dateModified":"2022-09-04T00:00:00\u002b00:00","keywords":["language design","software development","clojure","C"],"mainEntityOfPage":"true","wordCount":"593"}]</script>
+<meta name=author content="Jonathan Arnett">
+<script defer data-domain=j3rn.com src=https://plausible.io/js/plausible.js></script>
+</head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 bg-neutral text-neutral-900 sm:px-14 md:px-24 lg:px-32 dark:bg-neutral-800 dark:text-neutral max-w-7xl">
+<div id=the-top class="absolute flex self-center">
+<a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 dark:bg-neutral-600 focus:translate-y-0" href=#main-content><span class="font-bold ltr:pr-2 rtl:pl-2 text-primary-600 dark:text-primary-400">&darr;</span>Skip to main content</a>
+</div><header class="py-6 font-semibold sm:py-10 text-neutral-900 dark:text-neutral print:hidden">
+<nav class="flex justify-between">
+<div>
+<a href=/>
+<img src=/avatar.png width=250 height=250 class="max-w-[2rem] max-h-[2rem] mr-1 object-scale-down object-left rounded inline-block" alt="J3RN's Blog">
+</a>
+<a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" rel=me href=/>J3RN&rsquo;s Blog</a>
+</div><ul class="flex flex-col list-none ltr:text-right rtl:text-left sm:flex-row">
+<li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+<a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2" href=/tags/ title=Tags>Tags</a>
+</li></ul></nav></header><div class="relative flex flex-col grow">
+<main id=main-content class=grow>
+<article>
+<header class=max-w-prose>
+<h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+Readability vs Comprehensibility
+</h1><div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+<div class="flex flex-row flex-wrap items-center">
+<time datetime="2022-09-04 00:00:00 +0000 UTC">September 4, 2022</time><span class="px-2 text-primary-500">&#183;</span><span title="Reading time">3 mins</span>
+</div></div></header><section class="flex flex-col max-w-full mt-0 prose lg:flex-row dark:prose-invert">
+<div class="min-w-0 min-h-0 max-w-prose">
+<p>For me, clarity is composed of two smaller ideas: <em>readability</em> and <em>comprehensibility</em>. Neither of these words have widely-accepted definitions in software engineering, so for the purposes of this article, I will define them like so:</p><dl>
+<dt>readability</dt><dd>ability for a reader to recognize the syntactic constructs in a body of code.</dd><dt>comprehensibility</dt><dd>ability for a reader to discern the what a body of code does at a high level.</dd></dl><h2 id=readability class="relative group">Readability <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#readability aria-label=Anchor>#</a></span></h2><p>The LISP family of programming languages have reached the pinnacle of <em>readability</em>.</p><p>Consider that in Clojure (a LISP) addition looks like this:</p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#ef8383>+ </span><span style=color:#d19a66>1</span> <span style=color:#d19a66>2</span>)
+</span></span></code></pre></div><p>Printing to the console looks like this:</p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#ef8383>println </span><span style=color:#98c379>&#34;Hello, World!&#34;</span>)
+</span></span></code></pre></div><p>&ldquo;If&rdquo; expressions look like this:</p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#c678dd>if </span><span style=color:#dcaeea>true</span> <span style=color:#56b6c2>:was-true</span> <span style=color:#56b6c2>:was-false</span>)
+</span></span></code></pre></div><p>In each case, the expression has the form <code>(&lt;function> &lt;arg1> &lt;arg2> ...)</code>. That&rsquo;s it! Now you can parse any line of LISP.</p><p>Contrast this with a language such as C where addition looks like this:</p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=display:flex><span><span style=color:#d19a66>1</span> <span style=color:#c7bf54>+</span> <span style=color:#d19a66>2</span>
+</span></span></code></pre></div><p>Printing to the console looks like this:</p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=display:flex><span><span style=color:#c1abea>printf</span>(<span style=color:#98c379>&#34;Hello, World!&#34;</span>);
+</span></span></code></pre></div><p>&ldquo;If&rdquo; statements look like this:</p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=display:flex><span><span style=color:#c678dd>if</span> (<span style=color:#c1abea>condition</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#8a93a5;font-style:italic>// perform &#34;then&#34; actions
+</span></span></span><span style=display:flex><span><span style=color:#8a93a5;font-style:italic></span>} <span style=color:#c678dd>else</span> {
+</span></span><span style=display:flex><span>  <span style=color:#8a93a5;font-style:italic>// perform &#34;else&#34; actions
+</span></span></span><span style=display:flex><span><span style=color:#8a93a5;font-style:italic></span>}
+</span></span></code></pre></div><p>Each of these statements and expressions uses a different syntax (infix operator, function invocation, multi-arm conditional), and these are not the only forms in the language either. After years of study, many C programmers believe they have learned all the syntax of the language only to be bewildered by ternary expressions.</p><h2 id=comprehensibility class="relative group">Comprehensibility <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#comprehensibility aria-label=Anchor>#</a></span></h2><p>Readability, however, is often in contention with comprehensibility. Let&rsquo;s compare two recursive implementations of a factorial function:</p><p><strong>Clojure</strong></p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-clojure data-lang=clojure><span style=display:flex><span>(<span style=color:#c678dd>defn </span><span style=color:#dcaeea>factorial</span> [<span style=color:#dcaeea>x</span>]
+</span></span><span style=display:flex><span>  (<span style=color:#c678dd>if </span>(<span style=color:#ef8383>&lt;= </span><span style=color:#dcaeea>x</span> <span style=color:#d19a66>1</span>)
+</span></span><span style=display:flex><span>    <span style=color:#d19a66>1</span>
+</span></span><span style=display:flex><span>    (<span style=color:#ef8383>* </span><span style=color:#dcaeea>x</span> (<span style=color:#00b1f7>factorial</span> (<span style=color:#ef8383>- </span><span style=color:#dcaeea>x</span> <span style=color:#d19a66>1</span>)))))
+</span></span></code></pre></div><p><strong>C</strong><sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup></p><div class=highlight><pre tabindex=0 style=color:#b0c4de;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=display:flex><span><span style=color:#ef8383>int</span> <span style=color:#00b1f7>factorial</span>(<span style=color:#ef8383>int</span> <span style=color:#c1abea>x</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#c678dd>if</span> (<span style=color:#c1abea>x</span> <span style=color:#c7bf54>&lt;=</span> <span style=color:#d19a66>1</span>) <span style=color:#c678dd>return</span> <span style=color:#d19a66>1</span>;
+</span></span><span style=display:flex><span>  <span style=color:#c678dd>else</span> <span style=color:#c678dd>return</span> <span style=color:#c1abea>x</span> <span style=color:#c7bf54>*</span> <span style=color:#c1abea>factorial</span>(<span style=color:#c1abea>x</span> <span style=color:#c7bf54>-</span> <span style=color:#d19a66>1</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>The uniformity of the syntax of expressions in LISPs such as Clojure can impair the reader&rsquo;s ability to quickly determine the meaning of a given expression. For instance, the prefix notation of LISPs applied to boolean and arithmetic operators (e.g. <code>&lt; a b</code>) can be difficult for the reader to decipher when they are used to seeing infix notation (e.g. <code>a &lt; b</code>).</p><p>By contrast, the diversity of syntactic forms in the presented C code (discussed above), with the exception of the noisy inline type specifications, lead to a very comprehensible function (at least in my opinion). With only a little imagination, the function&rsquo;s body can be read as the English sentence &ldquo;If x is less than one, return one; else return x times the factorial of x minus one.&rdquo; If I had to explain to someone how this function worked, that is almost precisely the language that I would use to do so (although I would probably say &ldquo;otherwise&rdquo; instead of &ldquo;else&rdquo;).</p><p>However, if I had to explain which <em>syntactic forms</em> were utilized in the C function, I would have substantially more difficulty (infix operators, explicit return, braceless conditional?).</p><h2 id=wrap-up class="relative group">Wrap Up <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#wrap-up aria-label=Anchor>#</a></span></h2><p>While the syntax of a language can make a significant impact on the readability and comprehensibility of programs written in that language, a great deal of the burden of writing comprehensible code falls on the author in the form of code style, application architecture, and code organization. For instance, consider this <a href=https://github.com/lightningnetwork/lnd/blob/9d04b0c3d9577b2ab8c253e140220e80181619b8/rpcserver.go#L5033-L5244>~200 line Go function in the Lightning Network Daemon</a>. How long would it take you to understand or explain how this function works? I&rsquo;m guessing quite a while. As such, I hope to explore further how authors can make their codebases more comprehensible.</p><section class=footnotes role=doc-endnotes>
+<hr>
+<ol>
+<li id=fn:1 role=doc-endnote>
+<p>If you write C, you probably have your own preferred style and this is certainly not it. Bear with me here.&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></section></div></section><footer class="pt-8 max-w-prose print:hidden">
+<div class=pt-8>
+<hr class="border-dotted border-neutral-300 dark:border-neutral-600">
+<div class="flex justify-between pt-3">
+<span>
+<a class="flex group" href=/posts/2022-08-06-genserver-vs-agent/>
+<span class="mr-3 ltr:inline rtl:hidden text-neutral-700 dark:text-neutral group-hover:text-primary-600 dark:group-hover:text-primary-400">&larr;</span>
+<span class="ml-3 ltr:hidden rtl:inline text-neutral-700 dark:text-neutral group-hover:text-primary-600 dark:group-hover:text-primary-400">&rarr;</span>
+<span class="flex flex-col">
+<span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">Elixir GenServers vs Agents</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+<time datetime="2022-08-06 00:00:00 +0000 UTC">August 6, 2022</time>
+</span>
+</span>
+</a>
+</span>
+<span>
+</span>
+</div></div></footer></article><div class="absolute top-[100vh] ltr:right-0 rtl:left-0 w-12 pointer-events-none bottom-0">
+<a href=#the-top class="w-12 h-12 sticky pointer-events-auto top-[calc(100vh-5.5rem)] bg-neutral/50 dark:bg-neutral-800/50 backdrop-blur rounded-full text-xl flex items-center justify-center text-neutral-700 dark:text-neutral hover:text-primary-600 dark:hover:text-primary-400" aria-label="Scroll to top" title="Scroll to top">
+&uarr;
+</a>
+</div></main><footer class="py-10 print:hidden">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-sm text-neutral-500 dark:text-neutral-400">
+&copy;
+2022
+Jonathan Arnett
+</p><p class="text-xs text-neutral-500 dark:text-neutral-400">
+Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://git.io/hugo-congo target=_blank rel="noopener noreferrer">Congo</a>
+</p></div></div></footer></div></body></html>
