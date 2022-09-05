@@ -75,8 +75,8 @@ and Drivers" and additionally says "This software comes preinstalled." This
 disk isn't Windows recovery - it's a disk full of manufacturer bloatware, most 
 likely. Thanks, HP. That was real useful.
 
-The OS of Our Discontent
-------------------------
+The Windows of Our Discontent
+-----------------------------
 I sit back in my chair and look at this dysfunctional heap of hardware. I tried
 to save some files, and couldn't. I tried to reinstall and couldn't. This
 machine was at an intersection of evils: No protection against the end-user
