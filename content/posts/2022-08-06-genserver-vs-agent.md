@@ -292,9 +292,9 @@ end
 
 This didn't change all that much; we swapped "GenServer" for "Agent", now have to specify that we want the `init` function (which was implicit before), and also need to wrap `messages` in a list to make our first three arguments essentially and MFA tuple.  A side effect of this is that we could now pass additional arguments to `init`, if we wanted, or even renamed `init`, but that's not necessary for this example.
 
-<aside>
-
 You can view [the entire module with Agent on GitHub](https://github.com/J3RN/BBS/blob/fc4501ec20d4886505df76bc940716909a95b689/lib/bbs/message_respository.ex).
+
+<aside>
 
 #### Client/Server Separation
 
