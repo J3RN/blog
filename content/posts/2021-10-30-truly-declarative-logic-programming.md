@@ -147,19 +147,19 @@ However, Prolog doesn't have the facilities to do these things, at least not in 
 
 ### Facts
 
-Facts are exactly what they sound like. For instance, the following fact states that `mike` is the father of `john`:
+Facts are exactly what they sound like. For instance, the following fact states that `mike` is a parent of `john`:
 
 ```Prolog
-father(mike, john).
+parent(mike, john).
 ```
 
-The term `father` in the fact above is referred to as a "relation" because it describes the relationship between `mike` and `john`.
+The term `parent` in the fact above is referred to as a "relation" because it describes the relationship between `mike` and `john`.
 
 Having defined a fact, we can ask Prolog about it[^4]:
 ```Prolog
-?- father(mike, john).
+?- parent(mike, john).
 true.
-?- father(A, john).
+?- parent(A, john).
 A = mike.
 ```
 
@@ -173,16 +173,16 @@ Here, try it for yourself!
 
 ### Rules
 
-Rules represent ways in which we can extend our existing facts or rules to derive more information. For instance, below is an `ancestor` rule that builds upon our `father` relation. It can tell us if `A` is a paternal ancestor of `B`:
+Rules represent ways in which we can extend our existing facts or rules to derive more information. For instance, below is an `ancestor` rule that builds upon our `parent` relation. It can tell us if `A` is an ancestor of `B`:
 
 ```Prolog
 ancestor(A, B) :-
-  father(A, B);
-  father(C, B), ancestor(A, C).
+  parent(A, B);
+  parent(C, B), ancestor(A, C).
 ```
 
 In Prolog, `;` is read as "or" and `,` is read as "and", making the above rule:
-> A is an ancestor of B if A is the father of B or if C is the father of B and A is an ancestor of C.
+> A is an ancestor of B if A is the parent of B or if C is the parent of B and A is an ancestor of C.
 
 
 Try it! When Prolog returns a result but doesn't create a new prompt, this indicates that there may be more than one result, and Prolog wants you to tell it whether you want it to try to find the next answer or stop. To tell Prolog to try to find another solution, type `;`. To tell Prolog to stop searching for solutions, type `.`.
