@@ -330,7 +330,7 @@ end
 
 That's it!  Those 19 lines of code constitute our entire message repository process!  This level of brevity is not available with GenServer, only with Agent.
 
-If you'd like to see [this terser Agent version on GitHub](https://github.com/J3RN/BBS/blob/c679c7c3c07703901d2ee0ef275ff91757ef00dd/lib/bbs/message_respository.ex), that's also an option.
+You can view [this terser Agent version on GitHub](https://github.com/J3RN/BBS/blob/c679c7c3c07703901d2ee0ef275ff91757ef00dd/lib/bbs/message_respository.ex) as well.
 
 The downside to this condensed code, in my opinion, is that the separation between what code runs in the server process from what code runs in the client process is at its fuzziest.  I can imagine confusing what runs where when giving this code a quick skim.
 
