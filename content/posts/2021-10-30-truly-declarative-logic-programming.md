@@ -218,8 +218,8 @@ Therefore, our complete Prolog solution is this:
 ```Prolog
 solution(A, B, C) :-
     between(1, 10, C), between(1, C, B), between(1, B, A),
-    24 is A + B + C,
-    0 is A^2 + B^2 - C^2.
+    A + B + C =:= 24,
+    A^2 + B^2 =:= C^2.
 ```
 (_Note that I also included our additional constraints on A and B to preclude permutations here._)
 
@@ -235,16 +235,13 @@ Try it!
 
 <iframe frameborder="0" height="500px" width="100%" src="https://replit.com/@J3RN/Prolog-Triangle-Solution?lite=true"></iframe>
 
-Now, you've probably noticed something strange about some of these rules: Namely, that I used `is` instead of `=` whenever I had to do math. This is, sadly, just part of the way Prolog is; math is largely an afterthought. Doubly so, because the left side of `is` is required to be a number or variable, but not an expression. For instance, the following is invalid:
-```Prolog
-C**2 is A**2 + B**2.
-```
+Now, you've probably noticed something strange about some of these rules: Namely, that I used `=:=` instead of `=` whenever I had to do math. This is just part of the way Prolog is; the `=:=` operator "evals" each of it's arguments (the left and righthand sides) to determine if the solution has been found, whereas `=`, the unification operator, does not evaluate it's arguments; it only succeeds if they are the same.  Thus when prompted with `A + B + C = 24`, the Prolog interpreter doesn't care what `A`, `B`, or `C` are; it can clearly tell that the left side is an expression and the right side is an integer, those are *not* the same, and the unification is a failure.
 
-Pretty gnarly, isn't it?
+It's pretty odd and will really stretch your brain the more you think about it.
 
 ## Conclusions
 
-Of the above three, I'm particularly fond of the Prolog solution despite it's gnarly math limitations. **_"Why?"_** you ask? Well, because the Prolog solution is the most _declarative_. [Ward Cunningham defines declarative programming as the following](https://wiki.c2.com/?DeclarativeProgramming):
+Of the above three, I'm particularly fond of the Prolog solution despite it's weird math limitations. **_"Why?"_** you ask? Well, because the Prolog solution is the most _declarative_. [Ward Cunningham defines declarative programming as the following](https://wiki.c2.com/?DeclarativeProgramming):
 
 > Programming where problems are described, or conditions on a solution are described, and the computer finds a solution.
 
