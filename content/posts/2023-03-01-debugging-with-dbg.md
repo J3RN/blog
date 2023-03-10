@@ -98,7 +98,7 @@ iex(9)> MyApp.list_widgets()
 ]
 ```
 
-One final note before you go: You may have noticed that the reports from `dbg` use Erlang syntax, and that's for the very good reason that `dbg` is an Erlang utility and knows nothing about Elixir and its syntax.  The printing to the console is performed by a "handler" function which can be passed to `dbg:tracer` and is `dbg:dhandler/2`, so there's no reason why an Elixir-formatting handler couldn't be written.  That said, [`dbg:dhandler/2` (and it's closely associated `dhandler1/3`) constitute nearly 200 lines of code](https://github.com/erlang/otp/blob/2e9f3f57dc6b3c7e4ce48a9955abf16e3dc6c16d/lib/runtime_tools/src/dbg.erl#L999-L1162), so it's no small task!
+One final note before you go: You may have noticed that the reports from `dbg` use Erlang syntax, and that's for the very good reason that `dbg` is an Erlang utility and knows nothing about Elixir and its syntax.  Printing to the console is performed by a "handler" function which is an optional argument to `dbg:tracer`.  By default the handler function is `dbg:dhandler/2`, but there's no reason why an Elixir-formatting handler couldn't be written.  That said, [`dbg:dhandler/2` (and it's closely associated `dhandler1/3`) constitute nearly 200 lines of code](https://github.com/erlang/otp/blob/2e9f3f57dc6b3c7e4ce48a9955abf16e3dc6c16d/lib/runtime_tools/src/dbg.erl#L999-L1162), so it's no small task!
 
 I hope you found this information useful and happy debugging!
 
