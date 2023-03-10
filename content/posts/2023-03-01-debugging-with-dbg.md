@@ -12,13 +12,13 @@ Sometimes, either in local development or on a production server, you want to se
 
 Enter Erlang's `dbg`, a module that uses Erlang's powerful tracing system to print events of interest to the console.  Its usage in this article works regardless of whether you're using an IEx prompt or injecting this code into a test.
 
-To use `dbg` to solve our mysteries, we'll first have to start its tracer[^1]:
+To use `dbg` to solve our mysteries, we'll first have to start its tracer process[^1]:
 
 ```elixir
 :dbg.tracer()
 ```
 
-With that out of the way, we'll need to tell `dbg` what to look for, which we do with the unusually terse `p` function (all function names in `dbg` are, for some reason, very terse):
+Next, we'll need to tell `dbg` what to look for, which we do with the unusually terse `p` function (all function names in `dbg` are, for some reason, very terse):
 
 ```elixir
 :dbg.p(:all, :c)
@@ -26,7 +26,7 @@ With that out of the way, we'll need to tell `dbg` what to look for, which we do
 
 The function name `p` is supposedly short for "**p**rocess", which doesn't make an abundance of sense as its purpose is to tell `dbg` which tracer events we're interested in.  The first argument tells `dbg` which process(es) you want to trace (so maybe that's why).  You can pass a PID here to trace a specific process, but in the example we're passing the atom `:all` to indicate that we want events from _all_ processes.  The second argument specifies which kinds of tracer events you want to be notified about. `:c` is short for function **c**alls, and there are other options such as `:s` for message **s**ending, `:ports` for things related to ports, etc.
 
-Well, Erlang/OTP refuses to print information about _every_ function call being made in the system&mdash;at least, unless you ask it to&mdash;so in addition to telling `dbg` to trace function calls across all processes, we'll need to specify which function calls it should trace.  We'll do that here with the `tpl` function:
+Well, `dbg` refuses to print information about _every_ function call being made in the system&mdash;at least, unless you ask it to&mdash;so in addition to telling `dbg` to trace function calls across all processes, we'll need to specify which function calls it should trace.  We'll do that here with the `tpl` function:
 
 ```elixir
 :dbg.tpl(MyApp.Widgets, :show_widget?, :x)
@@ -41,9 +41,9 @@ That's all the setup we need to start debugging!  After this code has been evalu
 
 ```elixir
 iex(4)> MyApp.Widgets.show_widget?(%MyApp.Widget{spurving_bearings: false})
-#=> (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',hydrocoptic_marzelvanes => nil,
-#=>   spurving_bearings => false})
-#=> (<0.187.0>) returned from 'Elixir.MyApp.Widgets':'show_widget?'/1 -> false
+# (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',hydrocoptic_marzelvanes => nil,
+#   spurving_bearings => false})
+# (<0.187.0>) returned from 'Elixir.MyApp.Widgets':'show_widget?'/1 -> false
 false
 ```
 
@@ -52,10 +52,10 @@ As you can see above, `dbg` prints out that our function was called, what argume
 
 ```elixir
 iex(5)> MyApp.list_widgets()
-#=> (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',
-#=>   hydrocoptic_marzelvanes => [a,b,c,d,e,f],
-#=>   spurving_bearings => true})
-#=> (<0.187.0>) returned from 'Elixir.MyApp.Widgets':'show_widget?'/1 -> true
+# (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',
+#   hydrocoptic_marzelvanes => [a,b,c,d,e,f],
+#   spurving_bearings => true})
+# (<0.187.0>) returned from 'Elixir.MyApp.Widgets':'show_widget?'/1 -> true
 [
   %MyApp.Widget{
     spurving_bearings: true,
@@ -67,13 +67,13 @@ iex(5)> MyApp.list_widgets()
 
 we can see that `MyApp.Widgets.show_widget?/1` was called, what it was passed, and what it returned.
 
-OK, let's talk about `:x`.  The third argument to `tpl` is a "Match Spec".  Match specifications are non-trivial, and if you want to learn more about them you can do that here: [Match Specifications in Erlang].  Luckily for us, `tpl` has a few "built-in aliases" for debugging-related match specs of which `:x` is one.  Here, `:x` is short for "e**x**ceptions," which is also a bit deceiving since, in addition to reporting exceptions, it also reports calls, arguments, and return values.  The other two built-in aliases are `:c` and `:cx`.  `:c` is short for "**c**aller" and it reports the function that called your function of interest:
+OK, let's talk about `:x`.  The third argument to `tpl` is a "Match Spec".  Match specifications are non-trivial, and if you want to learn more about them you can do that here: [Match Specifications in Erlang].  Luckily for us, `tpl` has a few "built-in aliases" for debugging-related match specs, of which `:x` is one.  Here, `:x` is short for "e**x**ceptions," which is also a bit deceiving since, in addition to reporting exceptions, it also reports calls, arguments, and return values.  The other two built-in aliases are `:c` and `:cx`.  `:c` is short for "**c**aller" and it reports the function that called your function of interest:
 
 ```elixir
 iex(7)> MyApp.list_widgets()
-#=> (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',
-#=>   hydrocoptic_marzelvanes => [a,b,c,d,e,f],
-#=>   spurving_bearings => true}) ({'Elixir.Enum',filter_list,2})
+# (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',
+#   hydrocoptic_marzelvanes => [a,b,c,d,e,f],
+#   spurving_bearings => true}) ({'Elixir.Enum',filter_list,2})
 [
   %MyApp.Widget{
     spurving_bearings: true,
@@ -86,10 +86,10 @@ At the very end of the output you can see that `({'Elixir.Enum',filter_list,2})`
 
 ```elixir
 iex(9)> MyApp.list_widgets()
-#=> (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',
-#=>   hydrocoptic_marzelvanes => [a,b,c,d,e,f],
-#=>   spurving_bearings => true}) ({'Elixir.Enum',filter_list,2})
-#=> (<0.187.0>) returned from 'Elixir.MyApp.Widgets':'show_widget?'/1 -> true
+# (<0.187.0>) call 'Elixir.MyApp.Widgets':'show_widget?'(#{'__struct__' => 'Elixir.MyApp.Widget',
+#   hydrocoptic_marzelvanes => [a,b,c,d,e,f],
+#   spurving_bearings => true}) ({'Elixir.Enum',filter_list,2})
+# (<0.187.0>) returned from 'Elixir.MyApp.Widgets':'show_widget?'/1 -> true
 [
   %MyApp.Widget{
     spurving_bearings: true,
@@ -98,7 +98,7 @@ iex(9)> MyApp.list_widgets()
 ]
 ```
 
-One final note before you go: You may have noticed that the reports from `dbg` use Erlang syntax, and that's for the very good reason that `dbg` is an Erlang utility and knows nothing about Elixir and its syntax.  So far as I'm aware, there's no way to change this; perhaps an opportunity for an Elixir library (supposing one doesn't already exist)!
+One final note before you go: You may have noticed that the reports from `dbg` use Erlang syntax, and that's for the very good reason that `dbg` is an Erlang utility and knows nothing about Elixir and its syntax.  The printing to the console is performed by a "handler" function which can be passed to `dbg:tracer` and is `dbg:dhandler/2`, so there's no reason why an Elixir-formatting handler couldn't be written.  That said, [`dbg:dhandler/2` (and it's closely associated `dhandler1/3`) constitute nearly 200 lines of code](https://github.com/erlang/otp/blob/2e9f3f57dc6b3c7e4ce48a9955abf16e3dc6c16d/lib/runtime_tools/src/dbg.erl#L999-L1162), so it's no small task!
 
 I hope you found this information useful and happy debugging!
 
