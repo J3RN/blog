@@ -21,10 +21,10 @@ To use `dbg` to solve our mysteries, we'll first have to start its tracer proces
 Next, we'll need to tell `dbg` what to look for, which we do with the unusually terse `p` function (all function names in `dbg` are, for some reason, very terse):
 
 ```elixir
-:dbg.p(:all, :c)
+:dbg.p(:all, :call)
 ```
 
-The function name `p` is supposedly short for "**p**rocess", which doesn't make an abundance of sense as its purpose is to tell `dbg` which tracer events we're interested in.  The first argument tells `dbg` which process(es) you want to trace (so maybe that's why).  You can pass a PID here to trace a specific process, but in the example we're passing the atom `:all` to indicate that we want events from _all_ processes.  The second argument specifies which kinds of tracer events you want to be notified about. `:c` is short for function **c**alls, and there are other options such as `:s` for message **s**ending, `:ports` for things related to ports, etc.
+The function name `p` is supposedly short for "**p**rocess", and its purpose is to tell `dbg` which tracer events we're interested in.  The first argument tells `dbg` which process(es) you want to trace.  You can pass a PID here to trace a specific process, but in the example we're passing the atom `:all` to indicate that we want events from _all_ processes.  There are other special atoms you can use to indicate groups of processes, such as `:new_processes`; check [the `:dbg.p/2` documentation] for a full list.  The second argument specifies which kinds of tracer events you want to be notified about. `:call` indicates that we want to know about function calls, and there are other options such as `:send` for message sending, `:ports` for things related to ports, etc.
 
 Well, `dbg` refuses to print information about _every_ function call being made in the system&mdash;at least, unless you ask it to&mdash;so in addition to telling `dbg` to trace function calls across all processes, we'll need to specify which function calls it should trace.  We'll do that here with the `tpl` function:
 
@@ -104,4 +104,5 @@ I hope you found this information useful and happy debugging!
 
 [^1]: The process spawned by `:dbg.tracer()` (aptly named `dbg`) listens for events from Erlang's tracing system.
 
+[the `:dbg.p/2` documentation]: https://www.erlang.org/doc/man/dbg.html#p-2
 [Match Specifications in Erlang]: https://www.erlang.org/doc/apps/erts/match_spec.html
