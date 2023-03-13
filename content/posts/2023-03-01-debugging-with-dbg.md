@@ -36,6 +36,14 @@ Well, `dbg` refuses to print information about _every_ function call being made 
 
 The function name `tpl` is short for "**t**race **p**attern **l**ocal."  The first two arguments indicate, as you probably guessed, the module and function that you want to trace.  That mysterious `:x`?  We'll get to that in a moment.
 
+<aside>
+
+#### ⚠️ Note
+
+If you reload the module given as the first argument to `:dbg.tpl/3`, either manually with the IEx `r` helper or via Phoenix's built-in code reloader, you'll need to run `:dbg.tpl/3` again.  I don't know why this is exactly, and it can be pretty annoying.
+
+</aside>
+
 The `dbg` docs will generally point you towards using `tp`.  The difference between `tp` and `tpl` is that `tp` only traces "global" calls&mdash;calls between modules&mdash;and `tpl` traces both global and "local" (intra-module) calls.  I'm generally a "more data is better" person, so I prefer `tpl`.
 
 That's all the setup we need to start debugging!  After this code has been evaluated in a running system, events that match our "pattern" (here, calls of the function `MyApp.Widgets.show_widget/1` in any process) will be printed to the console.  Here's an example:
