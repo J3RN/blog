@@ -69,6 +69,7 @@ dd {
 .prose a code {
   text-decoration: underline;
   transition-duration: 150ms;
+  max-height: 26px;
 }
 
 .prose a:hover code {
