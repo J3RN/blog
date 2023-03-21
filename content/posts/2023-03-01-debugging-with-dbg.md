@@ -6,6 +6,7 @@ description: If you've ever wanted to see what's going on in your codebase witho
 tags:
 - elixir
 - erlang
+- debugging
 ---
 
 Sometimes, either in local development or on a production server, you want to see when a given function is called, what arguments it is being called with, and what it's returning.  Let's say that you have a `MyApp.Widgets.show_widget?/1` function which consumes a widget and returns a boolean indicating whether or not that widget should be shown to the user.  However, the logic contained in there is pretty complicated and&mdash;worse&mdash;you don't know really where it is called from anyway.
