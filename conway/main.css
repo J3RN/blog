@@ -1,0 +1,17 @@
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    text-align: center;
+}
+
+#main .controls {
+    height: 2rem;
+}
+
+#main svg {
+    max-width: 100vw;
+    max-height: calc(100vh - 150px);
+}
