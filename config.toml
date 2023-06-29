@@ -7,6 +7,9 @@ theme = "congo"
 [author]
 name = "Jonathan Arnett"
 image = "images/avatar.png"
+links = [
+  { mastodon = "https://fosstodon.org/@j3rn" }
+]
 
 [social]
 github = "https://github.com/J3RN"
