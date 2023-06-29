@@ -7,6 +7,8 @@ description: |
 showToc: true
 tags:
 - elixir
+aliases:
+- /posts/2021-04-14-elixir-1.12
 ---
 
 José recently [announced the availability of Elixir 1.12.0 rc.0](https://github.com/elixir-lang/elixir/releases/tag/v1.12.0-rc.0), a precursor to the full Elixir 1.12.0 release which should come within the next month or so. This update consists primarily of developer quality-of-life improvements. In his announcement, José elaborated on a few changes, but I couldn't help but feel that some exciting changes were relegated to footnotes. As such, I'm dedicating this post to trawling through the full changelog and shining a spotlight on a few of my favorite changes.

@@ -8,6 +8,8 @@ tags:
 - elixir
 - profiling
 - performance
+aliases:
+- /posts/2021-12-05-profiling-elixir-for-advent-of-code
 ---
 
 Every now and again, you may run into a problem that isn't hard to solve using functional programming, but which is hard to solve _quickly_ using functional programming. For me, today, that problem was [Advent of Code], [Day 5].

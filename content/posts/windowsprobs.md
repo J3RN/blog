@@ -8,6 +8,8 @@ draft: false
 tags:
 - linux
 - windows
+aliases:
+- /posts/2014-01-12-number-windowsprobs
 ---
 
 Linux is Great

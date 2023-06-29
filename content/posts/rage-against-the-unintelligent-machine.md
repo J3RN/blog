@@ -8,6 +8,8 @@ expirydate: 2020-09-04
 tags:
 - ai
 - machine learning
+aliases:
+- /posts/2016-01-13-rage-against-the-unintelligent-machine
 ---
 
 Today marked the first time I was ever so uncomfortable in a class that I nearly got up and walked out. Such a level of discomfort is not so unfamiliar, though. It was, in fact, common during my review of candidates' projects during my involvement in one of my former employer's hiring process. Someone might ask the candidate something like "How does user authorization work?" They'd drone on about encryption, throwing out buzzwords and waiting to see a spark in someone's eye, letting them know that they weren't a complete failure. It would never come. I would start getting jittery. I would feel an irrepressible urge to jump up and yell profanity, to tear out my hair and flip things.

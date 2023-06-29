@@ -7,6 +7,8 @@ description: |
 tags:
 - software development
 - agile
+aliases:
+- /posts/2021-03-06-the-agile-myth
 ---
 
 Writing a criticism of Agile after [the word "Agile" has been pronounced dead by one of its authors](https://pragdave.me/blog/2014/03/04/time-to-kill-agile.html#fn:2) may seem like overkill, but nothing has put a stop to the software industry's glut of [Agile certifications](https://www.bmc.com/blogs/agile-certifications/), [occupations of "doing Agile"](https://www.projectmanager.com/blog/what-is-a-scrum-master-everything-you-need), and every engineering manager I've ever spoken to saying "Oh, yes, we do Agile here." I could write an entire blog post haranguing the profiteering and narcissistic industry (see Dave Thomas' post linked above), but today I want to dive deeper, take a hard look at the original document, and ask "Who actually does this?"

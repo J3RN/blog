@@ -5,6 +5,8 @@ date: 2021-10-14T22:40:42-04:00
 description: As developers begin learning Elixir, they often have a very understandable confusion around the difference between Elixir's behaviours and protocols. These are similar constructs, but with important differences.
 tags:
 - elixir
+aliases:
+- /posts/2021-10-14-elixir-behaviours-vs-protocols
 ---
 
 As developers begin learning Elixir, they often have a very understandable confusion around the difference between Elixir's [behaviours](https://hexdocs.pm/elixir/typespecs.html#behaviours) and [protocols](https://hexdocs.pm/elixir/Protocol.html). These are similar constructs, but with important differences.

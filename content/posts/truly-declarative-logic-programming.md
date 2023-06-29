@@ -8,6 +8,8 @@ tags:
 - logic programming
 - prolog
 - haskell
+aliases:
+- /posts/2021-10-30-truly-declarative-logic-programming
 ---
 
 While reading through Miran Lipovača's excellent [_Learn You a Haskell_](http://learnyouahaskell.com/), I came across the following problem:

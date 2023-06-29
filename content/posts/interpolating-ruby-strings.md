@@ -8,6 +8,8 @@ comments: true
 tags:
 - ruby
 - interpolation
+aliases:
+- /posts/2014-12-19-interpolating-ruby-strings
 ---
 
 Let's talk about interpolation. Sure, you probably know the Ruby string interpolation syntax:

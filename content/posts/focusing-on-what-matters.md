@@ -7,6 +7,8 @@ description: |
 tags:
 - language design
 - software development
+aliases:
+- /posts/2022-04-01-focusing-on-what-matters
 ---
 
 In an introductory computer science course, our professor instructed us:

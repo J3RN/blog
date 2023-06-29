@@ -6,6 +6,8 @@ description: |
   If you need to bail out of a Ruby block before the end, how is that accomplished?
 tags:
 - ruby
+aliases:
+- /posts/2017-10-18-escaping-from-ruby-blocks
 ---
 
 ## Guard Clauses

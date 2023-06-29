@@ -8,6 +8,8 @@ tags:
 - elixir
 - nil
 - functional programming
+aliases:
+- /posts/2020-12-13-harmful-duality-of-elixirs-nil
 ---
 
 ### The Problem

@@ -9,6 +9,8 @@ tags:
 - software development
 - clojure
 - c
+aliases:
+- /posts/2022-05-13-readability-vs-comprehensibility
 ---
 
 For me, clarity is composed of two smaller ideas: _readability_ and _comprehensibility_.  Neither of these words have widely-accepted definitions in software engineering, so for the purposes of this article, I will define them like so:

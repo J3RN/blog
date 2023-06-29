@@ -5,6 +5,8 @@ date: 2022-08-06
 description: Elixir, and the OTP ecosystem it is built upon, offer a variety of different kinds of processes.  Two of the most common are GenServer and Agent, which are similar but have different applications.
 tags:
 - elixir
+aliases:
+- /posts/2022-08-06-genserver-vs-agent
 ---
 
 Just as [Protocols are an abstraction built upon Behaviours], Agents are an abstraction built upon GenServers.  While GenServers can serve a wider variety of purposes, Agents serve a single purpose: storing state.

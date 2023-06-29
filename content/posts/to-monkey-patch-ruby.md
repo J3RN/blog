@@ -8,6 +8,8 @@ category: j3rnvsj3rn
 tags:
 - monkey patching
 - ruby
+aliases:
+- /posts/2016-08-25-to-monkey-patch-ruby
 ---
 
 This is the first of a series of posts I intend to write in a new "J3RN vs J3RN" style. Essentially, I will be stating a problem with two or more possible solutions, taking both sides in turn, and hopefully ultimately reaching a well thought out solution to the problem.
