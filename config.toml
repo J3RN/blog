@@ -62,6 +62,12 @@ unsafe = true
 style='doom-one'
 
 [[menus.main]]
+name = "{{< icon \"mastodon\" >}}"
+title = "@J3RN on Fosstodon (a Mastodon server)"
+url = "https://fosstodon.org/@j3rn"
+weight = 30
+
+[[menus.main]]
 name = "Tags"
 pageRef = "tags"
 weight = 30
