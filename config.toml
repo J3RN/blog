@@ -43,7 +43,7 @@ dateFormat = "2006-01-02"
 # showEdit = true
 # editURL = "https://github.com/J3RN/blog/edit/master/content/"
 showTaxonomies = true
-sharingLinks = ["twitter", "reddit", "linkedin"]
+# sharingLinks = ["twitter", "reddit", "linkedin"]
 
 # Required me to change Congo and even so made the list look cluttered
 # [params.list]
