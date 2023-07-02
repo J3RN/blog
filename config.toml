@@ -62,13 +62,19 @@ unsafe = true
 style='doom-one'
 
 [[menus.main]]
-name = "Tags"
-pageRef = "tags"
-weight = 30
+name = "{{<icon \"rss\" >}}"
+title = "RSS Feed"
+url = "/index.xml"
+weight = 10
 
 [[menus.main]]
 name = "{{< icon \"mastodon\" >}}"
 title = "@J3RN on Fosstodon (a Mastodon server)"
 url = "https://fosstodon.org/@j3rn"
-weight = 10
+weight = 20
 params.rel = "me"
+
+[[menus.main]]
+name = "Tags"
+pageRef = "tags"
+weight = 30
