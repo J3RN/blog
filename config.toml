@@ -4,13 +4,6 @@ defaultContentLanguage = "en"
 title = "J3RN's Blog"
 theme = "congo"
 
-[author]
-name = "Jonathan Arnett"
-image = "images/avatar.png"
-links = [
-  { mastodon = "https://fosstodon.org/@j3rn" }
-]
-
 [social]
 github = "https://github.com/J3RN"
 mastodon = "https://fosstodon.org/J3RN"
@@ -19,19 +12,25 @@ mastodon = "https://fosstodon.org/J3RN"
 home = ["HTML", "RSS", "JSON"]
 
 [params]
-author = "Jonathan Arnett"
 description = "My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design."
 enableRSS = true
 colorScheme = "congo"
-logo = "avatar.png"
+header.logo = "avatar.png"
 enableSearch = true
 # Doesn't work
 # enableCodeCopy = true
 
+[params.author]
+name = "Jonathan Arnett"
+image = "images/avatar.png"
+links = [
+  { mastodon = "https://fosstodon.org/@j3rn" }
+]
+
 [params.footer]
 showAppearanceSwitcher = true
 
-[params.plausible]
+[params.plausibleAnalytics]
 domain = "j3rn.com"
 
 [params.homepage]
@@ -48,8 +47,9 @@ dateFormat = "2006-01-02"
 showTaxonomies = true
 # sharingLinks = ["twitter", "reddit", "linkedin"]
 
+[params.list]
+showTaxonomies = true
 # Required me to change Congo and even so made the list look cluttered
-# [params.list]
 # showSummary = true
 
 [params.page]

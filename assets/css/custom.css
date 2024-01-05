@@ -1,9 +1,13 @@
+nav img {
+  border-radius: 0.25rem;
+}
+
 .timeline {
   border-left: 1px solid rgba(var(--color-primary-400));
   padding-left: 10px;
 }
 
-.timeline > article > h3:before {
+.timeline > article h3:before {
   content: "";
   display: inline-block;
   background: rgba(var(--color-primary-400));
