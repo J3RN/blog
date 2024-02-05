@@ -43,7 +43,7 @@ let greeting = person =>
   | Director => "Hello Director."
   | Student("Richard") => "Still here Rickey?"
   | Student(anyOtherName) => "Hey, " ++ anyOtherName ++ "."
-};`,treeSitterWasm$1="tree-sitter-reason.wasm",reasonml=Object.freeze(Object.defineProperty({__proto__:null,colorMapping:colorMapping$1,defaultProgram:defaultProgram$1,treeSitterWasm:treeSitterWasm$1},Symbol.toStringTag,{value:"Module"})),colorMapping={function_definition:[270,50,90],while_statement:[285,50,90],assignment:[350,50,90],call:[56,50,90],identifier:[27,50,90],parameters:[311,50,90],argument_list:[311,50,90],keyword_argument:[263,50,90],integer:[180,50,90],string:[195,50,90],true:[165,50,90],false:[165,50,90],binary_operator:[126,50,90],boolean_operator:[126,50,90],not_operator:[126,50,90],tuple:[135,50,90],list:[126,50,90],comment:[185,50,90]},defaultProgram=`def fib(n):
+};`,treeSitterWasm$1="tree-sitter-reason.wasm",reasonml=Object.freeze(Object.defineProperty({__proto__:null,colorMapping:colorMapping$1,defaultProgram:defaultProgram$1,treeSitterWasm:treeSitterWasm$1},Symbol.toStringTag,{value:"Module"})),colorMapping={function_definition:[270,50,90],while_statement:[285,50,90],assignment:[350,50,90],call:[56,50,90],identifier:[27,50,90],parameters:[311,50,90],argument_list:[311,50,90],keyword_argument:[263,50,90],integer:[180,50,90],string:[195,50,90],true:[165,50,90],false:[165,50,90],binary_operator:[126,50,90],comparison_operator:[126,50,90],boolean_operator:[126,50,90],not_operator:[126,50,90],tuple:[135,50,90],list:[126,50,90],comment:[185,50,90]},defaultProgram=`def fib(n):
     a, b = 0, 1
     while a < n :
         print(a, end=' ')
