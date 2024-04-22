@@ -75,6 +75,11 @@ weight = 20
 params.rel = "me"
 
 [[menus.main]]
+name = "Portfolio"
+pageRef = "portfolio"
+weight = 25
+
+[[menus.main]]
 name = "Tags"
 pageRef = "tags"
 weight = 30

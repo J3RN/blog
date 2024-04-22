@@ -104,3 +104,45 @@ aside > *:last-child {
   margin-bottom: 0;
   padding-bottom: 0;
 }
+
+.cards {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-left: 0;
+}
+
+.cards > li {
+  display: block;
+  width: 47%;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+@media screen and (max-width: 700px) {
+  .cards > li {
+    width: 100%;
+  }
+}
+
+.cards > li h4 {
+  margin-top: 0;
+}
+
+.cards > li img {
+  border: 1px solid black;
+}
+
+.cards > li .actions {
+  margin: 0;
+  padding: 0;
+}
+
+.cards > li .actions a {
+  border: 1px solid var(--tw-prose-links);
+  border-radius: 5px;
+  text-decoration: none;
+  padding: 3px;
+}
