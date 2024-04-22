@@ -1,6 +1,6 @@
 ---
 title: "Why do you dress that way?"
-layout: "page"
+layout: "simple"
 ---
 
 ### I get asked this a lot, so I wrote a glorified FAQ page.
