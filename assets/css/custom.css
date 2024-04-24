@@ -116,9 +116,9 @@ aside > *:last-child {
 .cards > li {
   display: block;
   width: 47%;
-  border: 1px solid black;
+  border: 2px solid var(--tw-prose-headings);
   border-radius: 5px;
-  padding: 10px;
+  padding: 20px;
 }
 
 @media screen and (max-width: 700px) {
