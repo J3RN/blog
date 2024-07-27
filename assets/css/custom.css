@@ -136,13 +136,20 @@ aside > *:last-child {
 }
 
 .cards > li .actions {
+  display: flex;
+  gap: 10px;
   margin: 0;
   padding: 0;
 }
 
 .cards > li .actions a {
-  border: 1px solid var(--tw-prose-links);
+  background: rgba(var(--color-primary-500));
+  color: inherit;
   border-radius: 5px;
   text-decoration: none;
-  padding: 3px;
+  padding: 0 10px;
+}
+
+.cards > li .actions a:hover {
+  background: rgba(var(--color-primary-400));
 }
