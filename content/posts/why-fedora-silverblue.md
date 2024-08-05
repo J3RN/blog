@@ -10,15 +10,15 @@ aliases:
 - /posts/2024-03-05-why-fedora-silverblue
 ---
 
-This post is largely based on a write-up I gave to a friend about why I recommended Fedora Silverblue as their first Linux distribution.  I assumes no knowledge of Linux here.
+This post is largely based on a write-up I gave to a friend about why I recommended Fedora Silverblue as their first Linux distribution.  I assume no knowledge of Linux here.
 
-I've been using Linux-based operating systems (termed "Linux distribution", "Linux distro", or just "distro") since about 2011.  I've hopped between many distros, and for some years would switch distros every few months.  Lately, though, I've been quite content to use only one distro for my daily desktop use, **Fedora Silverblue**.
+I've been using Linux-based operating systems (termed "Linux distributions", "Linux distros", or just "distros") since about 2011.  I've hopped between many distros, and for some years would switch distros every few months.  Lately, though, I've been quite content to use only one distro for my daily desktop use, **Fedora Silverblue**.
 
 ![Fedora Silverblue](/images/silverblue.png)
 
 ## Background
 
-By most reports, the most popular Linux distro is Ubuntu.  I've had mixed experiences with Ubuntu, and don't necessarily recommend it to people.  Fedora Workstation is somewhere in the top five popularity-wise, I imagine.  Fedora Workstation is pretty good, and I used it for a few years before switching to the Fedora Silverblue variation.
+By most reports, the most popular Linux distro is Ubuntu.  I've had mixed experiences with Ubuntu, and don't recommend it to people.  Another popular—perhaps the second most popular—Linux distro is Fedora Workstation.  Fedora Workstation is pretty good, and I used it for several years before switching to Fedora Silverblue, which is its immutable variant.
 
 ## Why Silverblue
 
