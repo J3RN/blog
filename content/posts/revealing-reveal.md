@@ -2,7 +2,7 @@
 layout: post
 title: "Revealing Reveal"
 date: 2024-11-17
-description: Describing a developer tool that I'm attempting to create.
+description: An alternate approach for conveying syntactic information to programmers.
 tags:
 - software development
 - tree-sitter
