@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ .Site.Title }}</title>
+        <meta name="author" content={{ .Site.Params.author.name }} />
+        <meta name="description" content={{ .Site.Params.description }} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {{ $cssFiles := resources.Match "css/*.css" }}
+        {{ range $cssFiles }}
+          <link rel="stylesheet" href="{{ .RelPermalink }}" />
+        {{ end }}
+    </head>
+    <div>
+        {{ partial "header.html" . }}
+
+        <main>
+            <section class="timeline">
+                {{ range (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
+                  {{ partial "article-link.html" . }}
+                {{ end }}
+            </section>
+        </main>
+    </div>
+</html>

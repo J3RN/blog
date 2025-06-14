@@ -2,7 +2,6 @@ baseURL = "http://j3rn.com/"
 languageCode = "en-us"
 defaultContentLanguage = "en"
 title = "J3RN's Blog"
-theme = "congo"
 
 [social]
 github = "https://github.com/J3RN"
@@ -12,9 +11,8 @@ mastodon = "https://fosstodon.org/J3RN"
 home = ["HTML", "RSS", "JSON"]
 
 [params]
-description = "My technical blog where I write about Ruby, Elixir, software architecture, software development methodologies, and programming language design."
+description = "My technical blog where I write about Ruby, Elixir, Haskell, software architecture, software development methodologies, and programming language design."
 enableRSS = true
-colorScheme = "congo"
 header.logo = "avatar.png"
 enableSearch = true
 # Doesn't work
@@ -50,7 +48,7 @@ showTaxonomies = true
 [params.list]
 showTaxonomies = true
 # Required me to change Congo and even so made the list look cluttered
-# showSummary = true
+showSummary = true
 
 [params.page]
 showDate = false

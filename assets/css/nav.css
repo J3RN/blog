@@ -1,0 +1,29 @@
+header {
+    padding: 1rem 0;
+}
+
+nav {
+    align-items: center;
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    height: 3rem;
+    justify-content: space-between;
+}
+
+.combo-mark {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.combo-mark img {
+    border-radius: 0.25rem;
+    max-height: 2rem;
+    max-width: 2rem;
+}
+
+.combo-mark h1 {
+    font-size: 1.25rem;
+    font-weight: 400;
+}
