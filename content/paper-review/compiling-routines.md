@@ -1,4 +1,14 @@
-## Compiling Routines
+---
+layout: post
+title: "Paper Review: *Compiling Routines* by Richard K. Ridgway, 1952"
+date: 2025-06-17
+description: |
+    *Compiling Routines* is a short paper that describes one of the first compilers, termed "A-0".
+tags:
+  - paper review
+---
+
+## [Compiling Routines](https://dl.acm.org/doi/pdf/10.1145/800259.808980)
 ### Richard K. Ridgway, 1952
 
 *Compiling Routines* is a short paper (3 paged of text, 2 pages of figures) that describes one of the first compilers, termed "A-0".  A-0 is also referred to as "the antique compiler" in the paper as, apparently, newer compilers had been developed.
@@ -49,3 +59,4 @@ The change from programming by writing machine code by hand to programming by ar
 It is nice to see that Ridgway is thinking of the correspondence between subroutines and mathematical functions at this early era of computer history.  Indeed, this idea of a compiler as a sort of meta-computation is an interesting one, and does not directly correspond with modern conceptions of compilers that I have seen (namely, as automatic translators), though the idea of computing over functions is very commonplace today (e.g. first-class functions).
 
 In all, *Compiling Routines* is a succinct look into the state of programming in 1952, and how the field was set upon the trajectory that got it to where it is today.
+
