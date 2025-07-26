@@ -17,7 +17,7 @@ tags:
 
 > The main aims are 1) to let computers facilitate formulative thinking as they now facilitate the solution of formulated problems, and 2) to enable men and computers to cooperate in making decisions and controlling complex situations without inflexible dependence on predetermined programs.
 
-In my opinion, the paper says too much and also too little.  The paper goes into detail about technological challenges and "solutions" which are, obviously, dated today, and does not go into explicit detail about what is meant by the aims described above, how they are not being achieved by the technology of the time, and what their anticipated benefits would be.
+While these are interesting and worthy ideas, the paper goes into detail about technological challenges and "solutions" which are, obviously, dated today, but does not go into explicit detail about what is meant by these aims described above, how they are not being achieved by the technology of the time, and what their anticipated benefits would be.
 
 The paper opens (Part 1, Section A) with a description of the symbiotic relationship between the fig tree and *blastophaga grossorum* (now commonly known as *blastophaga psenes*) or "fig wasp" which pollinates it.  I am, personally, a big fan of papers that open with a discussion of a topic that is not, strictly speaking, related, so this was a fun part of the introduction for me.
 
