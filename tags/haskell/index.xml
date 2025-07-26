@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Haskell on J3RN's Blog</title><link>http://j3rn.com/tags/haskell/</link><description>Recent content in Haskell on J3RN's Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 30 Oct 2021 10:21:19 -0400</lastBuildDate><atom:link href="http://j3rn.com/tags/haskell/index.xml" rel="self" type="application/rss+xml"/><item><title>Truly Declarative: Logic Programming</title><link>http://j3rn.com/posts/truly-declarative-logic-programming/</link><pubDate>Sat, 30 Oct 2021 10:21:19 -0400</pubDate><guid>http://j3rn.com/posts/truly-declarative-logic-programming/</guid><description>&lt;p>While reading through Miran Lipovača&amp;rsquo;s excellent &lt;a href="http://learnyouahaskell.com/" target="_blank" rel="noreferrer">&lt;em>Learn You a Haskell&lt;/em>&lt;/a>, I came across the following problem:&lt;/p>
 &lt;blockquote>
-&lt;p>Which right triangle that has integers for all sides and all sides equal to or smaller than 10 has a perimeter of 24?&lt;/p>
-&lt;/blockquote>
+&lt;p>Which right triangle that has integers for all sides and all sides equal to or smaller than 10 has a perimeter of 24?&lt;/p>&lt;/blockquote>
 &lt;p>To demonstrate some properties of different programming languages, I&amp;rsquo;ll solve this problem in three languages embodying three different paradigms:&lt;/p>
 &lt;ul>
 &lt;li>&lt;a href="#c">C&lt;/a> (imperative and procedural)&lt;/li>
