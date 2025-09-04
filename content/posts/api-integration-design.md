@@ -32,7 +32,7 @@ The latter approach is the one that I typically start with.  Specifically, the a
 These two interfaces can be, but do not need to be, the same.  For instance, if *all* of our vendors split an action in our application's domain (e.g., "place an order") into two sequential actions (e.g., "create invoice" and "finalize invoice"), it might be fortuitous for the application-facing interface to have a single function (e.g., `place_order`) and the interface that the adapter modules implement to have two functions (e.g., `create_invoice`, `finalize_invoice`).  These interfaces being different is not typical, but can occasionally be advantageous.
 
 For the this example application's payment processor abstraction, let's start with the behaviour:
-```
+```elixir
 defmodule Bookstore.PaymentProcessor.Behaviour do
   @callback purchase_books(Bookstore.Customer.t(), [Bookstore.Book.t()]) ::
               {:ok, Bookstore.PaymentConfirmation.t()} | error()
@@ -64,13 +64,13 @@ Note that the types consumed and returned by the `Bookstore.PaymentProcessor` mo
 
 In this example, the `vendor_adapter` function chooses which vendor adapter module we want to handle this request.  If the application only uses a single vendor at a time, we could define the vendor adapter in our config:
 
-```
+```elixir
 config :bookstore, payment_adapter: Bookstore.PaymentProcessor.StripeAdapter
 ```
 
 And fetch it like so:
 
-```
+```elixir
 defp vendor_adapter do
   Application.compile_env!(:bookstore, :payment_adapter)
 end
@@ -94,7 +94,7 @@ An adapter module provides the mapping between these two.  Its interface speaks 
 
 For instance:
 
-```
+```elixir
 defmodule Bookstore.PaymentProcessor.StripeAdapter do
   @behaviour Bookstore.PaymentProcessor.Behaviour
   
