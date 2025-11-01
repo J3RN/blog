@@ -24,42 +24,53 @@ This syntax is pretty useful. However, it has it's limitations. Let's say that w
 My first inclination was something like this:
 
 ```ruby
-line = "Today the weather is \#{ weather }"
-weather_conditions = {}
+template = "Today the weather is \#{ weather }"
+weather_strings = {}
 
 ["warm", "cloudy", "windy"].each do |weather|
-  weather_conditions[weather] = %r/line/i
+  weather_strings[weather] = template
 end
 ```
 
-It's not hard to see why this didn't work. Well, it occurred to me shortly thereafter that ERB might be the right way to go with this. 
+It's not hard to see why `weather` wasn't interpolated into the strings. Well, it occurred to me shortly thereafter that ERB might be the right way to go with this.
 
 First try with ERB:
 
 ```ruby
-line = "Today the weather is <%= weather %>"
-weather_conditions = {}
+template = "Today the weather is <%= weather %>"
+weather_strings = {}
 
 ["warm", "cloudy", "windy"].each do |weather|
-  weather_conditions[weather] = ERB.new(line).result
+  weather_strings[weather] = ERB.new(template).result
 end
 ```
 
-This endeavor, however, resulted in the following error:
+This, however, resulted in the following error:
 
 ```bash
 NameError - undefined local variable or method `weather' for main:Object:
 ```
 
-After some searching about on the internet, it appears that there is an ever-present `binding` variable, that is an instance of the `Binding` class. Strange as that was, it seems to be needed by `ERB.new` to properly interpolate variables.
-
-The final code:
+After some searching about on the internet, it appears that there is an ever-present `binding` variable that is an instance of the `Binding` class. Strange as that was, it seems to be needed by `ERB#result` to properly interpolate variables.  I also discovered that we can also get by with only building the ERB instance once:
 
 ```ruby
-line = "Today the weather is <%= weather %>"
-weather_conditions = {}
+template = ERB.new("Today the weather is <%= weather %>")
+weather_strings = {}
 
 ["warm", "cloudy", "windy"].each do |weather|
-  weather_conditions[weather] = ERB.new(line).result(binding)
+  weather_strings[weather] = template.result(binding)
 end
 ```
+
+Another approach, if you don't want to pass ERB *all* variables in your `binding` is to use `result_with_hash` (using a Hash instead of a Binding):
+
+```ruby
+template = ERB.new("Today the weather is <%= weather %>")
+weather_strings = {}
+
+["warm", "cloudy", "windy"].each do |weather|
+  weather_strings[weather] = template.result_with_hash({weather: weather})
+end
+```
+
+Not very intuitive, but it works!
