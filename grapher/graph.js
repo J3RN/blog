@@ -18,6 +18,7 @@ svg.append("defs").append("marker")
 
 // Create container groups
 const g = svg.append("g");
+const moduleGroup = g.append("g").attr("class", "modules");
 const linkGroup = g.append("g").attr("class", "links");
 const nodeGroup = g.append("g").attr("class", "nodes");
 
@@ -38,6 +39,7 @@ let allNodesMap = new Map();
 // Initialize Tom Select instances
 let sourceSelect = null;
 let sinkSelect = null;
+let moduleSelect = null;
 
 // Handle file upload
 document.getElementById("fileInput").addEventListener("change", function (event) {
@@ -45,12 +47,20 @@ document.getElementById("fileInput").addEventListener("change", function (event)
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      const csvContent = e.target.result;
-      loadGraphData(csvContent);
+      const jsonContent = e.target.result;
+      loadGraphData(jsonContent);
     };
     reader.readAsText(file);
   }
 });
+
+// Function to initialize Tom Select for filters
+function getModuleFromId(id) {
+  // Module is everything up to the last '.'
+  const lastDot = id.lastIndexOf('.');
+  if (lastDot === -1) return null; // No module part
+  return id.substring(0, lastDot);
+}
 
 // Function to initialize Tom Select for filters
 function initializeFilters(nodes) {
@@ -61,10 +71,21 @@ function initializeFilters(nodes) {
   if (sinkSelect) {
     sinkSelect.destroy();
   }
+  if (moduleSelect) {
+    moduleSelect.destroy();
+  }
 
   // Sort nodes alphabetically for easier searching
   const sortedNodes = nodes.slice().sort((a, b) => a.id.localeCompare(b.id));
   const options = sortedNodes.map(n => ({ value: n.id, text: n.id }));
+
+  // Build unique module list for moduleSelect
+  const moduleSet = new Set();
+  sortedNodes.forEach(n => {
+    const mod = getModuleFromId(n.id);
+    if (mod) moduleSet.add(mod);
+  });
+  const moduleOptions = Array.from(moduleSet).sort().map(m => ({ value: m, text: m }));
 
   // Initialize source filter
   sourceSelect = new TomSelect('#sourceFilter', {
@@ -95,60 +116,96 @@ function initializeFilters(nodes) {
       applyFilters();
     }
   });
+
+  // Initialize exclude filter
+  moduleSelect = new TomSelect('#excludeFilter', {
+    plugins: ['remove_button'],
+    maxItems: null,
+    valueField: 'value',
+    labelField: 'text',
+    searchField: 'text',
+    options: moduleOptions,
+    placeholder: 'Show only nodes from these modules...',
+    onChange: function() {
+      // Auto-apply filters when selection changes
+      applyFilters();
+    }
+  });
 }
 
-// Function to load and parse CSV data
-function loadGraphData(csvContent) {
-  // Parse CSV
-  const lines = csvContent.trim().split('\n');
-  allNodesMap = new Map();
-  const edges = [];
+// Helper function to format node identifier
+function formatNodeId(node) {
+  // Concatenate module parts with function using periods
+  // e.g., {"module": ["Foo", "Bar"], "function": "asdf/2"} -> "Foo.Bar.asdf/2"
+  const modulePath = node.module.join('.');
+  return `${modulePath}.${node.function}`;
+}
 
-  // Skip header line
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
+// Helper function to create node key for comparison
+function getNodeKey(node) {
+  // Create a unique key for the node based on module and function
+  return JSON.stringify({ module: node.module, function: node.function });
+}
 
-    // Parse CSV line, handling quoted fields
-    const match = line.match(/"([^"]+)","([^"]+)"/);
-    if (match) {
-      let sourceNode, targetNode;
+// Function to load and parse JSON data
+function loadGraphData(jsonContent) {
+  try {
+    const data = JSON.parse(jsonContent);
 
-      if (allNodesMap.has(match[1])) {
-        sourceNode = allNodesMap.get(match[1]);
-      } else {
-        sourceNode = { id: match[1] };
-        allNodesMap.set(match[1], sourceNode);
-      }
-
-      if (allNodesMap.has(match[2])) {
-        targetNode = allNodesMap.get(match[2]);
-      } else {
-        targetNode = { id: match[2] };
-        allNodesMap.set(match[2], targetNode);
-      }
-
-      edges.push({
-        source: sourceNode,
-        target: targetNode
-      });
+    if (!data.nodes || !data.edges) {
+      document.getElementById("info").textContent = "Invalid JSON format. Expected 'nodes' and 'edges' properties.";
+      return;
     }
+
+    allNodesMap = new Map();
+    const edges = [];
+
+    // Process nodes - create formatted versions with IDs
+    data.nodes.forEach(node => {
+      const nodeKey = getNodeKey(node);
+      const formattedNode = {
+        id: formatNodeId(node),
+        module: node.module,
+        function: node.function,
+        originalKey: nodeKey
+      };
+      allNodesMap.set(formattedNode.id, formattedNode);
+    });
+
+    // Process edges
+    data.edges.forEach(edge => {
+      const sourceId = formatNodeId(edge.source);
+      const targetId = formatNodeId(edge.target);
+
+      const sourceNode = allNodesMap.get(sourceId);
+      const targetNode = allNodesMap.get(targetId);
+
+      if (sourceNode && targetNode) {
+        edges.push({
+          source: sourceNode,
+          target: targetNode
+        });
+      }
+    });
+
+    if (edges.length === 0) {
+      document.getElementById("info").textContent = "No valid edges found in JSON file.";
+      return;
+    }
+
+    // Store original data
+    originalEdges = edges;
+    originalNodes = Array.from(allNodesMap.values());
+
+    // Initialize the filter dropdowns with all nodes
+    initializeFilters(originalNodes);
+
+    // Initial visualization with no filters
+    clearFilters();
+  } catch (error) {
+    document.getElementById("info").textContent = `Error parsing JSON: ${error.message}`;
+    console.error("JSON parsing error:", error);
   }
-
-  if (edges.length === 0) {
-    document.getElementById("info").textContent = "No valid data found in CSV file.";
-    return;
-  }
-
-  // Store original data
-  originalEdges = edges;
-  originalNodes = Array.from(allNodesMap.values());
-
-  // Initialize the filter dropdowns with all nodes
-  initializeFilters(originalNodes);
-
-  // Initial visualization with no filters
-  clearFilters();
 }
 
 // Function to get all transitive callees of a node (forward traversal)
@@ -166,8 +223,6 @@ function getTransitiveCallees(startNode, edges) {
       }
     });
   }
-
-  /* debugger; */
 
   return callees;
 }
@@ -193,15 +248,16 @@ function getTransitiveCallers(startNode, edges) {
 
 // Apply source and sink filters
 function applyFilters() {
-  if (!sourceSelect || !sinkSelect) {
+  if (!sourceSelect || !sinkSelect || !moduleSelect) {
     return; // Selects not initialized yet
   }
 
   const sourceFilters = sourceSelect.getValue();
   const sinkFilters = sinkSelect.getValue();
+  const moduleFilters = moduleSelect.getValue();
 
-  if (sourceFilters.length === 0 && sinkFilters.length === 0) {
-    visualizeCallGraph(originalNodes, originalEdges);
+  if (moduleFilters.length === 0) {
+    visualizeCallGraph([], []);
     return;
   }
 
@@ -241,6 +297,15 @@ function applyFilters() {
     filteredNodes = new Set([...filteredNodes].filter(n => allCallers.has(n)));
   }
 
+  // Apply module include filters (keep only nodes belonging to selected modules)
+  const includedModules = new Set(moduleFilters);
+  filteredNodes = new Set(
+    [...filteredNodes].filter(id => {
+      const mod = getModuleFromId(id);
+      return mod && includedModules.has(mod);
+    })
+  );
+
   // Filter nodes and edges
   const nodes = originalNodes.filter(n => filteredNodes.has(n.id));
   const edges = originalEdges.filter(e =>
@@ -258,43 +323,36 @@ function clearFilters() {
   if (sinkSelect) {
     sinkSelect.clear();
   }
-  visualizeCallGraph(originalNodes, originalEdges);
+  if (moduleSelect) {
+    moduleSelect.clear();
+  }
+  visualizeCallGraph([], []);
 }
 
 function rankNodes(rootNodes, adjacency) {
-  // Assign levels using BFS
   const levels = new Map();
-  const queue = [];
 
-  // Initialize roots at level 0
+  // Perform DFS from each root node (level 0)
   rootNodes.forEach(node => {
-    levels.set(node.id, 0);
-    queue.push({ id: node.id, level: 0 });
+    rankNodes2(node.id, 0, levels, adjacency, new Set());
   });
 
-  // BFS to assign levels (max level from any path)
-  const visited = new Set();
-  while (queue.length > 0) {
-    const { id, level } = queue.shift();
+  return levels;
+}
 
-    if (!visited.has(id)) {
-      visited.add(id);
+function rankNodes2(id, level, levels, adjacency, visited) {
+  if (visited.has(id)) return;
 
-      const neighbors = adjacency.get(id) || [];
-      neighbors.forEach(targetId => {
-        const newLevel = level + 1;
-        const currentLevel = levels.get(targetId);
+  const newVisited = new Set(visited.values());
+  newVisited.add(id);
 
-        // Update if this path gives a deeper level
-        if (currentLevel === undefined || newLevel > currentLevel) {
-          levels.set(targetId, newLevel);
-          queue.push({ id: targetId, level: newLevel });
-        }
-      });
-    }
+  const currentLevel = levels.get(id);
+  if (currentLevel === undefined || currentLevel < level) {
+    levels.set(id, level);
   }
 
-  return levels;
+  const neighbors = adjacency.get(id) || [];
+  neighbors.forEach(targetId => rankNodes2(targetId, level + 1, levels, adjacency, newVisited));
 }
 
 // Function to visualize the call graph
@@ -332,8 +390,9 @@ function visualizeCallGraph(nodes, edges) {
   const rootCount = rootNodes.length;
   const sourceFilters = sourceSelect ? sourceSelect.getValue() : [];
   const sinkFilters = sinkSelect ? sinkSelect.getValue() : [];
+  const moduleFilters = moduleSelect ? moduleSelect.getValue() : [];
   let filterText = "";
-  if (sourceFilters.length > 0 || sinkFilters.length > 0) {
+  if (sourceFilters.length > 0 || sinkFilters.length > 0 || moduleFilters.length > 0) {
     filterText = " (filtered";
     if (sourceFilters.length > 0) {
       filterText += ` from ${sourceFilters.length} source${sourceFilters.length > 1 ? 's' : ''}`;
@@ -341,6 +400,10 @@ function visualizeCallGraph(nodes, edges) {
     if (sinkFilters.length > 0) {
       if (sourceFilters.length > 0) filterText += " and";
       filterText += ` to ${sinkFilters.length} sink${sinkFilters.length > 1 ? 's' : ''}`;
+    }
+    if (moduleFilters.length > 0) {
+      if (sourceFilters.length > 0 || sinkFilters.length > 0) filterText += " and";
+      filterText += ` in ${moduleFilters.length} module${moduleFilters.length > 1 ? 's' : ''}`;
     }
     filterText += ")";
   }

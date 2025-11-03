@@ -118,6 +118,24 @@
       stroke-width: 3px;
     }
 
+    .module-container {
+      fill: #f0f0f0;
+      fill-opacity: 0.3;
+      stroke: #666;
+      stroke-width: 2px;
+      stroke-dasharray: 5,5;
+      rx: 8;
+      ry: 8;
+    }
+
+    .module-label {
+      font-size: 14px;
+      font-weight: bold;
+      fill: #333;
+      pointer-events: none;
+      user-select: none;
+    }
+
     #info {
       margin-top: 10px;
       color: #666;
@@ -128,21 +146,26 @@
 <body>
   <div id="controls">
     <h1>Call Graph Visualizer</h1>
-    <input type="file" id="fileInput" accept=".csv" />
+    <input type="file" id="fileInput" accept=".json" />
     <div class="filter-controls">
       <div style="margin-bottom: 10px;">
         <label for="sourceFilter">Source:</label>
         <select id="sourceFilter" multiple placeholder="Filter to callees of these functions..."></select>
         <button onclick="applyFilters()">Apply</button>
       </div>
-      <div>
+      <div style="margin-bottom: 10px;">
         <label for="sinkFilter">Sink:</label>
         <select id="sinkFilter" multiple placeholder="Filter to callers of these functions..."></select>
         <button onclick="applyFilters()">Apply</button>
         <button class="clear" onclick="clearFilters()">Clear Filters</button>
       </div>
+      <div>
+        <label for="excludeFilter">Modules:</label>
+        <select id="excludeFilter" multiple placeholder="Show only nodes from these modules..."></select>
+        <button onclick="applyFilters()">Apply</button>
+      </div>
     </div>
-    <div id="info">Upload a CSV file with "source,target" format to visualize the call graph.</div>
+    <div id="info">Upload a JSON file with nodes and edges to visualize the call graph.</div>
   </div>
 
   <div id="svg-container">
