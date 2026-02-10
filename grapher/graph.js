@@ -18,7 +18,6 @@ svg.append("defs").append("marker")
 
 // Create container groups
 const g = svg.append("g");
-const moduleGroup = g.append("g").attr("class", "modules");
 const linkGroup = g.append("g").attr("class", "links");
 const nodeGroup = g.append("g").attr("class", "nodes");
 
@@ -36,13 +35,9 @@ let originalEdges = [];
 let originalNodes = [];
 let allNodesMap = new Map();
 
-let sourceSelect = document.getElementById('sourceFilter');
-let sinkSelect = document.getElementById('sinkFilter');
-let moduleSelect = document.getElementById('moduleFilter');
-
-sourceSelect.addEventListener('change', applyFilters);
-sinkSelect.addEventListener('change', applyFilters);
-moduleSelect.addEventListener('change', applyFilters);
+// Initialize Tom Select instances
+let sourceSelect = null;
+let sinkSelect = null;
 
 // Handle file upload
 document.getElementById("fileInput").addEventListener("change", function (event) {
@@ -50,114 +45,110 @@ document.getElementById("fileInput").addEventListener("change", function (event)
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      const jsonContent = e.target.result;
-      loadGraphData(jsonContent);
+      const csvContent = e.target.result;
+      loadGraphData(csvContent);
     };
     reader.readAsText(file);
   }
 });
 
-// Extract module from full Id (module + function)
-function getModuleFromId(id) {
-  // Module is everything up to the last '.'
-  const lastDot = id.lastIndexOf('.');
-  if (lastDot === -1) return null; // No module part
-  return id.substring(0, lastDot);
-}
-
-// Initialize filter selects
+// Function to initialize Tom Select for filters
 function initializeFilters(nodes) {
+  // Destroy existing instances if they exist
+  if (sourceSelect) {
+    sourceSelect.destroy();
+  }
+  if (sinkSelect) {
+    sinkSelect.destroy();
+  }
+
   // Sort nodes alphabetically for easier searching
   const sortedNodes = nodes.slice().sort((a, b) => a.id.localeCompare(b.id));
   const options = sortedNodes.map(n => ({ value: n.id, text: n.id }));
 
-  // Build unique module list for moduleSelect
-  const moduleSet = new Set();
-  sortedNodes.forEach(n => {
-    const mod = getModuleFromId(n.id);
-    if (mod) moduleSet.add(mod);
+  // Initialize source filter
+  sourceSelect = new TomSelect('#sourceFilter', {
+    plugins: ['remove_button'],
+    maxItems: null,
+    valueField: 'value',
+    labelField: 'text',
+    searchField: 'text',
+    options: options,
+    placeholder: 'Filter to callees of these functions...',
+    onChange: function() {
+      // Auto-apply filters when selection changes
+      applyFilters();
+    }
   });
-  const moduleOptions = Array.from(moduleSet).sort().map(m => ({ value: m, text: m }));
 
-  // Initialize source and sink filters
-  populateSelect(sourceSelect, options);
-  populateSelect(sinkSelect, options);
-  populateSelect(moduleSelect, moduleOptions);
-}
-
-// Helper function to format node identifier
-function formatNodeId(node) {
-  // Concatenate module parts with function using periods
-  // e.g., {"module": ["Foo", "Bar"], "function": "asdf/2"} -> "Foo.Bar.asdf/2"
-  const modulePath = node.module.join('.');
-  return `${modulePath}.${node.function}`;
-}
-
-// Helper function to create node key for comparison
-function getNodeKey(node) {
-  // Create a unique key for the node based on module and function
-  return JSON.stringify({ module: node.module, function: node.function });
-}
-
-// Function to load and parse JSON data
-function loadGraphData(jsonContent) {
-  try {
-    const data = JSON.parse(jsonContent);
-
-    if (!data.nodes || !data.edges) {
-      document.getElementById("info").textContent = "Invalid JSON format. Expected 'nodes' and 'edges' properties.";
-      return;
+  // Initialize sink filter
+  sinkSelect = new TomSelect('#sinkFilter', {
+    plugins: ['remove_button'],
+    maxItems: null,
+    valueField: 'value',
+    labelField: 'text',
+    searchField: 'text',
+    options: options,
+    placeholder: 'Filter to callers of these functions...',
+    onChange: function() {
+      // Auto-apply filters when selection changes
+      applyFilters();
     }
+  });
+}
 
-    allNodesMap = new Map();
-    const edges = [];
+// Function to load and parse CSV data
+function loadGraphData(csvContent) {
+  // Parse CSV
+  const lines = csvContent.trim().split('\n');
+  allNodesMap = new Map();
+  const edges = [];
 
-    // Process nodes - create formatted versions with IDs
-    data.nodes.forEach(node => {
-      const nodeKey = getNodeKey(node);
-      const formattedNode = {
-        id: formatNodeId(node),
-        module: node.module,
-        function: node.function,
-        originalKey: nodeKey
-      };
-      allNodesMap.set(formattedNode.id, formattedNode);
-    });
+  // Skip header line
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
 
-    // Process edges
-    data.edges.forEach(edge => {
-      const sourceId = formatNodeId(edge.source);
-      const targetId = formatNodeId(edge.target);
+    // Parse CSV line, handling quoted fields
+    const match = line.match(/"([^"]+)","([^"]+)"/);
+    if (match) {
+      let sourceNode, targetNode;
 
-      const sourceNode = allNodesMap.get(sourceId);
-      const targetNode = allNodesMap.get(targetId);
-
-      if (sourceNode && targetNode) {
-        edges.push({
-          source: sourceNode,
-          target: targetNode
-        });
+      if (allNodesMap.has(match[1])) {
+        sourceNode = allNodesMap.get(match[1]);
+      } else {
+        sourceNode = { id: match[1] };
+        allNodesMap.set(match[1], sourceNode);
       }
-    });
 
-    if (edges.length === 0) {
-      document.getElementById("info").textContent = "No valid edges found in JSON file.";
-      return;
+      if (allNodesMap.has(match[2])) {
+        targetNode = allNodesMap.get(match[2]);
+      } else {
+        targetNode = { id: match[2] };
+        allNodesMap.set(match[2], targetNode);
+      }
+
+      edges.push({
+        source: sourceNode,
+        target: targetNode
+      });
     }
-
-    // Store original data
-    originalEdges = edges;
-    originalNodes = Array.from(allNodesMap.values());
-
-    // Initialize the filter dropdowns with all nodes
-    initializeFilters(originalNodes);
-
-    // Initial visualization with no filters
-    clearFilters();
-  } catch (error) {
-    document.getElementById("info").textContent = `Error parsing JSON: ${error.message}`;
-    console.error("JSON parsing error:", error);
   }
+
+  if (edges.length === 0) {
+    document.getElementById("info").textContent = "No valid data found in CSV file.";
+    return;
+  }
+
+  // Store original data
+  originalEdges = edges;
+  originalNodes = Array.from(allNodesMap.values());
+
+  // Initialize the filter dropdowns with all nodes
+  initializeFilters(originalNodes);
+
+  // Initial visualization with no filters
+  clearFilters();
 }
 
 // Function to get all transitive callees of a node (forward traversal)
@@ -175,6 +166,8 @@ function getTransitiveCallees(startNode, edges) {
       }
     });
   }
+
+  /* debugger; */
 
   return callees;
 }
@@ -198,23 +191,17 @@ function getTransitiveCallers(startNode, edges) {
   return callers;
 }
 
-function populateSelect(select, options) {
-  select.innerHtml = '';
-  options.forEach(({text, value}) => select.appendChild(new Option(text, value)));
-}
-
-function selectedOptionValues(select) {
-  return [...select.selectedOptions].map(o => o.value);
-}
-
 // Apply source and sink filters
 function applyFilters() {
-  const sourceFilters = selectedOptionValues(sourceSelect);
-  const sinkFilters = selectedOptionValues(sinkSelect);
-  const moduleFilters = selectedOptionValues(moduleSelect);
+  if (!sourceSelect || !sinkSelect) {
+    return; // Selects not initialized yet
+  }
 
-  if (moduleFilters.length === 0) {
-    visualizeCallGraph([], []);
+  const sourceFilters = sourceSelect.getValue();
+  const sinkFilters = sinkSelect.getValue();
+
+  if (sourceFilters.length === 0 && sinkFilters.length === 0) {
+    visualizeCallGraph(originalNodes, originalEdges);
     return;
   }
 
@@ -254,15 +241,6 @@ function applyFilters() {
     filteredNodes = new Set([...filteredNodes].filter(n => allCallers.has(n)));
   }
 
-  // Apply module include filters (keep only nodes belonging to selected modules)
-  const includedModules = new Set(moduleFilters);
-  filteredNodes = new Set(
-    [...filteredNodes].filter(id => {
-      const mod = getModuleFromId(id);
-      return mod && includedModules.has(mod);
-    })
-  );
-
   // Filter nodes and edges
   const nodes = originalNodes.filter(n => filteredNodes.has(n.id));
   const edges = originalEdges.filter(e =>
@@ -274,38 +252,49 @@ function applyFilters() {
 
 // Clear all filters
 function clearFilters() {
-  initializeFilters(originalNodes);
-  sourceSelect.selectedIndex = -1;
-  sinkSelect.selectedIndex = -1;
-  moduleSelect.selectedIndex = -1;
-
-  visualizeCallGraph([], []);
+  if (sourceSelect) {
+    sourceSelect.clear();
+  }
+  if (sinkSelect) {
+    sinkSelect.clear();
+  }
+  visualizeCallGraph(originalNodes, originalEdges);
 }
 
 function rankNodes(rootNodes, adjacency) {
+  // Assign levels using BFS
   const levels = new Map();
+  const queue = [];
 
-  // Perform DFS from each root node (level 0)
+  // Initialize roots at level 0
   rootNodes.forEach(node => {
-    rankNodes2(node.id, 0, levels, adjacency, new Set());
+    levels.set(node.id, 0);
+    queue.push({ id: node.id, level: 0 });
   });
 
-  return levels;
-}
+  // BFS to assign levels (max level from any path)
+  const visited = new Set();
+  while (queue.length > 0) {
+    const { id, level } = queue.shift();
 
-function rankNodes2(id, level, levels, adjacency, visited) {
-  if (visited.has(id)) return;
+    if (!visited.has(id)) {
+      visited.add(id);
 
-  const newVisited = new Set(visited.values());
-  newVisited.add(id);
+      const neighbors = adjacency.get(id) || [];
+      neighbors.forEach(targetId => {
+        const newLevel = level + 1;
+        const currentLevel = levels.get(targetId);
 
-  const currentLevel = levels.get(id);
-  if (currentLevel === undefined || currentLevel < level) {
-    levels.set(id, level);
+        // Update if this path gives a deeper level
+        if (currentLevel === undefined || newLevel > currentLevel) {
+          levels.set(targetId, newLevel);
+          queue.push({ id: targetId, level: newLevel });
+        }
+      });
+    }
   }
 
-  const neighbors = adjacency.get(id) || [];
-  neighbors.forEach(targetId => rankNodes2(targetId, level + 1, levels, adjacency, newVisited));
+  return levels;
 }
 
 // Function to visualize the call graph
@@ -341,11 +330,10 @@ function visualizeCallGraph(nodes, edges) {
 
   // Update info
   const rootCount = rootNodes.length;
-  const sourceFilters = sourceSelect ? selectedOptionValues(sourceSelect) : [];
-  const sinkFilters = sinkSelect ? selectedOptionValues(sinkSelect) : [];
-  const moduleFilters = moduleSelect ? selectedOptionValues(moduleSelect) : [];
+  const sourceFilters = sourceSelect ? sourceSelect.getValue() : [];
+  const sinkFilters = sinkSelect ? sinkSelect.getValue() : [];
   let filterText = "";
-  if (sourceFilters.length > 0 || sinkFilters.length > 0 || moduleFilters.length > 0) {
+  if (sourceFilters.length > 0 || sinkFilters.length > 0) {
     filterText = " (filtered";
     if (sourceFilters.length > 0) {
       filterText += ` from ${sourceFilters.length} source${sourceFilters.length > 1 ? 's' : ''}`;
@@ -353,10 +341,6 @@ function visualizeCallGraph(nodes, edges) {
     if (sinkFilters.length > 0) {
       if (sourceFilters.length > 0) filterText += " and";
       filterText += ` to ${sinkFilters.length} sink${sinkFilters.length > 1 ? 's' : ''}`;
-    }
-    if (moduleFilters.length > 0) {
-      if (sourceFilters.length > 0 || sinkFilters.length > 0) filterText += " and";
-      filterText += ` in ${moduleFilters.length} module${moduleFilters.length > 1 ? 's' : ''}`;
     }
     filterText += ")";
   }
