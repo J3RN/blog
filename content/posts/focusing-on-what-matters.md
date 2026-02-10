@@ -36,7 +36,7 @@ Being "correct" means producing the desired output; solving the problem. For ins
 
 ![a whiteboard displaying "2 + 2 = 5"](/images/math.jpg)
 
-<small>Photo by <a href="https://unsplash.com/@michalmatlon?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Michal Marlon</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small>
+<small>Photo by <a href="https://unsplash.com/@alic01ak">Ali Colak</a> on <a href="https://unsplash.com?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></small>
 
 ### Productivity
 
