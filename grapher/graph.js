@@ -198,8 +198,9 @@ function getTransitiveCallers(startNode, edges) {
   return callers;
 }
 
+// Clear existing options and replace them with `options`
 function populateSelect(select, options) {
-  select.innerHtml = '';
+  [...select.options].forEach((option) => select.remove(option));
   options.forEach(({text, value}) => select.appendChild(new Option(text, value)));
 }
 
@@ -272,7 +273,6 @@ function applyFilters() {
   visualizeCallGraph(nodes, edges);
 }
 
-// Clear all filters
 function selectAllModules() {
   for (const option of moduleSelect.options) {
     option.selected = true;
@@ -280,6 +280,7 @@ function selectAllModules() {
   applyFilters();
 }
 
+// Clear all filters
 function clearFilters() {
   initializeFilters(originalNodes);
   sourceSelect.selectedIndex = -1;
@@ -293,7 +294,7 @@ function rankNodes(rootNodes, adjacency) {
   const levels = new Map();
 
   // Perform DFS from each root node (level 0)
-  rootNodes.forEach(node => {
+  rootNodes.forEach((node) => {
     rankNodes2(node.id, 0, levels, adjacency, new Set());
   });
 
@@ -303,16 +304,15 @@ function rankNodes(rootNodes, adjacency) {
 function rankNodes2(id, level, levels, adjacency, visited) {
   if (visited.has(id)) return;
 
-  const newVisited = new Set(visited.values());
-  newVisited.add(id);
+  const newVisited = new Set([...visited.values(), id]);
 
   const currentLevel = levels.get(id);
   if (currentLevel === undefined || currentLevel < level) {
     levels.set(id, level);
   }
 
-  const neighbors = adjacency.get(id) || [];
-  neighbors.forEach(targetId => rankNodes2(targetId, level + 1, levels, adjacency, newVisited));
+  const children = adjacency.get(id) || [];
+  children.forEach(targetId => rankNodes2(targetId, level + 1, levels, adjacency, newVisited));
 }
 
 // Find where a line from (cx, cy) in direction (dx, dy) intersects a rectangle boundary
@@ -383,6 +383,9 @@ function visualizeCallGraph(nodes, edges) {
   linkGroup.selectAll("*").remove();
   nodeGroup.selectAll("*").remove();
 
+  // Fix Y locations based on level
+  nodeArray.forEach((node) => node.fy = node.level * levelHeight)
+
   // Create force simulation with hierarchical constraints
   const simulation = d3.forceSimulation(nodeArray)
     .force("link", d3.forceLink(edgesArray).id(d => d.id).distance(100))
@@ -391,26 +394,21 @@ function visualizeCallGraph(nodes, edges) {
       const hw = d.hw || 40;
       const hh = d.hh || 12;
       return Math.sqrt(hw * hw + hh * hh) + 4;
-    }))
-  /* .force("x", d3.forceX(width / 2).strength(0.05)) */
-    .force("y", d3.forceY(d => d.level * levelHeight + 50).strength(1))
+    }));
 
   // Drag functions (must be defined before nodes are created)
   function dragstarted(event, d) {
     if (!event.active) simulation.alphaTarget(0.1).restart();
     d.fx = d.x;
-    d.fy = d.y;
   }
 
   function dragged(event, d) {
     d.fx = event.x;
-    d.fy = event.y;
   }
 
   function dragended(event, d) {
     if (!event.active) simulation.alphaTarget(0);
     d.fx = null;
-    d.fy = null;
   }
 
   // Draw links
